@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>One Bob Charity Fund — Every Shilling Counts</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #C0392B; --red-dark: #922B21; --gold: #D4A843;
+      --cream: #FAF6F0; --warm: #F5EDE0; --dark: #1A0E06;
+      --text: #2C1810; --muted: rgba(44,24,16,0.55);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+
+    /* NAVBAR */
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 0 5%; height: 66px; display: flex; align-items: center; justify-content: space-between; transition: background 0.4s, box-shadow 0.4s; }
+    .navbar.scrolled { background: rgba(250,246,240,0.97); backdrop-filter: blur(20px); box-shadow: 0 1px 0 rgba(44,24,16,0.08); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 34px; height: 34px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .logo-cross { position: relative; width: 14px; height: 14px; }
+    .logo-cross::before { content:''; position: absolute; top: 50%; left: 0; right: 0; height: 2.5px; background: white; transform: translateY(-50%); border-radius: 2px; }
+    .logo-cross::after { content:''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2.5px; background: white; transform: translateX(-50%); border-radius: 2px; }
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 800; color: white; transition: color 0.3s; }
+    .logo-text span { color: var(--gold); }
+    .navbar.scrolled .logo-text { color: var(--text); }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link { padding: 8px 14px; font-size: 0.73rem; font-weight: 500; color: rgba(255,255,255,0.75); text-decoration: none; border-radius: 4px; transition: all 0.2s; }
+    .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
+    .navbar.scrolled .nav-link { color: var(--muted); }
+    .navbar.scrolled .nav-link:hover { color: var(--text); background: rgba(44,24,16,0.05); }
+    .nav-btn { padding: 9px 22px; background: var(--red); color: white !important; border-radius: 4px; font-size: 0.73rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; margin-left: 8px; }
+    .nav-btn:hover { background: var(--red-dark) !important; }
+    .hamburger { display: none; background: none; border: none; color: white; font-size: 1.5rem; transition: color 0.3s; }
+    .navbar.scrolled .hamburger { color: var(--text); }
+    .mobile-menu { display: none; position: fixed; top: 66px; left: 0; right: 0; background: white; border-bottom: 1px solid rgba(44,24,16,0.08); padding: 12px 5% 20px; z-index: 199; flex-direction: column; gap: 4px; box-shadow: 0 8px 32px rgba(44,24,16,0.1); }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu .nav-link { color: var(--muted); }
+
+    /* HERO */
+    .hero { position: relative; height: 100vh; min-height: 600px; overflow: hidden; }
+    .hero-slides { position: absolute; inset: 0; }
+    .hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 2s ease; }
+    .hero-slide.active { opacity: 1; }
+    .hero-slide img { width: 100%; height: 100%; object-fit: cover; transform-origin: center; }
+    .hero-slide.active img { animation: kenBurns 10s ease-in-out forwards; }
+    @keyframes kenBurns { 0%{ transform: scale(1.0); } 100%{ transform: scale(1.1); } }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(105deg, rgba(10,5,2,0.85) 0%, rgba(10,5,2,0.55) 55%, rgba(10,5,2,0.25) 100%); z-index: 2; }
+    .hero-overlay-bottom { position: absolute; bottom: 0; left: 0; right: 0; height: 45%; background: linear-gradient(to top, rgba(10,5,2,0.85), transparent); z-index: 2; }
+    .hero-content { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; justify-content: center; padding: 100px 5% 80px; max-width: 700px; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(192,57,43,0.2); border: 1px solid rgba(192,57,43,0.4); border-radius: 20px; padding: 6px 14px; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #F4A79B; margin-bottom: 22px; width: fit-content; }
+    .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 6vw, 5.5rem); font-weight: 800; line-height: 1.0; color: white; margin-bottom: 8px; }
+    .hero-title-italic { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 6vw, 5.5rem); font-weight: 600; font-style: italic; color: var(--gold); line-height: 1.0; margin-bottom: 6px; }
+    .hero-tagline { font-size: clamp(0.85rem, 1.5vw, 1rem); font-style: italic; color: rgba(255,255,255,0.55); margin-bottom: 20px; font-weight: 300; }
+    .hero-sub { font-size: 0.92rem; line-height: 1.85; color: rgba(255,255,255,0.62); max-width: 440px; margin-bottom: 36px; font-weight: 300; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 44px; }
+    .btn-white { padding: 14px 32px; background: white; color: var(--red); border-radius: 4px; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.25s; }
+    .btn-white:hover { background: var(--cream); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+    .btn-ghost { padding: 14px 32px; background: transparent; color: white; border-radius: 4px; font-size: 0.76rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.25s; border: 1.5px solid rgba(255,255,255,0.3); }
+    .btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.07); }
+    .child-label { display: flex; align-items: center; gap: 12px; }
+    .child-divider { width: 24px; height: 1.5px; background: rgba(255,255,255,0.3); }
+    .child-label-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: rgba(255,255,255,0.85); }
+    .child-label-sub { font-size: 0.65rem; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; }
+    .hero-dots { position: absolute; bottom: 36px; right: 5%; z-index: 10; display: flex; gap: 8px; }
+    .hero-dot { width: 28px; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.22); cursor: pointer; transition: all 0.3s; }
+    .hero-dot.active { background: var(--gold); width: 48px; }
+    .scroll-hint { position: absolute; bottom: 36px; left: 5%; z-index: 10; display: flex; align-items: center; gap: 10px; font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.28); }
+    .scroll-line { width: 36px; height: 1px; background: rgba(255,255,255,0.2); position: relative; overflow: hidden; }
+    .scroll-line::after { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background: rgba(255,255,255,0.7); animation: slideRight 2s infinite; }
+    @keyframes slideRight { 0%{ left:-100%; } 100%{ left:100%; } }
+
+    /* TICKER */
+    .ticker { background: var(--red); padding: 10px 0; overflow: hidden; }
+    .ticker-track { display: flex; white-space: nowrap; animation: tickerMove 40s linear infinite; }
+    .ticker-track:hover { animation-play-state: paused; }
+    .ticker-item { display: inline-flex; align-items: center; gap: 8px; padding: 0 30px; font-size: 0.72rem; font-weight: 500; color: rgba(255,255,255,0.9); border-right: 1px solid rgba(255,255,255,0.15); }
+    @keyframes tickerMove { 0%{ transform: translateX(0); } 100%{ transform: translateX(-50%); } }
+
+    /* SECTIONS */
+    .section { padding: 88px 5%; }
+    .section-alt { background: #FDF8F2; }
+    .section-dark { background: var(--dark); }
+    .sec-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+    .sec-label.gold { color: rgba(212,168,67,0.7); }
+    .sec-heading { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.1; color: var(--text); margin-bottom: 14px; }
+    .sec-heading em { font-style: italic; color: var(--red); }
+    .sec-heading.light { color: white; }
+    .sec-heading.light em { color: var(--gold); }
+    .sec-sub { font-size: 0.86rem; color: var(--muted); line-height: 1.85; }
+    .sec-sub.light { color: rgba(255,255,255,0.45); }
+    .centered { text-align: center; }
+    .centered .sec-sub { max-width: 480px; margin: 0 auto; }
+
+    /* HOW IT WORKS */
+    .how-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; max-width: 1100px; margin: 0 auto; }
+    .how-steps { margin-top: 40px; }
+    .how-step { display: flex; gap: 18px; padding: 22px 0; border-bottom: 1px solid rgba(44,24,16,0.07); }
+    .how-step:last-child { border: none; }
+    .step-icon { width: 50px; height: 50px; border-radius: 12px; background: rgba(192,57,43,0.07); border: 1px solid rgba(192,57,43,0.13); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; transition: all 0.3s; }
+    .how-step:hover .step-icon { background: var(--red); }
+    .step-num { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); margin-bottom: 3px; }
+    .step-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .step-desc { font-size: 0.77rem; color: var(--muted); line-height: 1.7; }
+    .how-photo { border-radius: 14px; overflow: hidden; aspect-ratio: 4/5; position: relative; box-shadow: 0 20px 60px rgba(44,24,16,0.18); }
+    .how-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .how-photo-badge { position: absolute; bottom: 20px; left: 20px; right: 20px; background: rgba(10,5,2,0.82); backdrop-filter: blur(10px); border-radius: 8px; padding: 14px 16px; border: 1px solid rgba(255,255,255,0.07); }
+    .how-photo-badge p { font-family: 'Playfair Display', serif; font-size: 0.92rem; color: white; margin-bottom: 3px; }
+    .how-photo-badge span { font-size: 0.68rem; color: rgba(255,255,255,0.45); }
+
+    /* IMPACT */
+    .impact-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: rgba(255,255,255,0.04); max-width: 860px; margin: 48px auto 0; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+    .impact-item { padding: 40px 16px; text-align: center; background: rgba(255,255,255,0.02); }
+    .impact-num { font-family: 'Playfair Display', serif; font-size: clamp(2rem,4vw,3rem); font-weight: 800; color: var(--gold); }
+    .impact-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.32); margin-top: 6px; }
+
+    /* STORIES */
+    .stories-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; max-width: 1100px; margin: 48px auto 40px; }
+    .story-card { border-radius: 12px; overflow: hidden; background: white; box-shadow: 0 2px 16px rgba(44,24,16,0.06); transition: transform 0.3s, box-shadow 0.3s; }
+    .story-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(44,24,16,0.13); }
+    .story-img-wrap { position: relative; height: 230px; overflow: hidden; }
+    .story-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .story-card:hover .story-img-wrap img { transform: scale(1.05); }
+    .story-img-overlay { position: absolute; bottom: 0; left: 0; right: 0; height: 55%; background: linear-gradient(to top, rgba(0,0,0,0.65), transparent); }
+    .story-tag-country { position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); border-radius: 20px; padding: 4px 10px; font-size: 0.6rem; font-weight: 600; color: white; letter-spacing: 0.1em; text-transform: uppercase; }
+    .story-tag-need { position: absolute; top: 12px; right: 12px; background: var(--red); border-radius: 20px; padding: 4px 10px; font-size: 0.6rem; font-weight: 600; color: white; letter-spacing: 0.1em; text-transform: uppercase; }
+    .story-body { padding: 18px 20px 20px; }
+    .story-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .story-meta { font-size: 0.66rem; color: var(--muted); margin-bottom: 10px; letter-spacing: 0.06em; }
+    .story-text { font-size: 0.77rem; color: var(--muted); line-height: 1.78; margin-bottom: 14px; }
+    .story-link { font-size: 0.7rem; font-weight: 600; color: var(--red); text-decoration: none; }
+    .stories-cta { text-align: center; }
+
+    /* FOUNDER */
+    .founder-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+    .founder-avatar { width: 78px; height: 78px; border-radius: 50%; background: var(--red); color: white; font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 28px auto 0; border: 4px solid rgba(192,57,43,0.12); }
+    .founder-box { border: 1.5px dashed rgba(192,57,43,0.28); border-radius: 12px; padding: 44px 32px; margin-top: 28px; }
+    .founder-box p { font-size: 0.84rem; color: var(--muted); font-style: italic; line-height: 1.85; }
+
+    /* SUBSCRIBE */
+    .sub-wrap { max-width: 500px; margin: 0 auto; text-align: center; }
+    .sub-form { display: flex; gap: 10px; margin-top: 28px; }
+    .sub-input { flex: 1; padding: 13px 16px; border: 1.5px solid rgba(255,255,255,0.12); border-radius: 4px; background: rgba(255,255,255,0.07); color: white; font-family: 'DM Sans', sans-serif; font-size: 0.83rem; outline: none; transition: border-color 0.2s; }
+    .sub-input::placeholder { color: rgba(255,255,255,0.3); }
+    .sub-input:focus { border-color: rgba(255,255,255,0.35); }
+    .sub-btn { padding: 13px 24px; background: white; color: var(--red); border: none; border-radius: 4px; font-family: 'DM Sans', sans-serif; font-size: 0.73rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; transition: all 0.2s; }
+    .sub-btn:hover { background: var(--cream); }
+    .sub-ok { display: none; color: rgba(255,255,255,0.75); font-size: 0.82rem; margin-top: 14px; }
+    .sub-ok.on { display: block; }
+
+    /* SOCIAL */
+    .social-row { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 44px; }
+    .social-pill { display: flex; align-items: center; gap: 8px; padding: 11px 20px; background: white; border: 1px solid rgba(44,24,16,0.08); border-radius: 40px; text-decoration: none; font-size: 0.74rem; font-weight: 600; color: var(--text); transition: all 0.25s; box-shadow: 0 2px 10px rgba(44,24,16,0.04); }
+    .social-pill:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(44,24,16,0.1); border-color: var(--red); color: var(--red); }
+    .social-pill span { font-size: 1.15rem; }
+
+    /* BUTTONS */
+    .btn-red { display: inline-block; padding: 13px 32px; background: var(--red); color: white; border-radius: 4px; font-size: 0.77rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
+    .btn-red:hover { background: var(--red-dark); transform: translateY(-1px); }
+    .btn-outline { display: inline-block; padding: 13px 32px; background: transparent; color: var(--red); border-radius: 4px; font-size: 0.77rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; border: 2px solid var(--red); }
+    .btn-outline:hover { background: var(--red); color: white; }
+
+    /* FOOTER */
+    .footer { background: var(--dark); color: white; padding: 60px 5% 28px; }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 800; color: white; margin-bottom: 12px; display: block; }
+    .footer-logo span { color: var(--gold); }
+    .footer-brand p { font-size: 0.77rem; color: rgba(255,255,255,0.36); line-height: 1.8; max-width: 220px; }
+    .footer-col h4 { font-size: 0.63rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+    .footer-col a { display: block; font-size: 0.76rem; color: rgba(255,255,255,0.38); text-decoration: none; margin-bottom: 9px; transition: color 0.2s; }
+    .footer-col a:hover { color: white; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-copy { font-size: 0.67rem; color: rgba(255,255,255,0.2); }
+
+    /* RESPONSIVE */
+    @media(max-width:960px){ .how-layout{ grid-template-columns:1fr; } .how-photo{ display:none; } .stories-grid{ grid-template-columns:repeat(2,1fr); } .impact-grid{ grid-template-columns:repeat(2,1fr); } .footer-grid{ grid-template-columns:1fr 1fr; gap:32px; } }
+    @media(max-width:600px){ .navbar{ padding:0 4%; } .nav-links{ display:none; } .hamburger{ display:block; } .hero-content{ padding:90px 4% 70px; } .stories-grid{ grid-template-columns:1fr; } .sub-form{ flex-direction:column; } .footer-grid{ grid-template-columns:1fr; gap:24px; } .section{ padding:60px 4%; } }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon"><div class="logo-cross"></div></div>
+    <span class="logo-text">One <span>Bob</span> Charity Fund</span>
+  </a>
+  <div class="nav-links">
+    <a href="stories.html" class="nav-link">Stories</a>
+    <a href="mission.html" class="nav-link">Mission</a>
+    <a href="gallery.html" class="nav-link">Gallery</a>
+    <a href="volunteer.html" class="nav-link">Volunteer</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <a href="donate.html" class="nav-btn">Donate Now</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="stories.html" class="nav-link">Stories</a>
+  <a href="mission.html" class="nav-link">Mission</a>
+  <a href="gallery.html" class="nav-link">Gallery</a>
+  <a href="volunteer.html" class="nav-link">Volunteer</a>
+  <a href="contact.html" class="nav-link">Contact</a>
+  <a href="donate.html" class="nav-btn" style="text-align:center;margin-top:6px;">Donate Now</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-slides">
+    <div class="hero-slide active"><img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1600&q=80" alt=""/></div>
+    <div class="hero-slide"><img src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?w=1600&q=80" alt=""/></div>
+    <div class="hero-slide"><img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?w=1600&q=80" alt=""/></div>
+    <div class="hero-slide"><img src="https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=1600&q=80" alt=""/></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-overlay-bottom"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><div class="hero-badge-dot"></div> One Bob Charity Fund · OBCF</div>
+    <div class="hero-title">Every Shilling</div>
+    <div class="hero-title-italic">Counts.</div>
+    <div class="hero-tagline">One bob from a million hearts changes everything.</div>
+    <p class="hero-sub">We deliver education, food, and clothing directly to the most vulnerable children in Kenya, Tanzania, and Uganda. No child should be left behind because of poverty.</p>
+    <div class="hero-actions">
+      <a href="donate.html" class="btn-white">Donate Your Bob →</a>
+      <a href="stories.html" class="btn-ghost">See Their Stories</a>
+    </div>
+    <div class="child-label">
+      <div class="child-divider"></div>
+      <div>
+        <div class="child-label-name" id="childName">🇰🇪 Zawadi, 9</div>
+        <div class="child-label-sub" id="childSub">Kenya · Needs education support</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-dots" id="heroDots"></div>
+  <div class="scroll-hint"><div class="scroll-line"></div> Scroll to explore</div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <div class="ticker-item">🇰🇪 Amina · Nairobi · KSh 50</div>
+    <div class="ticker-item">🇹🇿 David · Dar es Salaam · TSh 500</div>
+    <div class="ticker-item">🇺🇬 Grace · Kampala · UGX 2,000</div>
+    <div class="ticker-item">🇰🇪 Samuel · Kisumu · KSh 100</div>
+    <div class="ticker-item">🇹🇿 Zawadi · Mwanza · TSh 1,000</div>
+    <div class="ticker-item">🇺🇬 Moses · Entebbe · UGX 5,000</div>
+    <div class="ticker-item">🇰🇪 Fatuma · Mombasa · KSh 20</div>
+    <div class="ticker-item">🇹🇿 Hassan · Zanzibar · TSh 200</div>
+    <div class="ticker-item">🇺🇬 Aisha · Jinja · UGX 1,000</div>
+    <div class="ticker-item">🇰🇪 John · Nakuru · KSh 500</div>
+    <div class="ticker-item">🇹🇿 Miriam · Arusha · TSh 5,000</div>
+    <div class="ticker-item">🇺🇬 Peter · Gulu · UGX 3,000</div>
+    <div class="ticker-item">🇰🇪 Amina · Nairobi · KSh 50</div>
+    <div class="ticker-item">🇹🇿 David · Dar es Salaam · TSh 500</div>
+    <div class="ticker-item">🇺🇬 Grace · Kampala · UGX 2,000</div>
+    <div class="ticker-item">🇰🇪 Samuel · Kisumu · KSh 100</div>
+    <div class="ticker-item">🇹🇿 Zawadi · Mwanza · TSh 1,000</div>
+    <div class="ticker-item">🇺🇬 Moses · Entebbe · UGX 5,000</div>
+    <div class="ticker-item">🇰🇪 Fatuma · Mombasa · KSh 20</div>
+    <div class="ticker-item">🇹🇿 Hassan · Zanzibar · TSh 200</div>
+    <div class="ticker-item">🇺🇬 Aisha · Jinja · UGX 1,000</div>
+    <div class="ticker-item">🇰🇪 John · Nakuru · KSh 500</div>
+    <div class="ticker-item">🇹🇿 Miriam · Arusha · TSh 5,000</div>
+    <div class="ticker-item">🇺🇬 Peter · Gulu · UGX 3,000</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section section-alt">
+  <div class="how-layout">
+    <div>
+      <div class="sec-label">Simple & Transparent</div>
+      <h2 class="sec-heading">How your <em>bob reaches</em><br/>a child</h2>
+      <p class="sec-sub">Every shilling donated goes directly to buying and delivering what children need most. No big offices. No waste. Just real impact.</p>
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="step-icon">💳</div>
+          <div><div class="step-num">Step 01</div><div class="step-title">You Donate Any Amount</div><div class="step-desc">Even one shilling counts. Every donation is recorded and goes into the fund immediately.</div></div>
+        </div>
+        <div class="how-step">
+          <div class="step-icon">🛒</div>
+          <div><div class="step-num">Step 02</div><div class="step-title">We Buy What is Needed</div><div class="step-desc">Our team buys food, school supplies, and clothing from local suppliers — keeping money in the community.</div></div>
+        </div>
+        <div class="how-step">
+          <div class="step-icon">🚐</div>
+          <div><div class="step-num">Step 03</div><div class="step-title">We Deliver Directly</div><div class="step-desc">We travel to schools and communities. No middlemen, no delays — straight to the children who need it.</div></div>
+        </div>
+        <div class="how-step">
+          <div class="step-icon">📸</div>
+          <div><div class="step-num">Step 04</div><div class="step-title">We Show You the Impact</div><div class="step-desc">Every delivery is photographed and shared. You will see exactly which children your bob helped.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="how-photo">
+      <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?w=800&q=80" alt="Child receiving help"/>
+      <div class="how-photo-badge">
+        <p>Last delivery — Kisumu, Kenya 🇰🇪</p>
+        <span>34 children received school bags and books</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section class="section section-dark">
+  <div class="centered">
+    <div class="sec-label gold">Our Impact So Far</div>
+    <h2 class="sec-heading light">Numbers that <em>matter</em></h2>
+  </div>
+  <div class="impact-grid">
+    <div class="impact-item"><div class="impact-num" id="cnt1">0</div><div class="impact-label">Total Donors</div></div>
+    <div class="impact-item"><div class="impact-num" id="cnt2">0</div><div class="impact-label">Children Helped</div></div>
+    <div class="impact-item"><div class="impact-num" id="cnt3">0</div><div class="impact-label">Schools Reached</div></div>
+    <div class="impact-item"><div class="impact-num" id="cnt4">0</div><div class="impact-label">Countries</div></div>
+  </div>
+</section>
+
+<!-- STORIES -->
+<section class="section">
+  <div class="centered">
+    <div class="sec-label">Real Children · Real Stories</div>
+    <h2 class="sec-heading">Behind every bob<br/><em>is a child waiting</em></h2>
+  </div>
+  <div class="stories-grid">
+    <div class="story-card">
+      <div class="story-img-wrap">
+        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80" alt="Zawadi"/>
+        <div class="story-img-overlay"></div>
+        <div class="story-tag-country">🇰🇪 Kenya</div>
+        <div class="story-tag-need">Education</div>
+      </div>
+      <div class="story-body">
+        <div class="story-name">Zawadi</div>
+        <div class="story-meta">Age 9 · Primary School · Nairobi</div>
+        <div class="story-text">Zawadi walks 5km every morning to reach school. She has never owned a school bag. Her dream is to become a doctor — but she needs your help to stay in school.</div>
+        <a href="stories.html" class="story-link">Read her story →</a>
+      </div>
+    </div>
+    <div class="story-card">
+      <div class="story-img-wrap">
+        <img src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?w=600&q=80" alt="Omondi"/>
+        <div class="story-img-overlay"></div>
+        <div class="story-tag-country">🇺🇬 Uganda</div>
+        <div class="story-tag-need">Food</div>
+      </div>
+      <div class="story-body">
+        <div class="story-name">Omondi</div>
+        <div class="story-meta">Age 7 · Primary School · Kampala</div>
+        <div class="story-text">Omondi comes to school most days without breakfast. His teacher says he falls asleep by 10am because he is hungry. One meal a day could change everything.</div>
+        <a href="stories.html" class="story-link">Read his story →</a>
+      </div>
+    </div>
+    <div class="story-card">
+      <div class="story-img-wrap">
+        <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?w=600&q=80" alt="Neema"/>
+        <div class="story-img-overlay"></div>
+        <div class="story-tag-country">🇹🇿 Tanzania</div>
+        <div class="story-tag-need">Clothing</div>
+      </div>
+      <div class="story-body">
+        <div class="story-name">Neema</div>
+        <div class="story-meta">Age 11 · Primary School · Dar es Salaam</div>
+        <div class="story-text">Neema shares one pair of shoes with her younger sister. On days her sister wears them, Neema stays home. She has missed three weeks of school this term alone.</div>
+        <a href="stories.html" class="story-link">Read her story →</a>
+      </div>
+    </div>
+  </div>
+  <div class="stories-cta"><a href="stories.html" class="btn-outline">See All Children's Stories</a></div>
+</section>
+
+<!-- FOUNDER -->
+<section class="section section-alt">
+  <div class="founder-inner">
+    <div class="centered">
+      <div class="sec-label">Our Founder</div>
+      <h2 class="sec-heading">The story behind <em>One Bob</em></h2>
+    </div>
+    <div class="founder-avatar">F</div>
+    <div class="founder-box">
+      <p>The founder's personal story — a journey of survival, hardship, and the decision to turn pain into purpose — will be shared here soon. It is a story that will move you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIBE -->
+<section class="section section-dark">
+  <div class="sub-wrap">
+    <div class="centered">
+      <div class="sec-label gold">Stay Connected</div>
+      <h2 class="sec-heading light">Get updates on the<br/><em>children you are helping</em></h2>
+      <p class="sec-sub light">Join donors who receive real delivery updates, children's stories, and impact reports in their inbox.</p>
+    </div>
+    <div class="sub-form">
+      <input type="email" class="sub-input" id="subEmail" placeholder="Your email address"/>
+      <button class="sub-btn" onclick="subscribe()">Subscribe</button>
+    </div>
+    <div class="sub-ok" id="subOk">✓ Subscribed! Watch your inbox for updates. 💛</div>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<section class="section">
+  <div class="centered">
+    <div class="sec-label">Follow Our Journey</div>
+    <h2 class="sec-heading">Stay <em>connected</em> with us</h2>
+    <p class="sec-sub" style="max-width:440px;margin:0 auto;">Follow us to see real deliveries, children receiving help, and your donations in action.</p>
+  </div>
+  <div class="social-row">
+    <a href="https://facebook.com/onebobcharityfund" target="_blank" class="social-pill"><span>📘</span> Facebook</a>
+    <a href="https://instagram.com/onebobcharityfund" target="_blank" class="social-pill"><span>📸</span> Instagram</a>
+    <a href="https://tiktok.com/@onebobcharityfund" target="_blank" class="social-pill"><span>🎵</span> TikTok</a>
+    <a href="https://wa.me/254700000000" target="_blank" class="social-pill"><span>💬</span> WhatsApp</a>
+    <a href="https://twitter.com/onebobcharity" target="_blank" class="social-pill"><span>🐦</span> Twitter</a>
+    <a href="https://youtube.com/@onebobcharityfund" target="_blank" class="social-pill"><span>▶️</span> YouTube</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="footer-logo">One <span>Bob</span> Charity Fund</span>
+      <p>Every shilling counts. One bob from a million hearts changes everything. Delivering education, food and clothing to children in East Africa.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a href="stories.html">Children's Stories</a>
+      <a href="donate.html">Donate Now</a>
+      <a href="mission.html">Our Mission</a>
+      <a href="gallery.html">Gallery</a>
+    </div>
+    <div class="footer-col">
+      <h4>Get Involved</h4>
+      <a href="volunteer.html">Volunteer</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="testimonies.html">Testimonies</a>
+    </div>
+    <div class="footer-col">
+      <h4>Countries</h4>
+      <a href="donate.html">🇰🇪 Kenya</a>
+      <a href="donate.html">🇹🇿 Tanzania</a>
+      <a href="donate.html">🇺🇬 Uganda</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 One Bob Charity Fund · All donations are voluntary · No minimum amount</div>
+    <div style="font-size:1.1rem;">🇰🇪 🇹🇿 🇺🇬</div>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll effect
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Mobile menu
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+  // Hero slideshow
+  const heroData = [
+    { name: '🇰🇪 Zawadi, 9', sub: 'Kenya · Needs education support' },
+    { name: '🇺🇬 Omondi, 7', sub: 'Uganda · Needs food support' },
+    { name: '🇹🇿 Neema, 11', sub: 'Tanzania · Needs clothing support' },
+    { name: '🇰🇪 Baraka, 6', sub: 'Kenya · Needs education support' },
+  ];
+  const slideEls = document.querySelectorAll('.hero-slide');
+  const dotsEl = document.getElementById('heroDots');
+  let curr = 0;
+
+  heroData.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'hero-dot' + (i===0?' active':'');
+    d.onclick = () => goSlide(i);
+    dotsEl.appendChild(d);
+  });
+
+  function goSlide(i) {
+    slideEls[curr].classList.remove('active');
+    document.querySelectorAll('.hero-dot')[curr].classList.remove('active');
+    curr = i;
+    slideEls[curr].classList.add('active');
+    document.querySelectorAll('.hero-dot')[curr].classList.add('active');
+    document.getElementById('childName').textContent = heroData[i].name;
+    document.getElementById('childSub').textContent = heroData[i].sub;
+  }
+
+  setInterval(() => goSlide((curr+1) % heroData.length), 7000);
+
+  // Impact counters
+  function count(id, target) {
+    const el = document.getElementById(id);
+    let n = 0, step = Math.max(1, Math.ceil(target/60));
+    const t = setInterval(() => { n = Math.min(n+step, target); el.textContent = n.toLocaleString(); if(n>=target) clearInterval(t); }, 28);
+  }
+
+  new IntersectionObserver(entries => {
+    if(entries[0].isIntersecting) { count('cnt1',12600); count('cnt2',3491); count('cnt3',17); count('cnt4',3); }
+  }, {threshold:0.3}).observe(document.querySelector('.impact-grid'));
+
+  // Subscribe
+  function subscribe() {
+    const v = document.getElementById('subEmail').value.trim();
+    if(!v || !v.includes('@')) { alert('Please enter a valid email.'); return; }
+    document.getElementById('subOk').classList.add('on');
+    document.getElementById('subEmail').value = '';
+  }
+</script>
+</body>
+</html>
