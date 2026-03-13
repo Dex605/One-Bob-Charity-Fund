@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Mission — One Bob Charity Fund</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #C0392B; --red-dark: #922B21; --gold: #D4A843;
+      --cream: #FAF6F0; --dark: #1A0E06; --text: #2C1810;
+      --muted: rgba(44,24,16,0.55);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+
+    /* NAVBAR */
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 0 5%; height: 66px; display: flex; align-items: center; justify-content: space-between; background: rgba(250,246,240,0.97); backdrop-filter: blur(20px); box-shadow: 0 1px 0 rgba(44,24,16,0.08); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 34px; height: 34px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .logo-cross { position: relative; width: 14px; height: 14px; }
+    .logo-cross::before { content:''; position: absolute; top: 50%; left: 0; right: 0; height: 2.5px; background: white; transform: translateY(-50%); border-radius: 2px; }
+    .logo-cross::after { content:''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2.5px; background: white; transform: translateX(-50%); border-radius: 2px; }
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 800; color: var(--text); }
+    .logo-text span { color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link { padding: 8px 14px; font-size: 0.73rem; font-weight: 500; color: var(--muted); text-decoration: none; border-radius: 4px; transition: all 0.2s; }
+    .nav-link:hover { color: var(--text); background: rgba(44,24,16,0.05); }
+    .nav-link.active { color: var(--red); }
+    .nav-btn { padding: 9px 22px; background: var(--red); color: white; border-radius: 4px; font-size: 0.73rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; margin-left: 8px; transition: all 0.2s; }
+    .nav-btn:hover { background: var(--red-dark); }
+    .hamburger { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; }
+    .mobile-menu { display: none; position: fixed; top: 66px; left: 0; right: 0; background: white; border-bottom: 1px solid rgba(44,24,16,0.08); padding: 12px 5% 20px; z-index: 199; flex-direction: column; gap: 4px; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu .nav-link { color: var(--muted); }
+
+    /* HERO */
+    .page-hero { padding: 120px 5% 80px; background: var(--dark); position: relative; overflow: hidden; min-height: 380px; display: flex; align-items: center; }
+    .page-hero::before { content:''; position: absolute; top: -20%; right: -5%; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(192,57,43,0.1) 0%, transparent 70%); }
+    .page-hero::after { content:''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(212,168,67,0.3), transparent); }
+    .hero-inner { max-width: 700px; }
+    .hero-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(212,168,67,0.7); margin-bottom: 12px; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 4rem); font-weight: 800; color: white; line-height: 1.05; margin-bottom: 16px; }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-sub { font-size: 0.92rem; color: rgba(255,255,255,0.45); line-height: 1.9; }
+
+    /* SECTIONS */
+    .section { padding: 88px 5%; }
+    .section-alt { background: #FDF8F2; }
+    .section-dark { background: var(--dark); }
+    .inner { max-width: 1100px; margin: 0 auto; }
+    .sec-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+    .sec-label.gold { color: rgba(212,168,67,0.7); }
+    .sec-heading { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.1; color: var(--text); margin-bottom: 14px; }
+    .sec-heading em { font-style: italic; color: var(--red); }
+    .sec-heading.light { color: white; }
+    .sec-heading.light em { color: var(--gold); }
+    .sec-sub { font-size: 0.87rem; color: var(--muted); line-height: 1.85; }
+    .sec-sub.light { color: rgba(255,255,255,0.45); }
+
+    /* MISSION VISION */
+    .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 48px; }
+    .mv-card { border-radius: 16px; padding: 40px; position: relative; overflow: hidden; }
+    .mv-card-mission { background: var(--red); }
+    .mv-card-vision { background: var(--dark); border: 1px solid rgba(255,255,255,0.06); }
+    .mv-card::before { content:''; position: absolute; top: -30%; right: -10%; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+    .mv-icon { font-size: 2.2rem; margin-bottom: 18px; }
+    .mv-type { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 10px; }
+    .mv-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 800; color: white; margin-bottom: 14px; font-style: italic; }
+    .mv-text { font-size: 0.84rem; color: rgba(255,255,255,0.7); line-height: 1.85; }
+
+    /* VALUES */
+    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 48px; }
+    .value-card { background: white; border-radius: 14px; padding: 32px 26px; border: 1px solid rgba(44,24,16,0.07); transition: transform 0.3s, box-shadow 0.3s; }
+    .value-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(44,24,16,0.1); }
+    .value-icon { width: 52px; height: 52px; border-radius: 12px; background: rgba(192,57,43,0.07); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 18px; transition: background 0.3s; }
+    .value-card:hover .value-icon { background: var(--red); }
+    .value-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .value-text { font-size: 0.78rem; color: var(--muted); line-height: 1.78; }
+
+    /* FOUNDER */
+    .founder-layout { display: grid; grid-template-columns: 280px 1fr; gap: 56px; align-items: start; }
+    .founder-photo-wrap { position: relative; }
+    .founder-photo { width: 100%; aspect-ratio: 3/4; border-radius: 16px; background: rgba(192,57,43,0.08); border: 2px dashed rgba(192,57,43,0.2); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; }
+    .founder-initials { width: 80px; height: 80px; border-radius: 50%; background: var(--red); color: white; font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+    .founder-photo-label { font-size: 0.72rem; color: var(--muted); font-style: italic; text-align: center; padding: 0 16px; }
+    .founder-badge { position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%); background: var(--red); color: white; border-radius: 20px; padding: 6px 16px; font-size: 0.68rem; font-weight: 600; white-space: nowrap; letter-spacing: 0.08em; }
+    .founder-right { padding-top: 8px; }
+    .founder-title { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; color: var(--text); line-height: 1.1; margin-bottom: 6px; }
+    .founder-title em { font-style: italic; color: var(--red); }
+    .founder-role { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px; }
+    .founder-placeholder { border: 1.5px dashed rgba(192,57,43,0.25); border-radius: 12px; padding: 40px 32px; margin-bottom: 24px; }
+    .founder-placeholder p { font-size: 0.86rem; color: var(--muted); font-style: italic; line-height: 1.9; text-align: center; }
+    .founder-placeholder p strong { color: var(--text); font-style: normal; }
+    .founder-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+    .founder-stat { }
+    .founder-stat-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 800; color: var(--red); }
+    .founder-stat-label { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+
+    /* TEAM */
+    .team-note { text-align: center; max-width: 540px; margin: 48px auto 0; }
+    .team-note p { font-size: 0.85rem; color: var(--muted); line-height: 1.85; font-style: italic; }
+    .team-empty { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 32px; }
+    .team-slot { width: 120px; text-align: center; }
+    .team-avatar-empty { width: 80px; height: 80px; border-radius: 50%; background: rgba(44,24,16,0.05); border: 2px dashed rgba(44,24,16,0.12); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 10px; }
+    .team-slot-label { font-size: 0.68rem; color: var(--muted); font-style: italic; }
+
+    /* PROMISE */
+    .promise-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.04); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); margin-top: 48px; }
+    .promise-item { padding: 36px 20px; text-align: center; background: rgba(255,255,255,0.02); }
+    .promise-icon { font-size: 2rem; margin-bottom: 12px; }
+    .promise-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: white; margin-bottom: 6px; }
+    .promise-text { font-size: 0.72rem; color: rgba(255,255,255,0.38); line-height: 1.6; }
+
+    /* CTA */
+    .cta-section { padding: 80px 5%; text-align: center; }
+    .cta-inner { max-width: 600px; margin: 0 auto; }
+    .cta-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; color: var(--text); margin-bottom: 14px; }
+    .cta-title em { font-style: italic; color: var(--red); }
+    .cta-sub { font-size: 0.87rem; color: var(--muted); line-height: 1.85; margin-bottom: 32px; }
+    .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-red { display: inline-block; padding: 14px 32px; background: var(--red); color: white; border-radius: 4px; font-size: 0.77rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
+    .btn-red:hover { background: var(--red-dark); transform: translateY(-1px); }
+    .btn-outline { display: inline-block; padding: 14px 32px; background: transparent; color: var(--red); border-radius: 4px; font-size: 0.77rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; border: 2px solid var(--red); }
+    .btn-outline:hover { background: var(--red); color: white; }
+
+    /* FOOTER */
+    .footer { background: var(--dark); color: white; padding: 48px 5% 24px; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 24px; }
+    .footer-copy { font-size: 0.68rem; color: rgba(255,255,255,0.22); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 0.68rem; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: white; }
+
+    @media(max-width:960px){ .mv-grid{ grid-template-columns:1fr; } .values-grid{ grid-template-columns:repeat(2,1fr); } .founder-layout{ grid-template-columns:1fr; } .founder-photo-wrap{ max-width:240px; margin:0 auto; } .promise-grid{ grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:600px){ .nav-links{ display:none; } .hamburger{ display:block; } .values-grid{ grid-template-columns:1fr; } .promise-grid{ grid-template-columns:1fr; } .section{ padding:60px 4%; } }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon"><div class="logo-cross"></div></div>
+    <span class="logo-text">One <span>Bob</span> Charity Fund</span>
+  </a>
+  <div class="nav-links">
+    <a href="stories.html" class="nav-link">Stories</a>
+    <a href="mission.html" class="nav-link active">Mission</a>
+    <a href="gallery.html" class="nav-link">Gallery</a>
+    <a href="volunteer.html" class="nav-link">Volunteer</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <a href="donate.html" class="nav-btn">Donate Now</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="stories.html" class="nav-link">Stories</a>
+  <a href="mission.html" class="nav-link active">Mission</a>
+  <a href="gallery.html" class="nav-link">Gallery</a>
+  <a href="volunteer.html" class="nav-link">Volunteer</a>
+  <a href="contact.html" class="nav-link">Contact</a>
+  <a href="donate.html" class="nav-btn" style="text-align:center;margin-top:6px;">Donate Now</a>
+</div>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="hero-inner">
+    <div class="hero-label">Who We Are</div>
+    <h1 class="hero-title">Built on one belief —<br/><em>every child matters</em></h1>
+    <p class="hero-sub">One Bob Charity Fund was born from personal pain and a simple conviction: that small acts of kindness, multiplied by many hearts, can change the lives of children who have been forgotten by the system.</p>
+  </div>
+</section>
+
+<!-- MISSION & VISION -->
+<section class="section">
+  <div class="inner">
+    <div class="sec-label">What Drives Us</div>
+    <h2 class="sec-heading">Our mission <em>&amp;</em> vision</h2>
+    <p class="sec-sub" style="max-width:560px;">Two simple statements that guide every decision we make, every delivery we carry out, and every child we help.</p>
+    <div class="mv-grid">
+      <div class="mv-card mv-card-mission">
+        <div class="mv-icon">🎯</div>
+        <div class="mv-type">Our Mission</div>
+        <div class="mv-title">To ensure no child in East Africa goes without food, education, or clothing because of poverty.</div>
+        <p class="mv-text">We collect small donations from many people and use every shilling to directly buy and deliver essential items to the most vulnerable children in Kenya, Tanzania, and Uganda. No child is turned away. No donation is too small.</p>
+      </div>
+      <div class="mv-card mv-card-vision">
+        <div class="mv-icon">🌍</div>
+        <div class="mv-type">Our Vision</div>
+        <div class="mv-title">A generation of East African children who grow up knowing they are not alone.</div>
+        <p class="mv-text">We believe that a child who is fed, clothed, and educated becomes an adult who builds their community. Our vision is not just to help children survive — it is to help them thrive and become the change East Africa needs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="section section-alt">
+  <div class="inner">
+    <div class="sec-label">What We Stand For</div>
+    <h2 class="sec-heading">Our core <em>values</em></h2>
+    <p class="sec-sub" style="max-width:520px;">These values are not words on a wall. They are the rules we live by in every decision, every delivery, and every interaction.</p>
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">🤝</div>
+        <div class="value-name">Transparency</div>
+        <p class="value-text">Every donation is tracked. Every delivery is photographed. Every shilling is accounted for. We show you exactly where your money goes because we have nothing to hide.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">💛</div>
+        <div class="value-name">Dignity</div>
+        <p class="value-text">We deliver help with love and respect. Every child we serve deserves to feel seen and valued — not pitied. We treat every family the way we would want our own families to be treated.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🎯</div>
+        <div class="value-name">Direct Impact</div>
+        <p class="value-text">No middlemen. No big offices. Our team personally buys and delivers to children. When you donate, your bob reaches a child — not an administrator's salary.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🌱</div>
+        <div class="value-name">Community First</div>
+        <p class="value-text">We buy from local suppliers to keep money circulating in East African communities. We work with local schools and community leaders who know the children best.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🔥</div>
+        <div class="value-name">Urgency</div>
+        <p class="value-text">A child who misses a meal today loses brain development that cannot be recovered. A child who drops out of school today loses a future. We act fast because children cannot wait.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🌍</div>
+        <div class="value-name">Inclusion</div>
+        <p class="value-text">We do not choose children based on tribe, religion, or gender. Every vulnerable child in our three countries is equal in our eyes. Poverty does not discriminate and neither do we.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section class="section">
+  <div class="inner">
+    <div class="sec-label">The Person Behind It All</div>
+    <h2 class="sec-heading">Meet our <em>founder</em></h2>
+    <div class="founder-layout">
+      <div class="founder-photo-wrap">
+        <div class="founder-photo">
+          <div class="founder-initials">F</div>
+          <p class="founder-photo-label">Founder photo coming soon</p>
+        </div>
+        <div class="founder-badge">Founder & CEO</div>
+      </div>
+      <div class="founder-right">
+        <h3 class="founder-title">A story of<br/><em>survival &amp; purpose</em></h3>
+        <div class="founder-role">Founder · CEO · One Bob Charity Fund · Nairobi, Kenya</div>
+        <div class="founder-placeholder">
+          <p><strong>This section is reserved for the founder's personal story.</strong><br/><br/>
+          A journey that began in hardship — of being let down by those who should have been there — and ended in a decision to become the person for others that no one was for him. A story of working as a cleaner and security guard to pay for his own education. Of building himself from nothing. Of arriving at a point where the only thing left to do was give back.<br/><br/>
+          <em>The founder will write this himself. It is his story to tell.</em></p>
+        </div>
+        <div class="founder-stats">
+          <div class="founder-stat">
+            <div class="founder-stat-num">3</div>
+            <div class="founder-stat-label">Countries we serve</div>
+          </div>
+          <div class="founder-stat">
+            <div class="founder-stat-num">3,491</div>
+            <div class="founder-stat-label">Children helped</div>
+          </div>
+          <div class="founder-stat">
+            <div class="founder-stat-num">1</div>
+            <div class="founder-stat-label">Simple belief</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section section-alt">
+  <div class="inner">
+    <div style="text-align:center;">
+      <div class="sec-label">The People</div>
+      <h2 class="sec-heading">Our <em>team</em></h2>
+    </div>
+    <div class="team-empty">
+      <div class="team-slot"><div class="team-avatar-empty">👤</div><div class="team-slot-label">Team member coming soon</div></div>
+      <div class="team-slot"><div class="team-avatar-empty">👤</div><div class="team-slot-label">Team member coming soon</div></div>
+      <div class="team-slot"><div class="team-avatar-empty">👤</div><div class="team-slot-label">Team member coming soon</div></div>
+      <div class="team-slot"><div class="team-avatar-empty">👤</div><div class="team-slot-label">Team member coming soon</div></div>
+    </div>
+    <div class="team-note">
+      <p>Our team is small, dedicated, and growing. We are looking for passionate people in Kenya, Tanzania, and Uganda who believe in this mission. <a href="volunteer.html" style="color:var(--red);font-style:normal;font-weight:600;">Join us as a volunteer →</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- OUR PROMISE -->
+<section class="section section-dark">
+  <div class="inner" style="text-align:center;">
+    <div class="sec-label gold">Our Promise To You</div>
+    <h2 class="sec-heading light">What we <em>commit</em> to every donor</h2>
+    <div class="promise-grid">
+      <div class="promise-item">
+        <div class="promise-icon">📸</div>
+        <div class="promise-title">Photo Evidence</div>
+        <p class="promise-text">Every delivery is photographed and shared on our social media and gallery</p>
+      </div>
+      <div class="promise-item">
+        <div class="promise-icon">💯</div>
+        <div class="promise-title">100% To Children</div>
+        <p class="promise-text">Every shilling donated goes directly to buying items for children — no admin cuts</p>
+      </div>
+      <div class="promise-item">
+        <div class="promise-icon">🚐</div>
+        <div class="promise-title">Direct Delivery</div>
+        <p class="promise-text">We personally travel to schools and communities — no middlemen involved</p>
+      </div>
+      <div class="promise-item">
+        <div class="promise-icon">📊</div>
+        <div class="promise-title">Regular Updates</div>
+        <p class="promise-text">Subscribe to receive delivery reports and see exactly what your donation achieved</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="sec-label" style="text-align:center;">Ready to Help?</div>
+    <h2 class="cta-title">Be part of something<br/><em>that truly matters</em></h2>
+    <p class="cta-sub">You now know who we are, what we believe, and how we work. The only question left is — will you donate your bob today?</p>
+    <div class="cta-btns">
+      <a href="donate.html" class="btn-red">Donate Now →</a>
+      <a href="stories.html" class="btn-outline">Read Children's Stories</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 One Bob Charity Fund · Kenya · Tanzania · Uganda</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="donate.html">Donate</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+</script>
+</body>
+</html>
