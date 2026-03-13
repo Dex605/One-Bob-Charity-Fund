@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Donate — One Bob Charity Fund</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #C0392B; --red-dark: #922B21; --gold: #D4A843;
+      --cream: #FAF6F0; --dark: #1A0E06; --text: #2C1810;
+      --muted: rgba(44,24,16,0.55);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+
+    /* NAVBAR */
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 0 5%; height: 66px; display: flex; align-items: center; justify-content: space-between; background: rgba(250,246,240,0.97); backdrop-filter: blur(20px); box-shadow: 0 1px 0 rgba(44,24,16,0.08); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 34px; height: 34px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .logo-cross { position: relative; width: 14px; height: 14px; }
+    .logo-cross::before { content:''; position: absolute; top: 50%; left: 0; right: 0; height: 2.5px; background: white; transform: translateY(-50%); border-radius: 2px; }
+    .logo-cross::after { content:''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2.5px; background: white; transform: translateX(-50%); border-radius: 2px; }
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 800; color: var(--text); }
+    .logo-text span { color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link { padding: 8px 14px; font-size: 0.73rem; font-weight: 500; color: var(--muted); text-decoration: none; border-radius: 4px; transition: all 0.2s; }
+    .nav-link:hover { color: var(--text); background: rgba(44,24,16,0.05); }
+    .nav-link.active { color: var(--red); }
+    .nav-btn { padding: 9px 22px; background: var(--red); color: white; border-radius: 4px; font-size: 0.73rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; margin-left: 8px; transition: all 0.2s; }
+    .nav-btn:hover { background: var(--red-dark); }
+    .hamburger { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; }
+    .mobile-menu { display: none; position: fixed; top: 66px; left: 0; right: 0; background: white; border-bottom: 1px solid rgba(44,24,16,0.08); padding: 12px 5% 20px; z-index: 199; flex-direction: column; gap: 4px; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu .nav-link { color: var(--muted); }
+
+    /* HERO */
+    .page-hero { padding: 120px 5% 64px; background: var(--dark); position: relative; overflow: hidden; }
+    .page-hero::before { content:''; position: absolute; top: -30%; right: -5%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(192,57,43,0.12) 0%, transparent 70%); }
+    .hero-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(212,168,67,0.7); margin-bottom: 12px; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 4rem); font-weight: 800; color: white; line-height: 1.05; margin-bottom: 14px; }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-sub { font-size: 0.88rem; color: rgba(255,255,255,0.45); max-width: 520px; line-height: 1.85; }
+
+    /* MAIN LAYOUT */
+    .donate-section { padding: 64px 5% 80px; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 380px; gap: 48px; align-items: start; }
+
+    /* LEFT — STEPS */
+    .donate-left { }
+    .sec-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+    .sec-heading { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; color: var(--text); line-height: 1.1; margin-bottom: 8px; }
+    .sec-heading em { font-style: italic; color: var(--red); }
+    .sec-sub { font-size: 0.85rem; color: var(--muted); line-height: 1.85; margin-bottom: 36px; }
+
+    /* STEP TABS */
+    .step-tabs { display: flex; gap: 0; margin-bottom: 32px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(44,24,16,0.1); }
+    .step-tab { flex: 1; padding: 14px 10px; text-align: center; background: white; border: none; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.2s; border-right: 1px solid rgba(44,24,16,0.08); position: relative; }
+    .step-tab:last-child { border-right: none; }
+    .step-tab.active { background: var(--red); color: white; }
+    .step-tab .tab-num { display: block; font-size: 1.1rem; font-weight: 800; margin-bottom: 2px; }
+
+    /* STEP PANELS */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    /* STEP 1 — Country */
+    .country-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+    .country-card { background: white; border: 2px solid rgba(44,24,16,0.08); border-radius: 12px; padding: 22px 16px; text-align: center; cursor: pointer; transition: all 0.25s; }
+    .country-card:hover { border-color: var(--red); transform: translateY(-2px); }
+    .country-card.selected { border-color: var(--red); background: rgba(192,57,43,0.04); box-shadow: 0 4px 20px rgba(192,57,43,0.12); }
+    .country-flag { font-size: 2.2rem; margin-bottom: 10px; display: block; }
+    .country-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .country-desc { font-size: 0.68rem; color: var(--muted); line-height: 1.5; }
+
+    /* STEP 2 — Amount */
+    .amount-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+    .amount-btn { padding: 14px 8px; background: white; border: 2px solid rgba(44,24,16,0.08); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600; color: var(--text); cursor: pointer; transition: all 0.2s; text-align: center; }
+    .amount-btn:hover { border-color: var(--red); color: var(--red); }
+    .amount-btn.selected { background: var(--red); border-color: var(--red); color: white; }
+    .amount-sub { font-size: 0.6rem; font-weight: 400; display: block; margin-top: 2px; opacity: 0.75; }
+    .custom-amount-wrap { margin-bottom: 28px; }
+    .custom-label { font-size: 0.72rem; font-weight: 500; color: var(--muted); margin-bottom: 8px; display: block; }
+    .custom-input-row { display: flex; gap: 10px; align-items: center; }
+    .currency-badge { padding: 12px 14px; background: rgba(44,24,16,0.05); border: 1.5px solid rgba(44,24,16,0.1); border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
+    .custom-input { flex: 1; padding: 12px 16px; border: 1.5px solid rgba(44,24,16,0.1); border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--text); outline: none; transition: border-color 0.2s; background: white; }
+    .custom-input:focus { border-color: var(--red); }
+    .amount-note { font-size: 0.72rem; color: var(--muted); font-style: italic; margin-top: 8px; }
+
+    /* STEP 3 — Payment */
+    .payment-methods { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+    .payment-method { background: white; border: 2px solid rgba(44,24,16,0.08); border-radius: 10px; padding: 18px 20px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 16px; }
+    .payment-method:hover { border-color: var(--red); }
+    .payment-method.selected { border-color: var(--red); background: rgba(192,57,43,0.03); }
+    .payment-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .payment-info { flex: 1; }
+    .payment-name { font-weight: 700; font-size: 0.88rem; color: var(--text); margin-bottom: 2px; }
+    .payment-detail { font-size: 0.72rem; color: var(--muted); }
+    .payment-check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(44,24,16,0.15); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .payment-method.selected .payment-check { background: var(--red); border-color: var(--red); color: white; font-size: 0.7rem; }
+    .payment-instructions { background: rgba(212,168,67,0.08); border: 1px solid rgba(212,168,67,0.2); border-radius: 8px; padding: 16px 18px; margin-bottom: 20px; display: none; }
+    .payment-instructions.show { display: block; }
+    .instr-title { font-size: 0.72rem; font-weight: 700; color: var(--text); margin-bottom: 8px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .instr-step { font-size: 0.78rem; color: var(--muted); margin-bottom: 6px; display: flex; gap: 8px; }
+    .instr-step span { color: var(--red); font-weight: 700; flex-shrink: 0; }
+    .instr-highlight { background: white; border: 1px solid rgba(44,24,16,0.1); border-radius: 6px; padding: 10px 14px; font-size: 0.85rem; font-weight: 700; color: var(--text); margin: 10px 0; text-align: center; letter-spacing: 0.05em; }
+
+    /* STEP 4 — Confirm */
+    .confirm-box { background: white; border-radius: 12px; padding: 28px; border: 1px solid rgba(44,24,16,0.08); margin-bottom: 20px; }
+    .confirm-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(44,24,16,0.06); }
+    .confirm-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .confirm-label { font-size: 0.72rem; color: var(--muted); }
+    .confirm-value { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+    .confirm-value.big { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 800; color: var(--red); }
+    .donor-fields { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+    .field-label { font-size: 0.72rem; font-weight: 500; color: var(--muted); margin-bottom: 5px; display: block; }
+    .field-input { width: 100%; padding: 12px 16px; border: 1.5px solid rgba(44,24,16,0.1); border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; color: var(--text); outline: none; transition: border-color 0.2s; background: white; }
+    .field-input:focus { border-color: var(--red); }
+    .anonymous-row { display: flex; align-items: center; gap: 10px; font-size: 0.78rem; color: var(--muted); cursor: pointer; }
+    .anonymous-row input { accent-color: var(--red); }
+
+    /* NAVIGATION BUTTONS */
+    .step-nav { display: flex; gap: 12px; margin-top: 8px; }
+    .btn-back { padding: 13px 24px; background: transparent; border: 1.5px solid rgba(44,24,16,0.15); border-radius: 4px; font-family: 'DM Sans', sans-serif; font-size: 0.76rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.2s; }
+    .btn-back:hover { border-color: var(--text); color: var(--text); }
+    .btn-next { flex: 1; padding: 14px 24px; background: var(--red); border: none; border-radius: 4px; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: white; cursor: pointer; transition: all 0.2s; }
+    .btn-next:hover { background: var(--red-dark); }
+    .btn-submit { flex: 1; padding: 14px 24px; background: var(--gold); border: none; border-radius: 4px; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); cursor: pointer; transition: all 0.2s; }
+    .btn-submit:hover { background: #c49535; }
+
+    /* SUCCESS */
+    .success-panel { display: none; text-align: center; padding: 48px 32px; background: white; border-radius: 16px; border: 1px solid rgba(44,24,16,0.08); }
+    .success-panel.show { display: block; }
+    .success-icon { font-size: 3.5rem; margin-bottom: 16px; }
+    .success-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+    .success-title em { font-style: italic; color: var(--red); }
+    .success-sub { font-size: 0.85rem; color: var(--muted); line-height: 1.85; max-width: 400px; margin: 0 auto 24px; }
+
+    /* RIGHT SIDEBAR */
+    .donate-right { position: sticky; top: 86px; }
+    .sidebar-card { background: var(--dark); border-radius: 16px; padding: 28px; margin-bottom: 16px; }
+    .sidebar-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: white; margin-bottom: 16px; }
+    .sidebar-title em { font-style: italic; color: var(--gold); }
+    .impact-list { display: flex; flex-direction: column; gap: 12px; }
+    .impact-item { display: flex; gap: 12px; align-items: flex-start; }
+    .impact-emoji { font-size: 1.3rem; flex-shrink: 0; margin-top: 1px; }
+    .impact-text { font-size: 0.76rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
+    .impact-text strong { color: white; font-weight: 600; }
+    .trust-card { background: white; border-radius: 14px; padding: 22px; border: 1px solid rgba(44,24,16,0.08); }
+    .trust-title { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .trust-items { display: flex; flex-direction: column; gap: 10px; }
+    .trust-item { display: flex; gap: 10px; align-items: center; font-size: 0.75rem; color: var(--muted); }
+    .trust-icon { color: var(--red); font-size: 1rem; }
+    .recent-card { background: white; border-radius: 14px; padding: 22px; border: 1px solid rgba(44,24,16,0.08); }
+    .recent-title { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .recent-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(44,24,16,0.05); }
+    .recent-item:last-child { border-bottom: none; }
+    .recent-flag { font-size: 1.1rem; }
+    .recent-info { flex: 1; }
+    .recent-name { font-size: 0.75rem; font-weight: 600; color: var(--text); }
+    .recent-time { font-size: 0.63rem; color: var(--muted); }
+    .recent-amount { font-size: 0.75rem; font-weight: 700; color: var(--red); }
+
+    /* FOOTER */
+    .footer { background: var(--dark); color: white; padding: 48px 5% 24px; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 24px; }
+    .footer-copy { font-size: 0.68rem; color: rgba(255,255,255,0.22); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 0.68rem; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: white; }
+
+    @media(max-width:960px){ .donate-section{ grid-template-columns:1fr; } .donate-right{ position:static; } }
+    @media(max-width:600px){ .nav-links{ display:none; } .hamburger{ display:block; } .country-grid{ grid-template-columns:1fr; } .amount-grid{ grid-template-columns:repeat(2,1fr); } }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon"><div class="logo-cross"></div></div>
+    <span class="logo-text">One <span>Bob</span> Charity Fund</span>
+  </a>
+  <div class="nav-links">
+    <a href="stories.html" class="nav-link">Stories</a>
+    <a href="mission.html" class="nav-link">Mission</a>
+    <a href="gallery.html" class="nav-link">Gallery</a>
+    <a href="volunteer.html" class="nav-link">Volunteer</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <a href="donate.html" class="nav-btn active">Donate Now</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="stories.html" class="nav-link">Stories</a>
+  <a href="mission.html" class="nav-link">Mission</a>
+  <a href="gallery.html" class="nav-link">Gallery</a>
+  <a href="volunteer.html" class="nav-link">Volunteer</a>
+  <a href="contact.html" class="nav-link">Contact</a>
+  <a href="donate.html" class="nav-btn" style="text-align:center;margin-top:6px;">Donate Now</a>
+</div>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="hero-label">Make a Difference Today</div>
+  <h1 class="hero-title">Your one bob<br/><em>changes everything</em></h1>
+  <p class="hero-sub">No minimum. No maximum. Any amount you give goes directly to buying food, clothing, and school supplies for children in Kenya, Tanzania, and Uganda.</p>
+</section>
+
+<div class="donate-section">
+  <!-- LEFT -->
+  <div class="donate-left">
+    <div class="sec-label">4 Simple Steps</div>
+    <h2 class="sec-heading">Donate in <em>minutes</em></h2>
+    <p class="sec-sub">Choose your country, pick your amount, select how you want to pay, and confirm. That is it. Your bob is on its way to a child who needs it.</p>
+
+    <!-- STEP TABS -->
+    <div class="step-tabs">
+      <button class="step-tab active" id="tab1"><span class="tab-num">1</span>Country</button>
+      <button class="step-tab" id="tab2"><span class="tab-num">2</span>Amount</button>
+      <button class="step-tab" id="tab3"><span class="tab-num">3</span>Payment</button>
+      <button class="step-tab" id="tab4"><span class="tab-num">4</span>Confirm</button>
+    </div>
+
+    <!-- STEP 1: COUNTRY -->
+    <div class="step-panel active" id="panel1">
+      <div class="country-grid">
+        <div class="country-card" onclick="selectCountry('Kenya','KSh','ke')">
+          <span class="country-flag">🇰🇪</span>
+          <div class="country-name">Kenya</div>
+          <div class="country-desc">Donate via M-Pesa or bank transfer in Kenyan Shillings</div>
+        </div>
+        <div class="country-card" onclick="selectCountry('Tanzania','TSh','tz')">
+          <span class="country-flag">🇹🇿</span>
+          <div class="country-name">Tanzania</div>
+          <div class="country-desc">Donate via M-Pesa Tanzania or Tigo Pesa in Tanzanian Shillings</div>
+        </div>
+        <div class="country-card" onclick="selectCountry('Uganda','UGX','ug')">
+          <span class="country-flag">🇺🇬</span>
+          <div class="country-name">Uganda</div>
+          <div class="country-desc">Donate via MTN Mobile Money or Airtel Money in Uganda Shillings</div>
+        </div>
+      </div>
+      <p style="font-size:0.78rem;color:var(--muted);font-style:italic;">Not in East Africa? You can donate via PayPal in any currency — select any country above to continue.</p>
+      <div class="step-nav">
+        <button class="btn-next" onclick="goStep(2)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: AMOUNT -->
+    <div class="step-panel" id="panel2">
+      <div class="amount-grid" id="amountGrid">
+        <!-- Filled by JS based on country -->
+      </div>
+      <div class="custom-amount-wrap">
+        <span class="custom-label">Or enter your own amount</span>
+        <div class="custom-input-row">
+          <span class="currency-badge" id="currencyBadge">KSh</span>
+          <input type="number" class="custom-input" id="customAmount" placeholder="Any amount you choose" min="1" oninput="setCustomAmount(this.value)"/>
+        </div>
+        <p class="amount-note">Every shilling counts. There is no minimum — even 1 bob makes a difference.</p>
+      </div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goStep(1)">← Back</button>
+        <button class="btn-next" onclick="goStep(3)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: PAYMENT METHOD -->
+    <div class="step-panel" id="panel3">
+      <div class="payment-methods" id="paymentMethods">
+        <!-- Filled by JS -->
+      </div>
+      <div class="payment-instructions" id="paymentInstructions"></div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goStep(2)">← Back</button>
+        <button class="btn-next" onclick="goStep(4)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: CONFIRM -->
+    <div class="step-panel" id="panel4">
+      <div class="confirm-box">
+        <div class="confirm-row"><span class="confirm-label">Country</span><span class="confirm-value" id="confirmCountry">—</span></div>
+        <div class="confirm-row"><span class="confirm-label">Amount</span><span class="confirm-value big" id="confirmAmount">—</span></div>
+        <div class="confirm-row"><span class="confirm-label">Payment Method</span><span class="confirm-value" id="confirmMethod">—</span></div>
+      </div>
+      <div class="donor-fields">
+        <div>
+          <span class="field-label">Your Name (optional)</span>
+          <input type="text" class="field-input" id="donorName" placeholder="e.g. Amina Wanjiru"/>
+        </div>
+        <div>
+          <span class="field-label">Phone / Email (optional — for receipt)</span>
+          <input type="text" class="field-input" id="donorContact" placeholder="e.g. 0712345678 or email@example.com"/>
+        </div>
+        <label class="anonymous-row">
+          <input type="checkbox" id="anonCheck"/> Show my donation as anonymous in the ticker
+        </label>
+      </div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goStep(3)">← Back</button>
+        <button class="btn-submit" onclick="submitDonation()">✓ I Have Donated →</button>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-panel" id="successPanel">
+      <div class="success-icon">💛</div>
+      <h2 class="success-title">Thank you for your <em>bob</em>!</h2>
+      <p class="success-sub">Your donation has been recorded. Our team will verify the payment and a child in <span id="successCountry"></span> will receive help because of you. You are part of the One Bob family now.</p>
+      <a href="stories.html" style="display:inline-block;padding:13px 28px;background:var(--red);color:white;border-radius:4px;text-decoration:none;font-size:0.76rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Read Their Stories →</a>
+    </div>
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="donate-right">
+    <div class="sidebar-card">
+      <div class="sidebar-title">What your <em>bob</em> buys</div>
+      <div class="impact-list">
+        <div class="impact-item"><span class="impact-emoji">📚</span><div class="impact-text"><strong>KSh 50</strong> buys a notebook and pencil for one child for a month</div></div>
+        <div class="impact-item"><span class="impact-emoji">🍚</span><div class="impact-text"><strong>KSh 100</strong> feeds one child for a full school week</div></div>
+        <div class="impact-item"><span class="impact-emoji">👕</span><div class="impact-text"><strong>KSh 500</strong> buys a complete school uniform for one child</div></div>
+        <div class="impact-item"><span class="impact-emoji">👟</span><div class="impact-text"><strong>KSh 300</strong> buys a pair of shoes so a child can walk to school</div></div>
+        <div class="impact-item"><span class="impact-emoji">🎒</span><div class="impact-text"><strong>KSh 800</strong> buys a school bag packed with supplies</div></div>
+      </div>
+    </div>
+
+    <div class="trust-card" style="margin-bottom:16px;">
+      <div class="trust-title">Why trust us</div>
+      <div class="trust-items">
+        <div class="trust-item"><span class="trust-icon">✓</span> Every delivery is photographed and shared</div>
+        <div class="trust-item"><span class="trust-icon">✓</span> No middlemen — we deliver directly</div>
+        <div class="trust-item"><span class="trust-icon">✓</span> All donations verified before use</div>
+        <div class="trust-item"><span class="trust-icon">✓</span> You can see children we have helped in the gallery</div>
+      </div>
+    </div>
+
+    <div class="recent-card">
+      <div class="recent-title">Recent Donations</div>
+      <div class="recent-item"><span class="recent-flag">🇰🇪</span><div class="recent-info"><div class="recent-name">Amina W.</div><div class="recent-time">2 minutes ago</div></div><span class="recent-amount">KSh 50</span></div>
+      <div class="recent-item"><span class="recent-flag">🇹🇿</span><div class="recent-info"><div class="recent-name">David M.</div><div class="recent-time">8 minutes ago</div></div><span class="recent-amount">TSh 500</span></div>
+      <div class="recent-item"><span class="recent-flag">🇺🇬</span><div class="recent-info"><div class="recent-name">Grace N.</div><div class="recent-time">15 minutes ago</div></div><span class="recent-amount">UGX 2,000</span></div>
+      <div class="recent-item"><span class="recent-flag">🇰🇪</span><div class="recent-info"><div class="recent-name">Anonymous</div><div class="recent-time">23 minutes ago</div></div><span class="recent-amount">KSh 100</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 One Bob Charity Fund · Kenya · Tanzania · Uganda</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="stories.html">Stories</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+  // State
+  let state = { country: '', currency: '', flag: '', amount: 0, amountLabel: '', method: '' };
+
+  // Payment data per country
+  const paymentData = {
+    Kenya: {
+      currency: 'KSh',
+      amounts: [
+        { label: 'KSh 20', value: 20, sub: 'One bob' },
+        { label: 'KSh 50', value: 50, sub: 'A notebook' },
+        { label: 'KSh 100', value: 100, sub: 'One meal' },
+        { label: 'KSh 500', value: 500, sub: 'Uniform' },
+      ],
+      methods: [
+        { id: 'mpesa', icon: '📱', name: 'M-Pesa', detail: 'Send to Paybill or Till Number',
+          instructions: { title: 'How to pay via M-Pesa', paybill: 'PAYBILL: 000000', account: 'ACCOUNT: OBCF', steps: ['Go to M-Pesa on your phone', 'Select Lipa na M-Pesa', 'Select Pay Bill', 'Enter Business No: 000000', 'Enter Account No: OBCF', 'Enter your amount', 'Enter your M-Pesa PIN and confirm'] }},
+        { id: 'bank_ke', icon: '🏦', name: 'Bank Transfer', detail: 'Equity Bank · KCB · Co-op Bank',
+          instructions: { title: 'Kenya Bank Transfer Details', paybill: 'Bank: Equity Bank Kenya', account: 'Account: 0000000000000', steps: ['Go to your bank app or branch', 'Transfer to Equity Bank', 'Account Name: One Bob Charity Fund', 'Account Number: 0000000000000', 'Use your name as reference'] }},
+        { id: 'paypal', icon: '💳', name: 'PayPal / Card', detail: 'International donors — any currency',
+          instructions: { title: 'PayPal Payment', paybill: 'PayPal: donate@onebobcharityfund.org', account: '', steps: ['Go to paypal.com', 'Click Send Money', 'Enter: donate@onebobcharityfund.org', 'Enter your amount in any currency', 'Add note: OBCF Donation'] }},
+      ]
+    },
+    Tanzania: {
+      currency: 'TSh',
+      amounts: [
+        { label: 'TSh 200', value: 200, sub: 'One bob' },
+        { label: 'TSh 500', value: 500, sub: 'A notebook' },
+        { label: 'TSh 1,000', value: 1000, sub: 'One meal' },
+        { label: 'TSh 5,000', value: 5000, sub: 'Uniform' },
+      ],
+      methods: [
+        { id: 'vodacom', icon: '📱', name: 'M-Pesa Tanzania', detail: 'Vodacom M-Pesa · Send money',
+          instructions: { title: 'How to pay via Vodacom M-Pesa', paybill: 'Business No: 000000', account: 'Reference: OBCF', steps: ['Dial *150*00#', 'Select Pay by M-Pesa', 'Select Business Number', 'Enter Business No: 000000', 'Enter Reference: OBCF', 'Enter your amount', 'Confirm with PIN'] }},
+        { id: 'tigopesa', icon: '📲', name: 'Tigo Pesa', detail: 'Tigo Tanzania mobile money',
+          instructions: { title: 'How to pay via Tigo Pesa', paybill: 'Number: 0000000', account: 'Reference: OBCF', steps: ['Dial *150*01#', 'Select Send Money', 'Enter number: 0000000', 'Enter amount', 'Enter your PIN to confirm'] }},
+        { id: 'paypal', icon: '💳', name: 'PayPal / Card', detail: 'International donors — any currency',
+          instructions: { title: 'PayPal Payment', paybill: 'PayPal: donate@onebobcharityfund.org', account: '', steps: ['Go to paypal.com', 'Click Send Money', 'Enter: donate@onebobcharityfund.org', 'Enter your amount in any currency', 'Add note: OBCF Donation'] }},
+      ]
+    },
+    Uganda: {
+      currency: 'UGX',
+      amounts: [
+        { label: 'UGX 500', value: 500, sub: 'One bob' },
+        { label: 'UGX 2,000', value: 2000, sub: 'A notebook' },
+        { label: 'UGX 5,000', value: 5000, sub: 'One meal' },
+        { label: 'UGX 20,000', value: 20000, sub: 'Uniform' },
+      ],
+      methods: [
+        { id: 'mtn', icon: '📱', name: 'MTN Mobile Money', detail: 'Send to MTN MoMo number',
+          instructions: { title: 'How to pay via MTN MoMo', paybill: 'MoMo Number: 0770000000', account: 'Reference: OBCF', steps: ['Dial *165#', 'Select Transfer Money', 'Select Send to Number', 'Enter: 0770000000', 'Enter amount', 'Enter reference: OBCF', 'Confirm with PIN'] }},
+        { id: 'airtel', icon: '📲', name: 'Airtel Money', detail: 'Send to Airtel Money number',
+          instructions: { title: 'How to pay via Airtel Money', paybill: 'Airtel Number: 0750000000', account: 'Reference: OBCF', steps: ['Dial *185#', 'Select Make Payments', 'Enter: 0750000000', 'Enter amount', 'Confirm with PIN'] }},
+        { id: 'paypal', icon: '💳', name: 'PayPal / Card', detail: 'International donors — any currency',
+          instructions: { title: 'PayPal Payment', paybill: 'PayPal: donate@onebobcharityfund.org', account: '', steps: ['Go to paypal.com', 'Click Send Money', 'Enter: donate@onebobcharityfund.org', 'Enter your amount in any currency', 'Add note: OBCF Donation'] }},
+      ]
+    }
+  };
+
+  function selectCountry(country, currency, flag) {
+    state.country = country;
+    state.currency = currency;
+    state.flag = flag;
+    document.querySelectorAll('.country-card').forEach(c => c.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+  }
+
+  function goStep(step) {
+    if (step === 2 && !state.country) { alert('Please select a country first.'); return; }
+    if (step === 3 && !state.amount) { alert('Please select or enter an amount.'); return; }
+    if (step === 4 && !state.method) { alert('Please select a payment method.'); return; }
+
+    // Update tabs
+    document.querySelectorAll('.step-tab').forEach((t, i) => {
+      t.classList.toggle('active', i + 1 === step);
+    });
+    document.querySelectorAll('.step-panel').forEach((p, i) => {
+      p.classList.toggle('active', i + 1 === step);
+    });
+
+    if (step === 2) buildAmounts();
+    if (step === 3) buildPayments();
+    if (step === 4) buildConfirm();
+  }
+
+  function buildAmounts() {
+    const data = paymentData[state.country];
+    document.getElementById('currencyBadge').textContent = data.currency;
+    const grid = document.getElementById('amountGrid');
+    grid.innerHTML = data.amounts.map(a => `
+      <button class="amount-btn" onclick="selectAmount(${a.value}, '${a.label}', this)">
+        ${a.label}<span class="amount-sub">${a.sub}</span>
+      </button>`).join('');
+  }
+
+  function selectAmount(value, label, btn) {
+    state.amount = value;
+    state.amountLabel = label;
+    document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('customAmount').value = '';
+  }
+
+  function setCustomAmount(val) {
+    state.amount = parseFloat(val) || 0;
+    state.amountLabel = val + ' ' + (paymentData[state.country]?.currency || '');
+    document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+  }
+
+  function buildPayments() {
+    const methods = paymentData[state.country].methods;
+    const wrap = document.getElementById('paymentMethods');
+    wrap.innerHTML = methods.map(m => `
+      <div class="payment-method" onclick="selectMethod('${m.id}', this)" data-id="${m.id}">
+        <span class="payment-icon">${m.icon}</span>
+        <div class="payment-info">
+          <div class="payment-name">${m.name}</div>
+          <div class="payment-detail">${m.detail}</div>
+        </div>
+        <div class="payment-check">✓</div>
+      </div>`).join('');
+  }
+
+  function selectMethod(id, el) {
+    state.method = id;
+    document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+    el.classList.add('selected');
+    // Show instructions
+    const methods = paymentData[state.country].methods;
+    const method = methods.find(m => m.id === id);
+    if (method) {
+      const instr = method.instructions;
+      const instrEl = document.getElementById('paymentInstructions');
+      instrEl.innerHTML = `
+        <div class="instr-title">${instr.title}</div>
+        ${instr.paybill ? `<div class="instr-highlight">${instr.paybill}</div>` : ''}
+        ${instr.account ? `<div class="instr-highlight">${instr.account}</div>` : ''}
+        ${instr.steps.map((s, i) => `<div class="instr-step"><span>${i+1}.</span>${s}</div>`).join('')}
+      `;
+      instrEl.classList.add('show');
+    }
+  }
+
+  function buildConfirm() {
+    const flags = { Kenya: '🇰🇪', Tanzania: '🇹🇿', Uganda: '🇺🇬' };
+    const methods = paymentData[state.country].methods;
+    const method = methods.find(m => m.id === state.method);
+    document.getElementById('confirmCountry').textContent = flags[state.country] + ' ' + state.country;
+    document.getElementById('confirmAmount').textContent = state.amountLabel || state.amount + ' ' + paymentData[state.country].currency;
+    document.getElementById('confirmMethod').textContent = method ? method.name : state.method;
+  }
+
+  function submitDonation() {
+    const name = document.getElementById('donorName').value.trim();
+    const anon = document.getElementById('anonCheck').checked;
+    document.getElementById('panel4').style.display = 'none';
+    document.getElementById('successPanel').classList.add('show');
+    document.getElementById('successCountry').textContent = state.country;
+    document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+  }
+</script>
+</body>
+</html>
