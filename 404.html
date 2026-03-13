@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Page Not Found — One Bob Charity Fund</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #C0392B; --red-dark: #922B21; --gold: #D4A843;
+      --cream: #FAF6F0; --dark: #1A0E06; --text: #2C1810;
+      --muted: rgba(44,24,16,0.55);
+    }
+    html, body { height: 100%; }
+    body { background: var(--dark); color: white; font-family: 'DM Sans', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; position: relative; text-align: center; padding: 24px; }
+
+    /* BACKGROUND GLOW */
+    .bg-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(192,57,43,0.1) 0%, transparent 65%); pointer-events: none; }
+    .bg-glow-2 { position: absolute; top: 20%; right: 10%; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(212,168,67,0.06) 0%, transparent 70%); pointer-events: none; }
+
+    /* LOGO */
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; position: absolute; top: 28px; left: 5%; }
+    .logo-icon { width: 34px; height: 34px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .logo-cross { position: relative; width: 14px; height: 14px; }
+    .logo-cross::before { content:''; position: absolute; top: 50%; left: 0; right: 0; height: 2.5px; background: white; transform: translateY(-50%); border-radius: 2px; }
+    .logo-cross::after { content:''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2.5px; background: white; transform: translateX(-50%); border-radius: 2px; }
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 800; color: white; }
+    .logo-text span { color: var(--gold); }
+
+    /* MAIN CONTENT */
+    .content { position: relative; z-index: 1; max-width: 560px; }
+
+    .four-o-four { font-family: 'Playfair Display', serif; font-size: clamp(7rem, 20vw, 12rem); font-weight: 800; line-height: 1; color: transparent; -webkit-text-stroke: 2px rgba(192,57,43,0.35); position: relative; margin-bottom: -16px; letter-spacing: -0.02em; user-select: none; }
+    .four-o-four .highlight { -webkit-text-stroke: 2px var(--red); }
+
+    .lost-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(212,168,67,0.6); margin-bottom: 12px; }
+
+    .title { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; color: white; line-height: 1.1; margin-bottom: 14px; }
+    .title em { font-style: italic; color: var(--gold); }
+
+    .subtitle { font-size: 0.87rem; color: rgba(255,255,255,0.4); line-height: 1.85; margin-bottom: 40px; max-width: 420px; margin-left: auto; margin-right: auto; }
+
+    /* LINKS */
+    .nav-links { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 40px; }
+    .nav-pill { padding: 10px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.6); font-size: 0.75rem; font-weight: 500; text-decoration: none; transition: all 0.25s; display: flex; align-items: center; gap: 6px; }
+    .nav-pill:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.16); color: white; transform: translateY(-2px); }
+
+    .btn-home { display: inline-block; padding: 14px 36px; background: var(--red); color: white; border-radius: 4px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; margin-bottom: 48px; }
+    .btn-home:hover { background: var(--red-dark); transform: translateY(-2px); }
+
+    /* QUOTE */
+    .bottom-quote { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 28px; max-width: 380px; margin: 0 auto; }
+    .quote-text { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-style: italic; color: rgba(255,255,255,0.3); line-height: 1.7; margin-bottom: 8px; }
+    .quote-text em { color: rgba(212,168,67,0.5); font-style: normal; }
+    .quote-source { font-size: 0.62rem; color: rgba(255,255,255,0.18); letter-spacing: 0.14em; text-transform: uppercase; }
+
+    /* FLOATING DOTS */
+    .dot { position: absolute; border-radius: 50%; opacity: 0.15; animation: float 6s ease-in-out infinite; }
+    .dot-1 { width: 8px; height: 8px; background: var(--gold); top: 15%; left: 12%; animation-delay: 0s; }
+    .dot-2 { width: 5px; height: 5px; background: var(--red); top: 70%; left: 8%; animation-delay: 1.5s; }
+    .dot-3 { width: 10px; height: 10px; background: var(--gold); top: 25%; right: 10%; animation-delay: 0.8s; }
+    .dot-4 { width: 6px; height: 6px; background: white; top: 75%; right: 15%; animation-delay: 2.2s; }
+    .dot-5 { width: 4px; height: 4px; background: var(--red); top: 45%; left: 5%; animation-delay: 3s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-14px); }
+    }
+
+    @media(max-width:500px){ .four-o-four{ font-size: 7rem; } .nav-links{ gap:8px; } .nav-pill{ font-size:0.7rem; padding:8px 14px; } }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+  <div class="bg-glow-2"></div>
+  <div class="dot dot-1"></div>
+  <div class="dot dot-2"></div>
+  <div class="dot dot-3"></div>
+  <div class="dot dot-4"></div>
+  <div class="dot dot-5"></div>
+
+  <!-- LOGO -->
+  <a href="index.html" class="logo">
+    <div class="logo-icon"><div class="logo-cross"></div></div>
+    <span class="logo-text">One <span>Bob</span> Charity Fund</span>
+  </a>
+
+  <div class="content">
+    <div class="four-o-four">4<span class="highlight">0</span>4</div>
+
+    <div class="lost-label">Page Not Found</div>
+    <h1 class="title">This page got <em>lost</em><br/>on the way</h1>
+    <p class="subtitle">The page you are looking for does not exist or may have been moved. But the children still need your help — let us get you back on track.</p>
+
+    <div class="nav-links">
+      <a href="index.html" class="nav-pill">🏠 Home</a>
+      <a href="stories.html" class="nav-pill">💛 Children's Stories</a>
+      <a href="donate.html" class="nav-pill">❤️ Donate</a>
+      <a href="gallery.html" class="nav-pill">📸 Gallery</a>
+      <a href="mission.html" class="nav-pill">🎯 Mission</a>
+      <a href="contact.html" class="nav-pill">✉️ Contact</a>
+    </div>
+
+    <a href="index.html" class="btn-home">← Take Me Home</a>
+
+    <div class="bottom-quote">
+      <div class="quote-text">"Every shilling counts. One bob from a million hearts <em>changes everything.</em>"</div>
+      <div class="quote-source">One Bob Charity Fund</div>
+    </div>
+  </div>
+
+</body>
+</html>
