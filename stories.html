@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Children's Stories — One Bob Charity Fund</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #C0392B; --red-dark: #922B21; --gold: #D4A843;
+      --cream: #FAF6F0; --dark: #1A0E06; --text: #2C1810;
+      --muted: rgba(44,24,16,0.55);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+
+    /* NAVBAR */
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 0 5%; height: 66px; display: flex; align-items: center; justify-content: space-between; background: rgba(250,246,240,0.97); backdrop-filter: blur(20px); box-shadow: 0 1px 0 rgba(44,24,16,0.08); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 34px; height: 34px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .logo-cross { position: relative; width: 14px; height: 14px; }
+    .logo-cross::before { content:''; position: absolute; top: 50%; left: 0; right: 0; height: 2.5px; background: white; transform: translateY(-50%); border-radius: 2px; }
+    .logo-cross::after { content:''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2.5px; background: white; transform: translateX(-50%); border-radius: 2px; }
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 800; color: var(--text); }
+    .logo-text span { color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link { padding: 8px 14px; font-size: 0.73rem; font-weight: 500; color: var(--muted); text-decoration: none; border-radius: 4px; transition: all 0.2s; }
+    .nav-link:hover { color: var(--text); background: rgba(44,24,16,0.05); }
+    .nav-link.active { color: var(--red); }
+    .nav-btn { padding: 9px 22px; background: var(--red); color: white; border-radius: 4px; font-size: 0.73rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; margin-left: 8px; transition: all 0.2s; }
+    .nav-btn:hover { background: var(--red-dark); }
+    .hamburger { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; }
+    .mobile-menu { display: none; position: fixed; top: 66px; left: 0; right: 0; background: white; border-bottom: 1px solid rgba(44,24,16,0.08); padding: 12px 5% 20px; z-index: 199; flex-direction: column; gap: 4px; box-shadow: 0 8px 32px rgba(44,24,16,0.1); }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu .nav-link { color: var(--muted); }
+
+    /* HERO */
+    .page-hero { padding: 120px 5% 64px; background: var(--dark); position: relative; overflow: hidden; }
+    .page-hero::before { content:''; position: absolute; top: -30%; right: -5%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(192,57,43,0.12) 0%, transparent 70%); }
+    .page-hero::after { content:''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(212,168,67,0.3), transparent); }
+    .hero-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(212,168,67,0.7); margin-bottom: 12px; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 4rem); font-weight: 800; color: white; line-height: 1.05; margin-bottom: 14px; }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-sub { font-size: 0.88rem; color: rgba(255,255,255,0.45); max-width: 520px; line-height: 1.85; }
+
+    /* FILTERS */
+    .filters-wrap { padding: 24px 5%; background: white; border-bottom: 1px solid rgba(44,24,16,0.07); position: sticky; top: 66px; z-index: 100; }
+    .filters-inner { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; }
+    .filter-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
+    .filter-btn { padding: 8px 18px; border-radius: 20px; border: 1.5px solid rgba(44,24,16,0.12); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 0.73rem; font-weight: 500; color: var(--muted); cursor: pointer; transition: all 0.2s; }
+    .filter-btn:hover { border-color: var(--red); color: var(--red); }
+    .filter-btn.active { background: var(--red); border-color: var(--red); color: white; }
+
+    /* STORIES */
+    .stories-section { padding: 60px 5% 80px; max-width: 1200px; margin: 0 auto; }
+
+    /* Featured story */
+    .story-featured { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-radius: 16px; overflow: hidden; background: white; box-shadow: 0 8px 40px rgba(44,24,16,0.1); margin-bottom: 48px; }
+    .story-featured-img { position: relative; min-height: 480px; }
+    .story-featured-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .story-featured-badge { position: absolute; top: 20px; left: 20px; display: flex; gap: 8px; }
+    .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+    .badge-featured { background: var(--gold); color: var(--dark); }
+    .badge-kenya { background: rgba(0,100,0,0.8); color: white; }
+    .badge-tanzania { background: rgba(0,0,180,0.8); color: white; }
+    .badge-uganda { background: rgba(180,0,0,0.8); color: white; }
+    .story-featured-body { padding: 48px 44px; display: flex; flex-direction: column; justify-content: center; }
+    .story-number { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+    .story-name { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 800; color: var(--text); line-height: 1.05; margin-bottom: 6px; }
+    .story-name em { font-style: italic; color: var(--red); }
+    .story-age-line { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 20px; }
+    .story-need-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .need-tag { padding: 5px 12px; border-radius: 20px; font-size: 0.63rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; border: 1.5px solid; }
+    .need-food { border-color: rgba(212,100,0,0.3); color: rgba(180,80,0,0.9); background: rgba(212,100,0,0.06); }
+    .need-education { border-color: rgba(0,100,180,0.3); color: rgba(0,80,160,0.9); background: rgba(0,100,180,0.06); }
+    .need-clothing { border-color: rgba(100,0,150,0.3); color: rgba(80,0,130,0.9); background: rgba(100,0,150,0.06); }
+    .story-text { font-size: 0.88rem; color: var(--muted); line-height: 1.9; margin-bottom: 28px; }
+    .story-quote { border-left: 3px solid var(--gold); padding: 12px 20px; margin-bottom: 28px; background: rgba(212,168,67,0.05); }
+    .story-quote p { font-family: 'Playfair Display', serif; font-size: 1rem; font-style: italic; color: var(--text); line-height: 1.7; }
+    .btn-red { display: inline-block; padding: 13px 28px; background: var(--red); color: white; border-radius: 4px; font-size: 0.76rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
+    .btn-red:hover { background: var(--red-dark); transform: translateY(-1px); }
+
+    /* Stories grid */
+    .stories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .story-card { background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 16px rgba(44,24,16,0.06); transition: transform 0.3s, box-shadow 0.3s; }
+    .story-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(44,24,16,0.13); }
+    .story-card.hidden { display: none; }
+    .card-img-wrap { position: relative; height: 220px; overflow: hidden; }
+    .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .story-card:hover .card-img-wrap img { transform: scale(1.05); }
+    .card-img-overlay { position: absolute; bottom: 0; left: 0; right: 0; height: 55%; background: linear-gradient(to top, rgba(0,0,0,0.65), transparent); }
+    .card-badges { position: absolute; top: 12px; left: 12px; display: flex; gap: 6px; }
+    .card-body { padding: 20px 22px 24px; }
+    .card-num { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); margin-bottom: 4px; }
+    .card-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+    .card-age { font-size: 0.67rem; color: var(--muted); margin-bottom: 10px; letter-spacing: 0.08em; }
+    .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .card-text { font-size: 0.78rem; color: var(--muted); line-height: 1.78; margin-bottom: 16px; }
+    .card-quote { font-family: 'Playfair Display', serif; font-size: 0.82rem; font-style: italic; color: var(--text); border-left: 2px solid var(--gold); padding-left: 12px; margin-bottom: 16px; line-height: 1.6; }
+    .card-link { font-size: 0.72rem; font-weight: 600; color: var(--red); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+    .card-link:hover { gap: 8px; }
+
+    /* CTA */
+    .stories-cta { margin-top: 64px; background: var(--dark); border-radius: 16px; padding: 56px 48px; display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center; }
+    .cta-title { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; color: white; margin-bottom: 10px; }
+    .cta-title em { font-style: italic; color: var(--gold); }
+    .cta-sub { font-size: 0.84rem; color: rgba(255,255,255,0.45); line-height: 1.8; max-width: 480px; }
+    .btn-gold { display: inline-block; padding: 14px 32px; background: var(--gold); color: var(--dark); border-radius: 4px; font-size: 0.77rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+    .btn-gold:hover { background: #c49535; transform: translateY(-1px); }
+
+    /* FOOTER */
+    .footer { background: var(--dark); color: white; padding: 48px 5% 24px; margin-top: 0; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 24px; }
+    .footer-copy { font-size: 0.68rem; color: rgba(255,255,255,0.22); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 0.68rem; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: white; }
+
+    @media(max-width:960px){ .story-featured{ grid-template-columns:1fr; } .story-featured-img{ min-height:320px; } .stories-grid{ grid-template-columns:repeat(2,1fr); } .stories-cta{ grid-template-columns:1fr; } }
+    @media(max-width:600px){ .nav-links{ display:none; } .hamburger{ display:block; } .stories-grid{ grid-template-columns:1fr; } .story-featured-body{ padding:28px 24px; } .stories-cta{ padding:36px 24px; } }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon"><div class="logo-cross"></div></div>
+    <span class="logo-text">One <span>Bob</span> Charity Fund</span>
+  </a>
+  <div class="nav-links">
+    <a href="stories.html" class="nav-link active">Stories</a>
+    <a href="mission.html" class="nav-link">Mission</a>
+    <a href="gallery.html" class="nav-link">Gallery</a>
+    <a href="volunteer.html" class="nav-link">Volunteer</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <a href="donate.html" class="nav-btn">Donate Now</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="stories.html" class="nav-link active">Stories</a>
+  <a href="mission.html" class="nav-link">Mission</a>
+  <a href="gallery.html" class="nav-link">Gallery</a>
+  <a href="volunteer.html" class="nav-link">Volunteer</a>
+  <a href="contact.html" class="nav-link">Contact</a>
+  <a href="donate.html" class="nav-btn" style="text-align:center;margin-top:6px;">Donate Now</a>
+</div>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="hero-label">Real Children · Real Lives</div>
+  <h1 class="hero-title">Stories that will<br/><em>move your heart</em></h1>
+  <p class="hero-sub">These are not statistics. These are children with names, dreams, and futures that depend on your one bob. Read their stories and decide — can you help?</p>
+</section>
+
+<!-- FILTERS -->
+<div class="filters-wrap">
+  <div class="filters-inner">
+    <span class="filter-label">Filter by</span>
+    <button class="filter-btn active" onclick="filter('all', this)">All Children</button>
+    <button class="filter-btn" onclick="filter('kenya', this)">🇰🇪 Kenya</button>
+    <button class="filter-btn" onclick="filter('tanzania', this)">🇹🇿 Tanzania</button>
+    <button class="filter-btn" onclick="filter('uganda', this)">🇺🇬 Uganda</button>
+    <button class="filter-btn" onclick="filter('education', this)">📚 Education</button>
+    <button class="filter-btn" onclick="filter('food', this)">🍚 Food</button>
+    <button class="filter-btn" onclick="filter('clothing', this)">👕 Clothing</button>
+  </div>
+</div>
+
+<section class="stories-section">
+
+  <!-- FEATURED STORY -->
+  <div class="story-featured" id="featuredStory">
+    <div class="story-featured-img">
+      <img src="images/kamau-njoroge-kenya.jpg" alt="Kamau Njoroge"/>
+      <div class="story-featured-badge">
+        <span class="badge badge-featured">Featured Story</span>
+        <span class="badge badge-kenya">🇰🇪 Kenya</span>
+      </div>
+    </div>
+    <div class="story-featured-body">
+      <div class="story-number">Story 01 of 10</div>
+      <h2 class="story-name">Kamau <em>Njoroge</em></h2>
+      <div class="story-age-line">Age 8 · Primary School · Nairobi, Kenya</div>
+      <div class="story-need-tags">
+        <span class="need-tag need-education">📚 Education</span>
+        <span class="need-tag need-food">🍚 Food</span>
+      </div>
+      <p class="story-text">Kamau Njoroge is eight years old and lives in Mathare, one of Nairobi's most overcrowded slums. He is the second born of five children. His mother sells secondhand clothes by the roadside and his father left when he was three. Kamau walks to school every morning without breakfast. By midday he can barely concentrate. His teacher, Madam Wanjiku, says he is one of the sharpest children in class — but hunger is stealing his future one day at a time.</p>
+      <div class="story-quote">
+        <p>"I want to be a pilot one day. But first I just want to eat something before school."</p>
+      </div>
+      <a href="donate.html" class="btn-red">Help Kamau Today →</a>
+    </div>
+  </div>
+
+  <!-- STORIES GRID -->
+  <div class="stories-grid" id="storiesGrid">
+
+    <!-- Story 2 -->
+    <div class="story-card" data-country="tanzania" data-need="clothing food">
+      <div class="card-img-wrap">
+        <img src="images/amina-zawadi-tanzania.jpg" alt="Amina Zawadi"/>
+        <div class="card-img-overlay"></div>
+        <div class="card-badges">
+          <span class="badge badge-tanzania">🇹🇿 Tanzania</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-num">Story 02</div>
+        <div class="card-name">Amina Zawadi</div>
+        <div class="card-age">Age 6 · Primary School · Dar es Salaam, Tanzania</div>
+        <div class="card-tags">
+          <span class="need-tag need-clothing">👕 Clothing</span>
+          <span class="need-tag need-food">🍚 Food</span>
+        </div>
+        <p class="card-text">Amina Zawadi shares a single dress with her older sister. On the days her sister wears it to school, Amina stays home. She has missed over a month of school this year because of this. She is six years old and already learning that poverty decides who gets to learn and who does not.</p>
+        <div class="card-quote">"I want to go to school every day like the other children."</div>
+        <a href="donate.html" class="card-link">Help Amina → </a>
+      </div>
+    </div>
+
+    <!-- Story 3 -->
+    <div class="story-card" data-country="uganda" data-need="food">
+      <div class="card-img-wrap">
+        <img src="images/aisha-nakato-uganda.jpg" alt="Aisha Nakato"/>
+        <div class="card-img-overlay"></div>
+        <div class="card-badges">
+          <span class="badge badge-uganda">🇺🇬 Uganda</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-num">Story 03</div>
+        <div class="card-name">Aisha Nakato</div>
+        <div class="card-age">Age 4 · Pre-School · Kampala, Uganda</div>
+        <div class="card-tags">
+          <span class="need-tag need-food">🍚 Food</span>
+        </div>
+        <p class="card-text">At just four years old, Aisha Nakato already knows what it means to be hungry. Her mother is a single parent caring for four children in Kampala's Kawempe division. Some days the family goes without a meal. Aisha is underweight for her age and her development is being affected by malnutrition.</p>
+        <div class="card-quote">"She cries at night from hunger. I have nothing to give her." — Her mother</div>
+        <a href="donate.html" class="card-link">Help Aisha →</a>
+      </div>
+    </div>
+
+    <!-- Story 4 -->
+    <div class="story-card" data-country="kenya" data-need="education">
+      <div class="card-img-wrap">
+        <img src="images/msafi-zawadi-kenya.jpg" alt="Msafi Zawadi"/>
+        <div class="card-img-overlay"></div>
+        <div class="card-badges">
+          <span class="badge badge-kenya">🇰🇪 Kenya</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-num">Story 04</div>
+        <div class="card-name">Msafi Zawadi</div>
+        <div class="card-age">Age 11 · Primary School · Kisumu, Kenya</div>
+        <div class="card-tags">
+          <span class="need-tag need-education">📚 Education</span>
+        </div>
+        <p class="card-text">Msafi Zawadi is eleven years old and carries the weight of the world on her small shoulders — literally. She walks to school every morning without a bag, holding her books under her arm. She has no pencils of her own. She borrows from classmates. Despite all this, she ranks in the top five of her class every term.</p>
+        <div class="card-quote">"I will not let poverty stop me. I will study even if I have to write on the ground."</div>
+        <a href="donate.html" class="card-link">Help Msafi →</a>
+      </div>
+    </div>
+
+    <!-- Story 5 -->
+    <div class="story-card" data-country="uganda" data-need="education clothing">
+      <div class="card-img-wrap">
+        <img src="images/akello-namuli-uganda.jpg" alt="Akello Namuli"/>
+        <div class="card-img-overlay"></div>
+        <div class="card-badges">
+          <span class="badge badge-uganda">🇺🇬 Uganda</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-num">Story 05</div>
+        <div class="card-name">Akello Namuli</div>
+        <div class="card-age">Age 13 · Primary School · Gulu, Uganda</div>
+        <div class="card-tags">
+          <span class="need-tag need-education">📚 Education</span>
+          <span class="need-tag need-clothing">👕 Clothing</span>
+        </div>
+        <p class="card-text">Akello Namuli is thirteen and in her final year of primary school in Gulu. She wants to become a nurse. But her school uniform is torn and she is embarrassed to attend. Her grandmother, who raised her after both parents passed, cannot afford a new one. Akello sits at the back of class every day hoping no one notices.</p>
+        <div class="card-quote">"If I had a proper uniform I would sit at the front. I want to see the board clearly."</div>
+        <a href="donate.html" class="card-link">Help Akello →</a>
+      </div>
+    </div>
+
+    <!-- Story 6 -->
+    <div class="story-card" data-country="tanzania" data-need="food education">
+      <div class="card-img-wrap">
+        <img src="images/halima-zuwena-tanzania.jpg" alt="Halima Zuwena"/>
+        <div class="card-img-overlay"></div>
+        <div class="card-badges">
+          <span class="badge badge-tanzania">🇹🇿 Tanzania</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-num">Story 06</div>
+        <div class="card-name">Halima Zuwena</div>
+        <div class="card-age">Age 5 · Pre-School · Mwanza, Tanzania</div>
+        <div class="card-tags">
+          <span class="need-tag need-food">🍚 Food</span>
+          <span class="need-tag need-education">📚 Education</span>
+        </div>
+        <p class="card-text">Halima Zuwena has the most intense eyes you will ever see on a five year old. She lives near Lake Victoria in Mwanza with her aunt who is also raising six other children. Halima has never been enrolled in school. Her aunt cannot afford the small materials fee. Halima spends her days watching other children walk past to school.</p>
+        <div class="card-quote">"She asks me every morning why she cannot go with the others. I have no answer." — Her aunt</div>
+        <a href="donate.html" class="card-link">Help Halima →</a>
+      </div>
+    </div>
+
+    <!-- Story 7 -->
+    <div class="story-card" data-country="kenya" data-need="food clothing">
+      <div class="card-img-wrap">
+        <img src="images/fatuma-nashipai-uganda.jpg" alt="Neema Akinyi"/>
+        <div class="card-img-overlay"></div>
+        <div class="card-badges">
+          <span class="badge badge-kenya">🇰🇪 Kenya</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-num">Story 07</div>
+        <div class="card-name">Neema Akinyi</div>
+        <div class="card-age">Age 7 · Primary School · Mombasa, Kenya</div>
+        <div class="card-tags">
+          <span class="need-tag need-food">🍚 Food</span>
+          <span class="need-tag need-clothing">👕 Clothing</span>
+        </div>
+        <p class="card-text">Neema Akinyi is seven years old and lives near the coast in Mombasa. She is the eldest child and already acts like a little mother to her two younger siblings. She comes to school most days in the same outfit — faded and too small. Her teacher has noted she is often distracted, likely from hunger. Yet she never complains.</p>
+        <div class="card-quote">"Neema never asks for anything. She just quietly suffers and keeps smiling." — Her teacher</div>
+        <a href="donate.html" class="card-link">Help Neema →</a>
+      </div>
+    </div>
+
+    <!-- Story 8 -->
+    <div class="story-card" data-country="uganda" data-need="food education">
+      <div class="card-img-wrap">
+        <img src="images/tendo-okello-uganda.jpg" alt="Tendo Okello"/>
+        <div class="card-img-overlay"></div>
+        <div class="card-badges">
+          <span class="badge badge-uganda">🇺🇬 Uganda</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-num">Story 08</div>
+        <div class="card-name">Tendo Okello</div>
+        <div class="card-age">Age 12 · Primary School · Entebbe, Uganda</div>
+        <div class="card-tags">
+          <span class="need-tag need-food">🍚 Food</span>
+          <span class="need-tag need-education">📚 Education</span>
+        </div>
+        <p class="card-text">Tendo Okello should be in class right now. Instead, at twelve years old, he sells small items on the streets of Entebbe to help his mother pay rent. He goes to school when he can — usually three days a week. His headteacher fears he will drop out completely before finishing primary school.</p>
+        <div class="card-quote">"I sell things so my younger brothers can eat. School can wait — but can it?"</div>
+        <a href="donate.html" class="card-link">Help Tendo →</a>
+      </div>
+    </div>
+
+    <!-- Story 9 -->
+    <div class="story-card" data-country="tanzania" data-need="clothing food">
+      <div class="card-img-wrap">
+        <img src="images/zawadi-mwangi-tanzania.jpg" alt="Zawadi Mwangi"/>
+        <div class="card-img-overlay"></div>
+        <div class="card-badges">
+          <span class="badge badge-tanzania">🇹🇿 Tanzania</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-num">Story 09</div>
+        <div class="card-name">Zawadi Mwangi</div>
+        <div class="card-age">Age 3 · Pre-School · Arusha, Tanzania</div>
+        <div class="card-tags">
+          <span class="need-tag need-clothing">👕 Clothing</span>
+          <span class="need-tag need-food">🍚 Food</span>
+        </div>
+        <p class="card-text">Zawadi Mwangi is only three years old — the youngest child we have on record in Arusha. She was found wandering near a market in dirty clothes, alone, by one of our community contacts. Her mother is ill and unable to care for her. She is being looked after by a neighbour who herself has very little.</p>
+        <div class="card-quote">"She is just a baby. She deserves warmth, food, and love — not this."</div>
+        <a href="donate.html" class="card-link">Help Zawadi →</a>
+      </div>
+    </div>
+
+    <!-- Story 10 -->
+    <div class="story-card" data-country="kenya" data-need="education food">
+      <div class="card-img-wrap">
+        <img src="images/amara-wangeci-kenya.jpg" alt="Amara Wangeci"/>
+        <div class="card-img-overlay"></div>
+        <div class="card-badges">
+          <span class="badge badge-kenya">🇰🇪 Kenya</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-num">Story 10</div>
+        <div class="card-name">Amara Wangeci</div>
+        <div class="card-age">Age 9 · Primary School · Nakuru, Kenya</div>
+        <div class="card-tags">
+          <span class="need-tag need-education">📚 Education</span>
+          <span class="need-tag need-food">🍚 Food</span>
+        </div>
+        <p class="card-text">Amara Wangeci is nine and full of joy despite everything. She walks two kilometres to school barefoot every morning. Her school has no lunch programme. By afternoon she is too weak to absorb anything the teacher is saying. She has repeated Class Two twice — not because she is not smart, but because hunger keeps interrupting her learning.</p>
+        <div class="card-quote">"She lights up every room she enters. Hunger should not be allowed to dim that light."</div>
+        <a href="donate.html" class="card-link">Help Amara →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="stories-cta">
+    <div>
+      <div class="cta-title">Every bob you give<br/><em>reaches a child like these</em></div>
+      <p class="cta-sub">You just read 10 stories. There are thousands more like them in Kenya, Tanzania, and Uganda. One donation — no matter how small — goes directly to buying food, clothing, or school supplies for a child who needs it.</p>
+    </div>
+    <a href="donate.html" class="btn-gold">Donate Your Bob Now →</a>
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 One Bob Charity Fund · Kenya · Tanzania · Uganda</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="donate.html">Donate</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+  function filter(type, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cards = document.querySelectorAll('.story-card');
+    cards.forEach(card => {
+      const country = card.dataset.country;
+      const need = card.dataset.need || '';
+      let show = false;
+      if (type === 'all') show = true;
+      else if (['kenya','tanzania','uganda'].includes(type)) show = country === type;
+      else show = need.includes(type);
+      card.classList.toggle('hidden', !show);
+    });
+    // Show/hide featured
+    const featured = document.getElementById('featuredStory');
+    if (type === 'all' || type === 'kenya' || type === 'education' || type === 'food') {
+      featured.style.display = 'grid';
+    } else {
+      featured.style.display = 'none';
+    }
+  }
+</script>
+</body>
+</html>
