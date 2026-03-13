@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallery — One Bob Charity Fund</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #C0392B; --red-dark: #922B21; --gold: #D4A843;
+      --cream: #FAF6F0; --dark: #1A0E06; --text: #2C1810;
+      --muted: rgba(44,24,16,0.55);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+
+    /* NAVBAR */
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 0 5%; height: 66px; display: flex; align-items: center; justify-content: space-between; background: rgba(250,246,240,0.97); backdrop-filter: blur(20px); box-shadow: 0 1px 0 rgba(44,24,16,0.08); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 34px; height: 34px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .logo-cross { position: relative; width: 14px; height: 14px; }
+    .logo-cross::before { content:''; position: absolute; top: 50%; left: 0; right: 0; height: 2.5px; background: white; transform: translateY(-50%); border-radius: 2px; }
+    .logo-cross::after { content:''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2.5px; background: white; transform: translateX(-50%); border-radius: 2px; }
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 800; color: var(--text); }
+    .logo-text span { color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link { padding: 8px 14px; font-size: 0.73rem; font-weight: 500; color: var(--muted); text-decoration: none; border-radius: 4px; transition: all 0.2s; }
+    .nav-link:hover { color: var(--text); background: rgba(44,24,16,0.05); }
+    .nav-link.active { color: var(--red); }
+    .nav-btn { padding: 9px 22px; background: var(--red); color: white; border-radius: 4px; font-size: 0.73rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; margin-left: 8px; transition: all 0.2s; }
+    .nav-btn:hover { background: var(--red-dark); }
+    .hamburger { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; }
+    .mobile-menu { display: none; position: fixed; top: 66px; left: 0; right: 0; background: white; border-bottom: 1px solid rgba(44,24,16,0.08); padding: 12px 5% 20px; z-index: 199; flex-direction: column; gap: 4px; box-shadow: 0 8px 32px rgba(44,24,16,0.1); }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu .nav-link { color: var(--muted); }
+
+    /* HERO */
+    .page-hero { padding: 120px 5% 60px; background: var(--dark); position: relative; overflow: hidden; }
+    .page-hero::before { content:''; position: absolute; top: -40%; right: -10%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(192,57,43,0.15) 0%, transparent 70%); }
+    .page-hero::after { content:''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(212,168,67,0.3), transparent); }
+    .hero-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(212,168,67,0.7); margin-bottom: 12px; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 4rem); font-weight: 800; color: white; line-height: 1.05; margin-bottom: 14px; }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-sub { font-size: 0.88rem; color: rgba(255,255,255,0.45); max-width: 480px; line-height: 1.85; }
+
+    /* FILTERS */
+    .filters-wrap { padding: 32px 5%; background: white; border-bottom: 1px solid rgba(44,24,16,0.07); position: sticky; top: 66px; z-index: 100; }
+    .filters-inner { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; }
+    .filter-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
+    .filter-btn { padding: 8px 18px; border-radius: 20px; border: 1.5px solid rgba(44,24,16,0.12); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 0.73rem; font-weight: 500; color: var(--muted); cursor: pointer; transition: all 0.2s; }
+    .filter-btn:hover { border-color: var(--red); color: var(--red); }
+    .filter-btn.active { background: var(--red); border-color: var(--red); color: white; }
+    .filter-count { font-size: 0.62rem; background: rgba(44,24,16,0.08); border-radius: 10px; padding: 2px 7px; margin-left: 5px; }
+    .filter-btn.active .filter-count { background: rgba(255,255,255,0.2); }
+
+    /* GALLERY GRID */
+    .gallery-section { padding: 48px 5% 80px; max-width: 1300px; margin: 0 auto; }
+    .gallery-grid { columns: 4; column-gap: 16px; }
+    .gallery-item { break-inside: avoid; margin-bottom: 16px; border-radius: 10px; overflow: hidden; position: relative; cursor: pointer; display: block; }
+    .gallery-item img { width: 100%; display: block; transition: transform 0.5s ease; }
+    .gallery-item:hover img { transform: scale(1.04); }
+    .gallery-item-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,5,2,0.85) 0%, transparent 50%); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 16px; }
+    .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+    .gallery-item-info { }
+    .gallery-item-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: white; }
+    .gallery-item-meta { font-size: 0.65rem; color: rgba(255,255,255,0.6); margin-top: 2px; letter-spacing: 0.08em; }
+    .gallery-item-tag { position: absolute; top: 12px; left: 12px; padding: 4px 10px; border-radius: 20px; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+    .tag-kenya { background: rgba(0,100,0,0.75); color: white; }
+    .tag-tanzania { background: rgba(0,0,150,0.75); color: white; }
+    .tag-uganda { background: rgba(150,0,0,0.75); color: white; }
+    .gallery-item.hidden { display: none; }
+
+    /* LIGHTBOX */
+    .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: none; align-items: center; justify-content: center; }
+    .lightbox.open { display: flex; }
+    .lightbox-inner { position: relative; max-width: 90vw; max-height: 90vh; }
+    .lightbox-img { max-width: 90vw; max-height: 80vh; object-fit: contain; border-radius: 6px; display: block; }
+    .lightbox-info { padding: 16px 0 0; text-align: center; }
+    .lightbox-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: white; }
+    .lightbox-meta { font-size: 0.72rem; color: rgba(255,255,255,0.45); margin-top: 4px; letter-spacing: 0.1em; }
+    .lightbox-close { position: absolute; top: -44px; right: 0; background: none; border: none; color: rgba(255,255,255,0.6); font-size: 1.8rem; cursor: pointer; transition: color 0.2s; line-height: 1; }
+    .lightbox-close:hover { color: white; }
+    .lightbox-prev, .lightbox-next { position: fixed; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; cursor: pointer; transition: all 0.2s; }
+    .lightbox-prev { left: 20px; }
+    .lightbox-next { right: 20px; }
+    .lightbox-prev:hover, .lightbox-next:hover { background: rgba(255,255,255,0.18); }
+
+    /* EMPTY STATE */
+    .empty-state { text-align: center; padding: 80px 20px; color: var(--muted); display: none; }
+    .empty-state.show { display: block; }
+
+    /* FOOTER */
+    .footer { background: var(--dark); color: white; padding: 48px 5% 24px; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-copy { font-size: 0.68rem; color: rgba(255,255,255,0.22); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 0.68rem; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: white; }
+
+    @media(max-width:1100px){ .gallery-grid{ columns:3; } }
+    @media(max-width:720px){ .gallery-grid{ columns:2; } .nav-links{ display:none; } .hamburger{ display:block; } }
+    @media(max-width:420px){ .gallery-grid{ columns:1; } }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon"><div class="logo-cross"></div></div>
+    <span class="logo-text">One <span>Bob</span> Charity Fund</span>
+  </a>
+  <div class="nav-links">
+    <a href="stories.html" class="nav-link">Stories</a>
+    <a href="mission.html" class="nav-link">Mission</a>
+    <a href="gallery.html" class="nav-link active">Gallery</a>
+    <a href="volunteer.html" class="nav-link">Volunteer</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <a href="donate.html" class="nav-btn">Donate Now</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="stories.html" class="nav-link">Stories</a>
+  <a href="mission.html" class="nav-link">Mission</a>
+  <a href="gallery.html" class="nav-link active">Gallery</a>
+  <a href="volunteer.html" class="nav-link">Volunteer</a>
+  <a href="contact.html" class="nav-link">Contact</a>
+  <a href="donate.html" class="nav-btn" style="text-align:center;margin-top:6px;">Donate Now</a>
+</div>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="hero-label">Our Gallery</div>
+  <h1 class="hero-title">Faces of <em>hope</em><br/>across East Africa</h1>
+  <p class="hero-sub">Every photo tells a story. These are real children from Kenya, Tanzania, and Uganda — waiting for your one bob to change their lives.</p>
+</section>
+
+<!-- FILTERS -->
+<div class="filters-wrap">
+  <div class="filters-inner">
+    <span class="filter-label">Filter by</span>
+    <button class="filter-btn active" onclick="filter('all', this)">All Photos <span class="filter-count">22</span></button>
+    <button class="filter-btn" onclick="filter('kenya', this)">🇰🇪 Kenya <span class="filter-count">8</span></button>
+    <button class="filter-btn" onclick="filter('tanzania', this)">🇹🇿 Tanzania <span class="filter-count">6</span></button>
+    <button class="filter-btn" onclick="filter('uganda', this)">🇺🇬 Uganda <span class="filter-count">8</span></button>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+  <div class="gallery-grid" id="galleryGrid">
+
+    <!-- KENYA -->
+    <div class="gallery-item" data-country="kenya" data-name="Baraka Omondi" data-meta="Kenya · Age 10 · Education" onclick="openLightbox(0)">
+      <img src="images/baraka-omondi-kenya.jpg" alt="Baraka Omondi"/>
+      <div class="gallery-item-tag tag-kenya">🇰🇪 Kenya</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Baraka Omondi</div><div class="gallery-item-meta">Kenya · Age 10 · Education</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="tanzania" data-name="Amina Zawadi" data-meta="Tanzania · Age 8 · Food" onclick="openLightbox(1)">
+      <img src="images/amina-zawadi-tanzania.jpg" alt="Amina Zawadi"/>
+      <div class="gallery-item-tag tag-tanzania">🇹🇿 Tanzania</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Amina Zawadi</div><div class="gallery-item-meta">Tanzania · Age 8 · Food</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="kenya" data-name="Neema Akinyi" data-meta="Kenya · Age 12 · Clothing" onclick="openLightbox(2)">
+      <img src="images/neema-akinyi-kenya.jpg" alt="Neema Akinyi"/>
+      <div class="gallery-item-tag tag-kenya">🇰🇪 Kenya</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Neema Akinyi</div><div class="gallery-item-meta">Kenya · Age 12 · Clothing</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="uganda" data-name="Fatuma Nashipai" data-meta="Uganda · Age 5 · Food" onclick="openLightbox(3)">
+      <img src="images/fatuma-nashipai-uganda.jpg" alt="Fatuma Nashipai"/>
+      <div class="gallery-item-tag tag-uganda">🇺🇬 Uganda</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Fatuma Nashipai</div><div class="gallery-item-meta">Uganda · Age 5 · Food</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="kenya" data-name="Kamau Baraka" data-meta="Kenya · Age 9 · Education" onclick="openLightbox(4)">
+      <img src="images/kamau-baraka-kenya.jpg" alt="Kamau Baraka"/>
+      <div class="gallery-item-tag tag-kenya">🇰🇪 Kenya</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Kamau Baraka</div><div class="gallery-item-meta">Kenya · Age 9 · Education</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="tanzania" data-name="Juma Masika" data-meta="Tanzania · Age 11 · Clothing" onclick="openLightbox(5)">
+      <img src="images/juma-masika-tanzania.jpg" alt="Juma Masika"/>
+      <div class="gallery-item-tag tag-tanzania">🇹🇿 Tanzania</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Juma Masika</div><div class="gallery-item-meta">Tanzania · Age 11 · Clothing</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="kenya" data-name="Wanjiru Auma" data-meta="Kenya · Age 7 · Food" onclick="openLightbox(6)">
+      <img src="images/wanjiru-auma-kenya.jpg" alt="Wanjiru Auma"/>
+      <div class="gallery-item-tag tag-kenya">🇰🇪 Kenya</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Wanjiru Auma</div><div class="gallery-item-meta">Kenya · Age 7 · Food</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="uganda" data-name="Aisha Nakato" data-meta="Uganda · Age 4 · Food" onclick="openLightbox(7)">
+      <img src="images/aisha-nakato-uganda.jpg" alt="Aisha Nakato"/>
+      <div class="gallery-item-tag tag-uganda">🇺🇬 Uganda</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Aisha Nakato</div><div class="gallery-item-meta">Uganda · Age 4 · Food</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="uganda" data-name="Zuwena Rehema" data-meta="Uganda · Age 6 · Clothing" onclick="openLightbox(8)">
+      <img src="images/zuwena-rehema-uganda.jpg" alt="Zuwena Rehema"/>
+      <div class="gallery-item-tag tag-uganda">🇺🇬 Uganda</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Zuwena Rehema</div><div class="gallery-item-meta">Uganda · Age 6 · Clothing</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="kenya" data-name="Kamau Njoroge" data-meta="Kenya · Age 8 · Education" onclick="openLightbox(9)">
+      <img src="images/kamau-njoroge-kenya.jpg" alt="Kamau Njoroge"/>
+      <div class="gallery-item-tag tag-kenya">🇰🇪 Kenya</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Kamau Njoroge</div><div class="gallery-item-meta">Kenya · Age 8 · Education</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="tanzania" data-name="Zuwena Salama" data-meta="Tanzania · Age 9 · Food" onclick="openLightbox(10)">
+      <img src="images/zuwena-salama-tanzania.jpg" alt="Zuwena Salama"/>
+      <div class="gallery-item-tag tag-tanzania">🇹🇿 Tanzania</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Zuwena Salama</div><div class="gallery-item-meta">Tanzania · Age 9 · Food</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="uganda" data-name="Akello Namuli" data-meta="Uganda · Age 13 · Education" onclick="openLightbox(11)">
+      <img src="images/akello-namuli-uganda.jpg" alt="Akello Namuli"/>
+      <div class="gallery-item-tag tag-uganda">🇺🇬 Uganda</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Akello Namuli</div><div class="gallery-item-meta">Uganda · Age 13 · Education</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="kenya" data-name="Msafi Zawadi" data-meta="Kenya · Age 11 · Clothing" onclick="openLightbox(12)">
+      <img src="images/msafi-zawadi-kenya.jpg" alt="Msafi Zawadi"/>
+      <div class="gallery-item-tag tag-kenya">🇰🇪 Kenya</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Msafi Zawadi</div><div class="gallery-item-meta">Kenya · Age 11 · Clothing</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="tanzania" data-name="Amina Mwajuma" data-meta="Tanzania · Age 14 · Education" onclick="openLightbox(13)">
+      <img src="images/amina-mwajuma-tanzania.jpg" alt="Amina Mwajuma"/>
+      <div class="gallery-item-tag tag-tanzania">🇹🇿 Tanzania</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Amina Mwajuma</div><div class="gallery-item-meta">Tanzania · Age 14 · Education</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="uganda" data-name="Tendo Nakimu" data-meta="Uganda · Age 10 · Food" onclick="openLightbox(14)">
+      <img src="images/tendo-nakimu-uganda.jpg" alt="Tendo Nakimu"/>
+      <div class="gallery-item-tag tag-uganda">🇺🇬 Uganda</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Tendo Nakimu</div><div class="gallery-item-meta">Uganda · Age 10 · Food</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="uganda" data-name="Kiiza Nalwoga" data-meta="Uganda · Age 7 · Education" onclick="openLightbox(15)">
+      <img src="images/kiiza-nalwoga-uganda.jpg" alt="Kiiza Nalwoga"/>
+      <div class="gallery-item-tag tag-uganda">🇺🇬 Uganda</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Kiiza Nalwoga</div><div class="gallery-item-meta">Uganda · Age 7 · Education</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="uganda" data-name="Tendo Okello" data-meta="Uganda · Age 12 · Food" onclick="openLightbox(16)">
+      <img src="images/tendo-okello-uganda.jpg" alt="Tendo Okello"/>
+      <div class="gallery-item-tag tag-uganda">🇺🇬 Uganda</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Tendo Okello</div><div class="gallery-item-meta">Uganda · Age 12 · Food</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="kenya" data-name="Amara Wangeci" data-meta="Kenya · Age 5 · Food" onclick="openLightbox(17)">
+      <img src="images/amara-wangeci-kenya.jpg" alt="Amara Wangeci"/>
+      <div class="gallery-item-tag tag-kenya">🇰🇪 Kenya</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Amara Wangeci</div><div class="gallery-item-meta">Kenya · Age 5 · Food</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="kenya" data-name="Kioni Muthoni" data-meta="Kenya · Age 3 · Clothing" onclick="openLightbox(18)">
+      <img src="images/kioni-muthoni-kenya.jpg" alt="Kioni Muthoni"/>
+      <div class="gallery-item-tag tag-kenya">🇰🇪 Kenya</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Kioni Muthoni</div><div class="gallery-item-meta">Kenya · Age 3 · Clothing</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="tanzania" data-name="Halima Zuwena" data-meta="Tanzania · Age 6 · Food" onclick="openLightbox(19)">
+      <img src="images/halima-zuwena-tanzania.jpg" alt="Halima Zuwena"/>
+      <div class="gallery-item-tag tag-tanzania">🇹🇿 Tanzania</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Halima Zuwena</div><div class="gallery-item-meta">Tanzania · Age 6 · Food</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="tanzania" data-name="Zawadi Mwangi" data-meta="Tanzania · Age 4 · Clothing" onclick="openLightbox(20)">
+      <img src="images/zawadi-mwangi-tanzania.jpg" alt="Zawadi Mwangi"/>
+      <div class="gallery-item-tag tag-tanzania">🇹🇿 Tanzania</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Zawadi Mwangi</div><div class="gallery-item-meta">Tanzania · Age 4 · Clothing</div></div></div>
+    </div>
+
+    <div class="gallery-item" data-country="uganda" data-name="Juma Wekesa" data-meta="Uganda · Age 9 · Education" onclick="openLightbox(21)">
+      <img src="images/juma-wekesa-uganda.jpg" alt="Juma Wekesa"/>
+      <div class="gallery-item-tag tag-uganda">🇺🇬 Uganda</div>
+      <div class="gallery-item-overlay"><div class="gallery-item-info"><div class="gallery-item-name">Juma Wekesa</div><div class="gallery-item-meta">Uganda · Age 9 · Education</div></div></div>
+    </div>
+
+  </div>
+  <div class="empty-state" id="emptyState">No photos found for this filter.</div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxOutside(event)">
+  <button class="lightbox-prev" onclick="prevPhoto()">&#8592;</button>
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt=""/>
+    <div class="lightbox-info">
+      <div class="lightbox-name" id="lightboxName"></div>
+      <div class="lightbox-meta" id="lightboxMeta"></div>
+    </div>
+  </div>
+  <button class="lightbox-next" onclick="nextPhoto()">&#8594;</button>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 One Bob Charity Fund · Kenya · Tanzania · Uganda</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="donate.html">Donate</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+  // Build photos array from DOM
+  const items = document.querySelectorAll('.gallery-item');
+  let visibleItems = [...items];
+  let currentIndex = 0;
+
+  function filter(country, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    visibleItems = [];
+    items.forEach(item => {
+      const match = country === 'all' || item.dataset.country === country;
+      item.classList.toggle('hidden', !match);
+      if (match) visibleItems.push(item);
+    });
+    document.getElementById('emptyState').classList.toggle('show', visibleItems.length === 0);
+  }
+
+  function openLightbox(index) {
+    currentIndex = index;
+    showPhoto();
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function showPhoto() {
+    const item = visibleItems[currentIndex] || items[currentIndex];
+    const img = item.querySelector('img');
+    document.getElementById('lightboxImg').src = img.src;
+    document.getElementById('lightboxName').textContent = item.dataset.name;
+    document.getElementById('lightboxMeta').textContent = item.dataset.meta;
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeLightboxOutside(e) {
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
+  }
+
+  function nextPhoto() {
+    currentIndex = (currentIndex + 1) % visibleItems.length;
+    showPhoto();
+  }
+
+  function prevPhoto() {
+    currentIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
+    showPhoto();
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'ArrowRight') nextPhoto();
+    if (e.key === 'ArrowLeft') prevPhoto();
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // Fix openLightbox to use visible index
+  items.forEach((item, i) => {
+    item.onclick = () => {
+      const visIdx = visibleItems.indexOf(item);
+      currentIndex = visIdx >= 0 ? visIdx : 0;
+      showPhoto();
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+  });
+</script>
+</body>
+</html>
