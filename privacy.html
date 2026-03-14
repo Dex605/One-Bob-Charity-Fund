@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Privacy Policy — One Bob Charity Fund</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #C0392B; --red-dark: #922B21; --gold: #D4A843;
+      --cream: #FAF6F0; --dark: #1A0E06; --text: #2C1810;
+      --muted: rgba(44,24,16,0.55);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+
+    /* NAVBAR */
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 0 5%; height: 66px; display: flex; align-items: center; justify-content: space-between; background: rgba(250,246,240,0.97); backdrop-filter: blur(20px); box-shadow: 0 1px 0 rgba(44,24,16,0.08); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 34px; height: 34px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .logo-cross { position: relative; width: 14px; height: 14px; }
+    .logo-cross::before { content:''; position: absolute; top: 50%; left: 0; right: 0; height: 2.5px; background: white; transform: translateY(-50%); border-radius: 2px; }
+    .logo-cross::after { content:''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2.5px; background: white; transform: translateX(-50%); border-radius: 2px; }
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 800; color: var(--text); }
+    .logo-text span { color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link { padding: 8px 14px; font-size: 0.73rem; font-weight: 500; color: var(--muted); text-decoration: none; border-radius: 4px; transition: all 0.2s; }
+    .nav-link:hover { color: var(--text); background: rgba(44,24,16,0.05); }
+    .nav-btn { padding: 9px 22px; background: var(--red); color: white; border-radius: 4px; font-size: 0.73rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; margin-left: 8px; transition: all 0.2s; }
+    .nav-btn:hover { background: var(--red-dark); }
+    .hamburger { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
+    .mobile-menu { display: none; position: fixed; top: 66px; left: 0; right: 0; background: white; border-bottom: 1px solid rgba(44,24,16,0.08); padding: 12px 5% 20px; z-index: 199; flex-direction: column; gap: 4px; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu .nav-link { color: var(--muted); }
+
+    /* HERO */
+    .page-hero { padding: 110px 5% 56px; background: var(--dark); position: relative; overflow: hidden; }
+    .page-hero::before { content:''; position: absolute; top: -30%; right: -5%; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(192,57,43,0.1) 0%, transparent 70%); }
+    .page-hero::after { content:''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(212,168,67,0.3), transparent); }
+    .hero-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(212,168,67,0.7); margin-bottom: 10px; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; color: white; line-height: 1.05; margin-bottom: 10px; }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-date { font-size: 0.72rem; color: rgba(255,255,255,0.3); }
+
+    /* CONTENT */
+    .content-wrap { max-width: 760px; margin: 0 auto; padding: 64px 5% 80px; }
+
+    .policy-intro { background: white; border-radius: 14px; padding: 28px 32px; border: 1px solid rgba(44,24,16,0.07); margin-bottom: 48px; }
+    .policy-intro p { font-size: 0.88rem; color: var(--muted); line-height: 1.9; }
+    .policy-intro p strong { color: var(--text); }
+
+    .policy-block { margin-bottom: 40px; }
+    .policy-num { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
+    .policy-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+    .policy-icon { font-size: 1.1rem; }
+    .policy-text { font-size: 0.86rem; color: var(--muted); line-height: 1.95; }
+    .policy-text strong { color: var(--text); font-weight: 600; }
+    .policy-text a { color: var(--red); text-decoration: none; }
+    .policy-text a:hover { text-decoration: underline; }
+
+    .policy-list { margin: 12px 0 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .policy-list li { display: flex; gap: 10px; font-size: 0.84rem; color: var(--muted); line-height: 1.7; }
+    .policy-list li::before { content: '✓'; color: var(--red); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+    .divider { height: 1px; background: rgba(44,24,16,0.07); margin: 40px 0; }
+
+    .contact-box { background: var(--dark); border-radius: 14px; padding: 32px; text-align: center; margin-top: 48px; }
+    .contact-box h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: white; margin-bottom: 8px; }
+    .contact-box h3 em { font-style: italic; color: var(--gold); }
+    .contact-box p { font-size: 0.82rem; color: rgba(255,255,255,0.4); margin-bottom: 20px; line-height: 1.8; }
+    .btn-red { display: inline-block; padding: 12px 28px; background: var(--red); color: white; border-radius: 4px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
+    .btn-red:hover { background: var(--red-dark); }
+
+    /* FOOTER */
+    .footer { background: var(--dark); color: white; padding: 48px 5% 24px; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 24px; }
+    .footer-copy { font-size: 0.68rem; color: rgba(255,255,255,0.22); }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .footer-links a { font-size: 0.68rem; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: white; }
+
+    @media(max-width:600px){ .nav-links{ display:none; } .hamburger{ display:block; } .content-wrap{ padding:48px 4% 60px; } .policy-intro{ padding:22px; } }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon"><div class="logo-cross"></div></div>
+    <span class="logo-text">One <span>Bob</span> Charity Fund</span>
+  </a>
+  <div class="nav-links">
+    <a href="stories.html" class="nav-link">Stories</a>
+    <a href="mission.html" class="nav-link">Mission</a>
+    <a href="gallery.html" class="nav-link">Gallery</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <a href="donate.html" class="nav-btn">Donate Now</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="stories.html" class="nav-link">Stories</a>
+  <a href="mission.html" class="nav-link">Mission</a>
+  <a href="gallery.html" class="nav-link">Gallery</a>
+  <a href="contact.html" class="nav-link">Contact</a>
+  <a href="donate.html" class="nav-btn" style="text-align:center;margin-top:6px;">Donate Now</a>
+</div>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="hero-label">Legal · Transparency</div>
+  <h1 class="hero-title">Privacy <em>Policy</em></h1>
+  <div class="hero-date">Last updated: March 2025 · One Bob Charity Fund</div>
+</section>
+
+<!-- CONTENT -->
+<div class="content-wrap">
+
+  <div class="policy-intro">
+    <p><strong>Your privacy matters to us.</strong> One Bob Charity Fund is a charity that collects small donations to help children in Kenya, Tanzania and Uganda. When you donate, contact us, or use our website, you may share personal information with us. This policy explains clearly what we collect, why we collect it, and how we protect it. We keep it simple — no legal jargon.</p>
+  </div>
+
+  <!-- 1 -->
+  <div class="policy-block">
+    <div class="policy-num">01</div>
+    <div class="policy-title"><span class="policy-icon">📋</span> What information we collect</div>
+    <p class="policy-text">We only collect information that you choose to give us. This may include:</p>
+    <ul class="policy-list">
+      <li>Your <strong>name</strong> — when you donate or contact us</li>
+      <li>Your <strong>email address or phone number</strong> — when you subscribe, donate, or fill in a form</li>
+      <li>Your <strong>country</strong> — when you donate internationally, so we can recognise you properly</li>
+      <li>Your <strong>donation amount and payment reference</strong> — to verify and record your contribution</li>
+      <li>Basic <strong>browser and device data</strong> — automatically collected when you visit our website (IP address, browser type, pages visited)</li>
+    </ul>
+    <p class="policy-text" style="margin-top:12px;">We do <strong>not</strong> store your card or M-Pesa PIN details. Payments go through secure third-party processors.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 2 -->
+  <div class="policy-block">
+    <div class="policy-num">02</div>
+    <div class="policy-title"><span class="policy-icon">🎯</span> Why we collect it</div>
+    <p class="policy-text">We use your information only for the following purposes:</p>
+    <ul class="policy-list">
+      <li>To <strong>process and record your donation</strong> and confirm it was received</li>
+      <li>To <strong>recognise you</strong> in our donation ticker and Top Donors page if applicable</li>
+      <li>To <strong>send you updates</strong> about deliveries and children you have helped — only if you opted in</li>
+      <li>To <strong>respond to your messages</strong> when you contact us</li>
+      <li>To <strong>improve our website</strong> using anonymous browsing statistics</li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 3 -->
+  <div class="policy-block">
+    <div class="policy-num">03</div>
+    <div class="policy-title"><span class="policy-icon">🔒</span> How we protect your information</div>
+    <p class="policy-text">We take the security of your personal information seriously:</p>
+    <ul class="policy-list">
+      <li>We <strong>never sell</strong> your personal information to anyone</li>
+      <li>We <strong>never share</strong> your data with third parties except where necessary to process your donation (e.g. PayPal, Binance)</li>
+      <li>Your data is stored securely and only accessible to the OBCF team</li>
+      <li>Our website uses <strong>HTTPS encryption</strong> to protect data in transit</li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 4 -->
+  <div class="policy-block">
+    <div class="policy-num">04</div>
+    <div class="policy-title"><span class="policy-icon">🍪</span> Cookies</div>
+    <p class="policy-text">Our website uses basic cookies to help it function properly and to understand how visitors use the site. These cookies do not identify you personally. They help us see which pages are most visited and how donors navigate the site so we can improve the experience. You can disable cookies in your browser settings at any time — the site will still work.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 5 -->
+  <div class="policy-block">
+    <div class="policy-num">05</div>
+    <div class="policy-title"><span class="policy-icon">🌍</span> International donors</div>
+    <p class="policy-text">If you are donating from outside East Africa — for example from the UK, Germany, Canada or the USA — your data is handled with the same care as all other donors. We collect your country of origin purely to recognise your generosity in our ticker and Top Donors page. We do not share this with any government or third party. Third-party payment services such as <strong>PayPal</strong> and <strong>Binance Pay</strong> have their own privacy policies which we encourage you to review.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 6 -->
+  <div class="policy-block">
+    <div class="policy-num">06</div>
+    <div class="policy-title"><span class="policy-icon">✋</span> Your rights</div>
+    <p class="policy-text">You are in control of your personal data at all times:</p>
+    <ul class="policy-list">
+      <li>You can <strong>ask us what data we hold</strong> about you at any time</li>
+      <li>You can <strong>ask us to delete</strong> your data from our records</li>
+      <li>You can <strong>opt out</strong> of our email updates at any time by contacting us</li>
+      <li>You can request to be shown as <strong>anonymous</strong> in our ticker and donor pages</li>
+    </ul>
+    <p class="policy-text" style="margin-top:12px;">To exercise any of these rights, simply contact us at <a href="mailto:info@onebobcharityfund.org">info@onebobcharityfund.org</a></p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 7 -->
+  <div class="policy-block">
+    <div class="policy-num">07</div>
+    <div class="policy-title"><span class="policy-icon">🔄</span> Changes to this policy</div>
+    <p class="policy-text">If we update this privacy policy, we will post the new version on this page with the updated date at the top. We encourage you to check back occasionally. Continued use of the website after changes are posted means you accept the updated policy.</p>
+  </div>
+
+  <!-- CONTACT BOX -->
+  <div class="contact-box">
+    <h3>Have a <em>privacy question?</em></h3>
+    <p>We are a small, transparent team and we are happy to answer any question you have about how we handle your data. Just reach out.</p>
+    <a href="contact.html" class="btn-red">Contact Us →</a>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 One Bob Charity Fund · Kenya · Tanzania · Uganda</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="donate.html">Donate</a>
+      <a href="stories.html">Stories</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+</script>
+</body>
+</html>

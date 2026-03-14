@@ -66,7 +66,7 @@
     .step-panel.active { display: block; }
 
     /* STEP 1 — Country */
-    .country-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+    .country-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
     .country-card { background: white; border: 2px solid rgba(44,24,16,0.08); border-radius: 12px; padding: 22px 16px; text-align: center; cursor: pointer; transition: all 0.25s; }
     .country-card:hover { border-color: var(--red); transform: translateY(-2px); }
     .country-card.selected { border-color: var(--red); background: rgba(192,57,43,0.04); box-shadow: 0 4px 20px rgba(192,57,43,0.12); }
@@ -171,7 +171,7 @@
     .footer-links a:hover { color: white; }
 
     @media(max-width:960px){ .donate-section{ grid-template-columns:1fr; } .donate-right{ position:static; } }
-    @media(max-width:600px){ .nav-links{ display:none; } .hamburger{ display:block; } .country-grid{ grid-template-columns:1fr; } .amount-grid{ grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:600px){ .nav-links{ display:none; } .hamburger{ display:block; } .country-grid{ grid-template-columns:repeat(2,1fr); } .amount-grid{ grid-template-columns:repeat(2,1fr); } }
   </style>
 </head>
 <body>
@@ -244,8 +244,12 @@
           <div class="country-name">Uganda</div>
           <div class="country-desc">Donate via MTN Mobile Money or Airtel Money in Uganda Shillings</div>
         </div>
+        <div class="country-card" onclick="selectCountry('International','','intl')" style="border-color:rgba(212,168,67,0.25);background:rgba(212,168,67,0.02);">
+          <span class="country-flag">🌍</span>
+          <div class="country-name" style="color:#C0392B;">International</div>
+          <div class="country-desc">Donate from anywhere in the world in any currency</div>
+        </div>
       </div>
-      <p style="font-size:0.78rem;color:var(--muted);font-style:italic;">Not in East Africa? You can donate via PayPal or Binance Pay in any currency — select any country above to continue.</p>
       <div class="step-nav">
         <button class="btn-next" onclick="goStep(2)">Continue →</button>
       </div>
@@ -293,6 +297,11 @@
         <div>
           <span class="field-label">Your Name (optional)</span>
           <input type="text" class="field-input" id="donorName" placeholder="e.g. Amina Wanjiru"/>
+        </div>
+        <div id="intlCountryField" style="display:none;">
+          <span class="field-label">Your Country 🌍 <span style="color:var(--red);">*</span></span>
+          <input type="text" class="field-input" id="donorCountry" placeholder="e.g. United Kingdom, Germany, USA, Canada..."/>
+          <p style="font-size:0.67rem;color:var(--muted);margin-top:5px;font-style:italic;">Your country will appear in our donor ticker and Top Donors page 🎉</p>
         </div>
         <div>
           <span class="field-label">Phone / Email (optional — for receipt)</span>
@@ -358,6 +367,7 @@
       <a href="index.html">Home</a>
       <a href="stories.html">Stories</a>
       <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
     </div>
   </div>
 </footer>
@@ -368,7 +378,25 @@
   // State
   let state = { country: '', currency: '', flag: '', amount: 0, amountLabel: '', method: '' };
 
-  const svgIcons = {
+  const paymentData_International = {
+    currency: '',
+    amounts: [
+      { label: '$5', value: 5, sub: 'Five dollars' },
+      { label: '$10', value: 10, sub: 'Ten dollars' },
+      { label: '$50', value: 50, sub: 'Fifty dollars' },
+      { label: '$100', value: 100, sub: 'One hundred' },
+    ],
+    methods: [
+      { id: 'paypal', icon: '💳', name: 'PayPal / Card', detail: 'Any currency · Visa · Mastercard · Amex',
+        instructions: { title: 'PayPal Payment', paybill: 'PayPal: donate@onebobcharityfund.org', account: '', steps: ['Go to paypal.com or open PayPal app', 'Click Send Money', 'Enter: donate@onebobcharityfund.org', 'Enter your amount in any currency', 'Add note: OBCF Donation + your country'] }},
+      { id: 'binance', icon: '🟡', name: 'Binance Pay', detail: 'Crypto · USDT · BNB · BTC · Any coin',
+        instructions: { title: 'How to pay via Binance Pay', paybill: 'Binance Pay ID: 000000000', account: 'Or scan QR code in the app', steps: ['Open your Binance app', 'Tap Pay → Send', 'Search Pay ID: 000000000', 'Enter your amount in USDT or any crypto', 'Add note: OBCF Donation + your country', 'Confirm and send'] }},
+      { id: 'bank_intl', icon: '🏦', name: 'Bank / Wire Transfer', detail: 'SWIFT · IBAN · International wire',
+        instructions: { title: 'International Bank Transfer', paybill: 'Bank: Equity Bank Kenya', account: 'SWIFT/BIC: EQBLKENA', steps: ['Contact us at donate@onebobcharityfund.org', 'We will send you full SWIFT/IBAN details', 'Transfer in any currency', 'Use your name as reference', 'Send us confirmation after transfer'] }},
+    ]
+  };
+
+    const svgIcons = {
     mpesa: `<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#006B3F"/><text x="18" y="14" text-anchor="middle" fill="white" font-size="7" font-weight="bold" font-family="Arial">M-PESA</text><rect x="8" y="17" width="20" height="10" rx="2" fill="white" opacity="0.15"/><text x="18" y="25" text-anchor="middle" fill="white" font-size="9" font-weight="bold" font-family="Arial">M</text></svg>`,
     vodacom: `<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#E60000"/><text x="18" y="14" text-anchor="middle" fill="white" font-size="6" font-weight="bold" font-family="Arial">M-PESA</text><circle cx="18" cy="23" r="6" fill="white" opacity="0.2"/><text x="18" y="27" text-anchor="middle" fill="white" font-size="9" font-weight="bold" font-family="Arial">M</text></svg>`,
     tigopesa: `<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#0072BC"/><text x="18" y="14" text-anchor="middle" fill="white" font-size="7.5" font-weight="bold" font-family="Arial">TIGO</text><text x="18" y="26" text-anchor="middle" fill="#FFC72C" font-size="7" font-weight="bold" font-family="Arial">PESA</text></svg>`,
@@ -463,17 +491,29 @@
 
     if (step === 2) buildAmounts();
     if (step === 3) buildPayments();
-    if (step === 4) buildConfirm();
+    if (step === 4) {
+      buildConfirm();
+      document.getElementById('intlCountryField').style.display = state.country === 'International' ? 'block' : 'none';
+    }
   }
 
   function buildAmounts() {
-    const data = paymentData[state.country];
-    document.getElementById('currencyBadge').textContent = data.currency;
+    const data = state.country === 'International' ? paymentData_International : paymentData[state.country];
+    document.getElementById('currencyBadge').textContent = data.currency || 'Any';
     const grid = document.getElementById('amountGrid');
-    grid.innerHTML = data.amounts.map(a => `
-      <button class="amount-btn" onclick="selectAmount(${a.value}, '${a.label}', this)">
-        ${a.label}<span class="amount-sub">${a.sub}</span>
-      </button>`).join('');
+    if (state.country === 'International') {
+      grid.innerHTML = data.amounts.map(a => `
+        <button class="amount-btn" onclick="selectAmount(${a.value}, '${a.label}', this)">
+          ${a.label}<span class="amount-sub">${a.sub}</span>
+        </button>`).join('');
+      document.getElementById('customAmount').placeholder = 'Any amount in any currency e.g. 50, £20, €30';
+    } else {
+      grid.innerHTML = data.amounts.map(a => `
+        <button class="amount-btn" onclick="selectAmount(${a.value}, '${a.label}', this)">
+          ${a.label}<span class="amount-sub">${a.sub}</span>
+        </button>`).join('');
+      document.getElementById('customAmount').placeholder = 'Any amount you choose';
+    }
   }
 
   function selectAmount(value, label, btn) {
@@ -491,7 +531,7 @@
   }
 
   function buildPayments() {
-    const methods = paymentData[state.country].methods;
+    const methods = state.country === 'International' ? paymentData_International.methods : paymentData[state.country].methods;
     const wrap = document.getElementById('paymentMethods');
     wrap.innerHTML = methods.map(m => `
       <div class="payment-method" onclick="selectMethod('${m.id}', this)" data-id="${m.id}">
@@ -509,7 +549,7 @@
     document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
     el.classList.add('selected');
     // Show instructions
-    const methods = paymentData[state.country].methods;
+    const methods = state.country === 'International' ? paymentData_International.methods : paymentData[state.country].methods;
     const method = methods.find(m => m.id === id);
     if (method) {
       const instr = method.instructions;
@@ -525,8 +565,8 @@
   }
 
   function buildConfirm() {
-    const flags = { Kenya: '🇰🇪', Tanzania: '🇹🇿', Uganda: '🇺🇬' };
-    const methods = paymentData[state.country].methods;
+    const flags = { Kenya: '🇰🇪', Tanzania: '🇹🇿', Uganda: '🇺🇬', International: '🌍' };
+    const methods = state.country === 'International' ? paymentData_International.methods : paymentData[state.country].methods;
     const method = methods.find(m => m.id === state.method);
     document.getElementById('confirmCountry').textContent = flags[state.country] + ' ' + state.country;
     document.getElementById('confirmAmount').textContent = state.amountLabel || state.amount + ' ' + paymentData[state.country].currency;
