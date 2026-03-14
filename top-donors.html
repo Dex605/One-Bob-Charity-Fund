@@ -12,10 +12,10 @@
       --red: #C0392B; --red-dark: #922B21; --gold: #D4A843;
       --cream: #FAF6F0; --dark: #1A0E06; --text: #2C1810;
       --muted: rgba(44,24,16,0.55);
-      --bronze: #CD7F32; --bronze-bg: rgba(205,127,50,0.08); --bronze-border: rgba(205,127,50,0.3);
-      --silver: #A8A9AD; --silver-bg: rgba(168,169,173,0.08); --silver-border: rgba(168,169,173,0.3);
-      --gold-c: #D4A843; --gold-bg: rgba(212,168,67,0.08); --gold-border: rgba(212,168,67,0.35);
-      --diamond: #B9F2FF; --diamond-bg: rgba(185,242,255,0.06); --diamond-border: rgba(185,242,255,0.25);
+      --bronze: #CD7F32; --bronze-bg: linear-gradient(135deg, #8B4513, #CD7F32, #A0522D); --bronze-border: #8B4513;
+      --silver: #A8A9AD; --silver-bg: linear-gradient(135deg, #4a4a4a, #A8A9AD, #6e6e6e); --silver-border: #555;
+      --gold-c: #D4A843; --gold-bg: linear-gradient(135deg, #8B6914, #D4A843, #B8860B); --gold-border: #8B6914;
+      --diamond: #B9F2FF; --diamond-bg: linear-gradient(135deg, #0a3d5c, #1a7aad, #0d5a8a); --diamond-border: #0a3d5c;
     }
     html { scroll-behavior: smooth; }
     body { background: var(--dark); color: white; font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
@@ -81,48 +81,50 @@
     /* DONOR CARDS */
     .donors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 
-    .donor-card { border-radius: 14px; padding: 24px; position: relative; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
-    .donor-card:hover { transform: translateY(-4px); }
-    .donor-card.placeholder { opacity: 0.35; cursor: default; }
+    .donor-card { border-radius: 18px; padding: 0; position: relative; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
+    .donor-card:hover { transform: translateY(-6px); }
+    .donor-card.placeholder { opacity: 0.5; cursor: default; }
     .donor-card.placeholder:hover { transform: none; }
 
-    .card-bronze { background: var(--bronze-bg); border: 1px solid var(--bronze-border); }
-    .card-bronze:hover { box-shadow: 0 12px 40px rgba(205,127,50,0.15); }
-    .card-silver { background: var(--silver-bg); border: 1px solid var(--silver-border); }
-    .card-silver:hover { box-shadow: 0 12px 40px rgba(168,169,173,0.15); }
-    .card-gold { background: var(--gold-bg); border: 1px solid var(--gold-border); }
-    .card-gold:hover { box-shadow: 0 12px 40px rgba(212,168,67,0.2); }
-    .card-diamond { background: var(--diamond-bg); border: 1px solid var(--diamond-border); }
-    .card-diamond:hover { box-shadow: 0 16px 48px rgba(185,242,255,0.15); }
+    .card-bronze { background: linear-gradient(145deg, #6B3410, #CD7F32, #8B4513); border: 1px solid rgba(255,200,100,0.3); box-shadow: 0 8px 32px rgba(139,69,19,0.4), inset 0 1px 0 rgba(255,220,150,0.2); }
+    .card-bronze:hover { box-shadow: 0 20px 60px rgba(139,69,19,0.6), inset 0 1px 0 rgba(255,220,150,0.3); }
+    .card-silver { background: linear-gradient(145deg, #2a2a2a, #909090, #4a4a4a); border: 1px solid rgba(220,220,220,0.3); box-shadow: 0 8px 32px rgba(80,80,80,0.5), inset 0 1px 0 rgba(255,255,255,0.15); }
+    .card-silver:hover { box-shadow: 0 20px 60px rgba(80,80,80,0.7), inset 0 1px 0 rgba(255,255,255,0.2); }
+    .card-gold { background: linear-gradient(145deg, #5C4200, #D4A843, #8B6914); border: 1px solid rgba(255,230,100,0.4); box-shadow: 0 8px 32px rgba(92,66,0,0.5), inset 0 1px 0 rgba(255,240,150,0.25); }
+    .card-gold:hover { box-shadow: 0 20px 60px rgba(92,66,0,0.7), inset 0 1px 0 rgba(255,240,180,0.3); }
+    .card-diamond { background: linear-gradient(145deg, #030d1a, #0d4a7a, #0a2a50); border: 1px solid rgba(185,242,255,0.3); box-shadow: 0 8px 32px rgba(13,74,122,0.6), inset 0 1px 0 rgba(185,242,255,0.15); }
+    .card-diamond:hover { box-shadow: 0 20px 60px rgba(13,74,122,0.8), 0 0 40px rgba(185,242,255,0.1); }
 
-    .card-shine { position: absolute; top: 0; right: 0; width: 80px; height: 80px; border-radius: 50%; opacity: 0.06; }
-    .shine-bronze { background: var(--bronze); }
-    .shine-silver { background: var(--silver); }
-    .shine-gold { background: var(--gold-c); }
-    .shine-diamond { background: var(--diamond); }
+    .card-shine { position: absolute; top: -20px; right: -20px; width: 120px; height: 120px; border-radius: 50%; opacity: 0.12; }
+    .shine-bronze { background: radial-gradient(circle, #FFD700, transparent); }
+    .shine-silver { background: radial-gradient(circle, #ffffff, transparent); }
+    .shine-gold { background: radial-gradient(circle, #FFE066, transparent); }
+    .shine-diamond { background: radial-gradient(circle, var(--diamond), transparent); }
 
+    .card-body-inner { padding: 24px; }
     .card-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
-    .card-avatar { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 800; flex-shrink: 0; }
-    .avatar-bronze { background: rgba(205,127,50,0.2); color: var(--bronze); border: 1px solid var(--bronze-border); }
-    .avatar-silver { background: rgba(168,169,173,0.2); color: var(--silver); border: 1px solid var(--silver-border); }
-    .avatar-gold { background: rgba(212,168,67,0.2); color: var(--gold-c); border: 1px solid var(--gold-border); }
-    .avatar-diamond { background: rgba(185,242,255,0.1); color: var(--diamond); border: 1px solid var(--diamond-border); }
+    .card-avatar { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 800; flex-shrink: 0; overflow: hidden; }
+    .avatar-bronze { background: rgba(0,0,0,0.3); color: #FFD090; border: 2px solid rgba(255,200,100,0.4); }
+    .avatar-silver { background: rgba(0,0,0,0.3); color: #E8E8E8; border: 2px solid rgba(255,255,255,0.25); }
+    .avatar-gold { background: rgba(0,0,0,0.3); color: #FFE066; border: 2px solid rgba(255,230,100,0.4); }
+    .avatar-diamond { background: rgba(0,0,0,0.3); color: var(--diamond); border: 2px solid rgba(185,242,255,0.3); }
+    .card-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .card-info { flex: 1; }
-    .card-name { font-size: 0.92rem; font-weight: 700; color: white; margin-bottom: 2px; }
-    .card-meta { font-size: 0.66rem; color: rgba(255,255,255,0.3); }
+    .card-name { font-size: 0.95rem; font-weight: 700; color: white; margin-bottom: 3px; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+    .card-meta { font-size: 0.68rem; color: rgba(255,255,255,0.55); }
     .card-badge { padding: 3px 10px; border-radius: 20px; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
-    .badge-bronze { background: rgba(205,127,50,0.15); color: var(--bronze); border: 1px solid var(--bronze-border); }
-    .badge-silver { background: rgba(168,169,173,0.15); color: var(--silver); border: 1px solid var(--silver-border); }
-    .badge-gold { background: rgba(212,168,67,0.15); color: var(--gold-c); border: 1px solid var(--gold-border); }
-    .badge-diamond { background: rgba(185,242,255,0.1); color: var(--diamond); border: 1px solid var(--diamond-border); }
+    .badge-bronze { background: rgba(0,0,0,0.35); color: #FFD090; border: 1px solid rgba(255,200,100,0.4); }
+    .badge-silver { background: rgba(0,0,0,0.35); color: #E8E8E8; border: 1px solid rgba(255,255,255,0.25); }
+    .badge-gold { background: rgba(0,0,0,0.35); color: #FFE566; border: 1px solid rgba(255,230,100,0.4); }
+    .badge-diamond { background: rgba(0,0,0,0.35); color: var(--diamond); border: 1px solid rgba(185,242,255,0.3); }
 
-    .card-amount { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; }
-    .amount-bronze { color: var(--bronze); }
-    .amount-silver { color: var(--silver); }
-    .amount-gold { color: var(--gold-c); }
+    .card-amount { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 800; margin-bottom: 10px; text-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+    .amount-bronze { color: #FFD090; }
+    .amount-silver { color: #F0F0F0; }
+    .amount-gold { color: #FFE566; }
     .amount-diamond { color: var(--diamond); }
 
-    .card-message { font-size: 0.76rem; color: rgba(255,255,255,0.35); line-height: 1.7; font-style: italic; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; }
+    .card-message { font-size: 0.76rem; color: rgba(255,255,255,0.6); line-height: 1.75; font-style: italic; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; margin-top: 4px; }
 
     .placeholder-label { font-size: 0.68rem; color: rgba(255,255,255,0.2); text-align: center; padding: 24px 0; font-style: italic; }
     .placeholder-card-inner { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; gap: 10px; }
@@ -289,8 +291,9 @@
     <div class="donors-grid">
       <div class="donor-card card-silver">
         <div class="card-shine shine-silver"></div>
+        <div class="card-body-inner">
         <div class="card-top">
-          <div class="card-avatar avatar-silver">H</div>
+          <div class="card-avatar avatar-silver"><img src="images/heinz-gunter-donor.jpg" alt="Heinz Günter"/></div>
           <div class="card-info">
             <div class="card-name">Heinz Günter</div>
             <div class="card-meta">🇩🇪 Germany · Age 61</div>
@@ -299,6 +302,7 @@
         </div>
         <div class="card-amount amount-silver">€1,200</div>
         <div class="card-message">From Germany with a big heart — Heinz believed that children across East Africa deserve better. Donated January 2026.</div>
+        </div>
       </div>
       <div class="donor-card card-silver placeholder">
         <div class="placeholder-card-inner">
@@ -328,8 +332,9 @@
     <div class="donors-grid">
       <div class="donor-card card-bronze">
         <div class="card-shine shine-bronze"></div>
+        <div class="card-body-inner">
         <div class="card-top">
-          <div class="card-avatar avatar-bronze">L</div>
+          <div class="card-avatar avatar-bronze"><img src="images/linda-sue-donor.jpg" alt="Linda-Sue"/></div>
           <div class="card-info">
             <div class="card-name">Linda-Sue</div>
             <div class="card-meta">🇨🇦 Canada · Age 48</div>
@@ -338,6 +343,7 @@
         </div>
         <div class="card-amount amount-bronze">$520</div>
         <div class="card-message">A generous heart from Canada who believed in our mission and made it real. Donated December 2025.</div>
+        </div>
       </div>
       <div class="donor-card card-bronze placeholder">
         <div class="placeholder-card-inner">
