@@ -244,7 +244,7 @@
           <div class="country-desc">Donate via MTN Mobile Money or Airtel Money in Uganda Shillings</div>
         </div>
       </div>
-      <p style="font-size:0.78rem;color:var(--muted);font-style:italic;">Not in East Africa? You can donate via PayPal in any currency — select any country above to continue.</p>
+      <p style="font-size:0.78rem;color:var(--muted);font-style:italic;">Not in East Africa? You can donate via PayPal or Binance Pay in any currency — select any country above to continue.</p>
       <div class="step-nav">
         <button class="btn-next" onclick="goStep(2)">Continue →</button>
       </div>
@@ -367,7 +367,18 @@
   // State
   let state = { country: '', currency: '', flag: '', amount: 0, amountLabel: '', method: '' };
 
-  // Payment data per country
+  const svgIcons = {
+    mpesa: `<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#006B3F"/><text x="18" y="14" text-anchor="middle" fill="white" font-size="7" font-weight="bold" font-family="Arial">M-PESA</text><rect x="8" y="17" width="20" height="10" rx="2" fill="white" opacity="0.15"/><text x="18" y="25" text-anchor="middle" fill="white" font-size="9" font-weight="bold" font-family="Arial">M</text></svg>`,
+    vodacom: `<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#E60000"/><text x="18" y="14" text-anchor="middle" fill="white" font-size="6" font-weight="bold" font-family="Arial">M-PESA</text><circle cx="18" cy="23" r="6" fill="white" opacity="0.2"/><text x="18" y="27" text-anchor="middle" fill="white" font-size="9" font-weight="bold" font-family="Arial">M</text></svg>`,
+    tigopesa: `<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#0072BC"/><text x="18" y="14" text-anchor="middle" fill="white" font-size="7.5" font-weight="bold" font-family="Arial">TIGO</text><text x="18" y="26" text-anchor="middle" fill="#FFC72C" font-size="7" font-weight="bold" font-family="Arial">PESA</text></svg>`,
+    mtn: `<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#FFCC00"/><text x="18" y="16" text-anchor="middle" fill="#000" font-size="9" font-weight="bold" font-family="Arial">MTN</text><text x="18" y="27" text-anchor="middle" fill="#000" font-size="6" font-weight="bold" font-family="Arial">MoMo</text></svg>`,
+    airtel: `<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#E40000"/><text x="18" y="16" text-anchor="middle" fill="white" font-size="7.5" font-weight="bold" font-family="Arial">AIRTEL</text><text x="18" y="27" text-anchor="middle" fill="white" font-size="6.5" font-weight="bold" font-family="Arial">MONEY</text></svg>`,
+    bank_ke: `<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#1A3C6E"/><polygon points="18,7 28,13 8,13" fill="white" opacity="0.9"/><rect x="10" y="14" width="3" height="10" fill="white" opacity="0.9"/><rect x="16.5" y="14" width="3" height="10" fill="white" opacity="0.9"/><rect x="23" y="14" width="3" height="10" fill="white" opacity="0.9"/><rect x="8" y="25" width="20" height="2.5" fill="white" opacity="0.9"/></svg>`,
+    paypal: `<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#003087"/><path d="M23 11H15c-.6 0-1 .4-1.1 1l-2.9 14c-.1.4.2.8.6.8h3.5c.5 0 .9-.4 1-.8l.8-5c.1-.5.5-.8 1-.8h2c3.5 0 6-1.7 6.8-5.1.3-1.4 0-2.6-.7-3.4-.8-.9-2.1-1.7-4-1.7z" fill="#009CDE"/><path d="M24 16.5c-.7 3-3 4.5-6 4.5h-1.5c-.5 0-.9.4-1 .8l-1 6.2H11c-.4 0-.7-.4-.6-.8l2.9-14c.1-.5.5-.8 1-.8H22c1.5 0 2.5.5 2 4.1z" fill="white" opacity="0.9"/></svg>`,
+    binance: `<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#F0B90B"/><path d="M18 9l2.8 2.8-2.8 2.8-2.8-2.8L18 9zm-6.5 6.5l2.8 2.8-2.8 2.8L8.7 18l2.8-2.8v-.7zm13 0l2.8 2.8-2.8 2.8-2.8-2.8 2.8-2.8zm-6.5 0l2.8 2.8-2.8 2.8-2.8-2.8 2.8-2.8zm-6.5 6.5l2.8 2.8-2.8 2.8-2.8-2.8 2.8-2.8zm13 0l2.8 2.8-2.8 2.8-2.8-2.8 2.8-2.8zm-6.5 0l2.8 2.8-2.8 2.8-2.8-2.8 2.8-2.8z" fill="#1E1E1E"/></svg>`
+  };
+
+    // Payment data per country
   const paymentData = {
     Kenya: {
       currency: 'KSh',
@@ -384,6 +395,8 @@
           instructions: { title: 'Kenya Bank Transfer Details', paybill: 'Bank: Equity Bank Kenya', account: 'Account: 0000000000000', steps: ['Go to your bank app or branch', 'Transfer to Equity Bank', 'Account Name: One Bob Charity Fund', 'Account Number: 0000000000000', 'Use your name as reference'] }},
         { id: 'paypal', icon: '💳', name: 'PayPal / Card', detail: 'International donors — any currency',
           instructions: { title: 'PayPal Payment', paybill: 'PayPal: donate@onebobcharityfund.org', account: '', steps: ['Go to paypal.com', 'Click Send Money', 'Enter: donate@onebobcharityfund.org', 'Enter your amount in any currency', 'Add note: OBCF Donation'] }},
+        { id: 'binance', icon: '🟡', name: 'Binance Pay', detail: 'Crypto · USDT · BNB · Any currency',
+          instructions: { title: 'How to pay via Binance Pay', paybill: 'Binance Pay ID: 000000000', account: 'Or scan QR code in the app', steps: ['Open your Binance app', 'Tap Pay → Send', 'Search Pay ID: 000000000', 'Enter your amount in USDT or any crypto', 'Add note: OBCF Donation', 'Confirm and send'] }},
       ]
     },
     Tanzania: {
@@ -401,6 +414,8 @@
           instructions: { title: 'How to pay via Tigo Pesa', paybill: 'Number: 0000000', account: 'Reference: OBCF', steps: ['Dial *150*01#', 'Select Send Money', 'Enter number: 0000000', 'Enter amount', 'Enter your PIN to confirm'] }},
         { id: 'paypal', icon: '💳', name: 'PayPal / Card', detail: 'International donors — any currency',
           instructions: { title: 'PayPal Payment', paybill: 'PayPal: donate@onebobcharityfund.org', account: '', steps: ['Go to paypal.com', 'Click Send Money', 'Enter: donate@onebobcharityfund.org', 'Enter your amount in any currency', 'Add note: OBCF Donation'] }},
+        { id: 'binance', icon: '🟡', name: 'Binance Pay', detail: 'Crypto · USDT · BNB · Any currency',
+          instructions: { title: 'How to pay via Binance Pay', paybill: 'Binance Pay ID: 000000000', account: 'Or scan QR code in the app', steps: ['Open your Binance app', 'Tap Pay → Send', 'Search Pay ID: 000000000', 'Enter your amount in USDT or any crypto', 'Add note: OBCF Donation', 'Confirm and send'] }},
       ]
     },
     Uganda: {
@@ -418,6 +433,8 @@
           instructions: { title: 'How to pay via Airtel Money', paybill: 'Airtel Number: 0750000000', account: 'Reference: OBCF', steps: ['Dial *185#', 'Select Make Payments', 'Enter: 0750000000', 'Enter amount', 'Confirm with PIN'] }},
         { id: 'paypal', icon: '💳', name: 'PayPal / Card', detail: 'International donors — any currency',
           instructions: { title: 'PayPal Payment', paybill: 'PayPal: donate@onebobcharityfund.org', account: '', steps: ['Go to paypal.com', 'Click Send Money', 'Enter: donate@onebobcharityfund.org', 'Enter your amount in any currency', 'Add note: OBCF Donation'] }},
+        { id: 'binance', icon: '🟡', name: 'Binance Pay', detail: 'Crypto · USDT · BNB · Any currency',
+          instructions: { title: 'How to pay via Binance Pay', paybill: 'Binance Pay ID: 000000000', account: 'Or scan QR code in the app', steps: ['Open your Binance app', 'Tap Pay → Send', 'Search Pay ID: 000000000', 'Enter your amount in USDT or any crypto', 'Add note: OBCF Donation', 'Confirm and send'] }},
       ]
     }
   };
@@ -477,7 +494,7 @@
     const wrap = document.getElementById('paymentMethods');
     wrap.innerHTML = methods.map(m => `
       <div class="payment-method" onclick="selectMethod('${m.id}', this)" data-id="${m.id}">
-        <span class="payment-icon">${m.icon}</span>
+        <span class="payment-icon" style="font-size:0;width:36px;height:36px;display:flex;align-items:center;">${svgIcons[m.id] || '<span style=\"font-size:1.8rem\">' + m.icon + '</span>'}</span>
         <div class="payment-info">
           <div class="payment-name">${m.name}</div>
           <div class="payment-detail">${m.detail}</div>
