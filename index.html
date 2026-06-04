@@ -1,191 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>One Bob Charity Fund — Every Shilling Counts</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --red: #C0392B; --red-dark: #922B21; --gold: #D4A843;
-      --cream: #FAF6F0; --warm: #F5EDE0; --dark: #1A0E06;
-      --text: #2C1810; --muted: rgba(44,24,16,0.55);
-    }
-    html { scroll-behavior: smooth; }
-    body { background: var(--cream); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>One Bob Charity Fund — Every Shilling Counts</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red: #C0392B; --red-dark: #922B21; --gold: #D4A843;
+  --cream: #FAF6F0; --dark: #1A0E06; --text: #2C1810;
+  --muted: rgba(44,24,16,0.55);
+}
+html { scroll-behavior: smooth; }
+body { background: var(--cream); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
 
-    /* NAVBAR */
-    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 0 5%; height: 66px; display: flex; align-items: center; justify-content: space-between; transition: background 0.4s, box-shadow 0.4s; }
-    .navbar.scrolled { background: rgba(250,246,240,0.97); backdrop-filter: blur(20px); box-shadow: 0 1px 0 rgba(44,24,16,0.08); }
-    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .logo-icon { width: 34px; height: 34px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .logo-cross { position: relative; width: 14px; height: 14px; }
-    .logo-cross::before { content:''; position: absolute; top: 50%; left: 0; right: 0; height: 2.5px; background: white; transform: translateY(-50%); border-radius: 2px; }
-    .logo-cross::after { content:''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2.5px; background: white; transform: translateX(-50%); border-radius: 2px; }
-    .logo-text { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 800; color: white; transition: color 0.3s; }
-    .logo-text span { color: var(--gold); }
-    .navbar.scrolled .logo-text { color: var(--text); }
-    .nav-links { display: flex; align-items: center; gap: 2px; }
-    .nav-link { padding: 8px 14px; font-size: 0.73rem; font-weight: 500; color: rgba(255,255,255,0.75); text-decoration: none; border-radius: 4px; transition: all 0.2s; }
-    .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
-    .navbar.scrolled .nav-link { color: var(--muted); }
-    .navbar.scrolled .nav-link:hover { color: var(--text); background: rgba(44,24,16,0.05); }
-    .nav-btn { padding: 9px 22px; background: var(--red); color: white !important; border-radius: 4px; font-size: 0.73rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; margin-left: 8px; }
-    .nav-btn:hover { background: var(--red-dark) !important; }
-    .hamburger { display: none; background: none; border: none; color: white; font-size: 1.5rem; transition: color 0.3s; }
-    .navbar.scrolled .hamburger { color: var(--text); }
-    .mobile-menu { display: none; position: fixed; top: 66px; left: 0; right: 0; background: white; border-bottom: 1px solid rgba(44,24,16,0.08); padding: 12px 5% 20px; z-index: 199; flex-direction: column; gap: 4px; box-shadow: 0 8px 32px rgba(44,24,16,0.1); }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu .nav-link { color: var(--muted); }
+/* NAVBAR */
+.navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 0 5%; height: 66px; display: flex; align-items: center; justify-content: space-between; background: rgba(250,246,240,0.97); backdrop-filter: blur(20px); box-shadow: 0 1px 0 rgba(44,24,16,0.08); }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-icon { width: 34px; height: 34px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.logo-cross { position: relative; width: 14px; height: 14px; }
+.logo-cross::before { content:''; position: absolute; top: 50%; left: 0; right: 0; height: 2.5px; background: white; transform: translateY(-50%); border-radius: 2px; }
+.logo-cross::after { content:''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2.5px; background: white; transform: translateX(-50%); border-radius: 2px; }
+.logo-text { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 800; color: var(--text); }
+.logo-text span { color: var(--gold); }
+.nav-links { display: flex; align-items: center; gap: 2px; }
+.nav-link { padding: 8px 14px; font-size: 0.73rem; font-weight: 500; color: var(--muted); text-decoration: none; border-radius: 4px; transition: all 0.2s; }
+.nav-link:hover { color: var(--text); background: rgba(44,24,16,0.05); }
+.nav-link.active { color: var(--red); }
+.nav-btn { padding: 9px 22px; background: var(--red); color: white; border-radius: 4px; font-size: 0.73rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; margin-left: 8px; transition: all 0.2s; }
+.nav-btn:hover { background: var(--red-dark); }
+.hamburger { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
+.mobile-menu { display: none; position: fixed; top: 66px; left: 0; right: 0; background: white; border-bottom: 1px solid rgba(44,24,16,0.08); padding: 12px 5% 20px; z-index: 199; flex-direction: column; gap: 4px; }
+.mobile-menu.open { display: flex; }
+.mobile-menu .nav-link { color: var(--muted); }
 
-    /* HERO */
-    .hero { position: relative; height: 100vh; min-height: 600px; overflow: hidden; }
-    .hero-slides { position: absolute; inset: 0; }
-    .hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 2s ease; }
-    .hero-slide.active { opacity: 1; }
-    .hero-slide img { width: 100%; height: 100%; object-fit: cover; transform-origin: center; }
-    .hero-slide.active img { animation: kenBurns 10s ease-in-out forwards; }
-    @keyframes kenBurns { 0%{ transform: scale(1.0); } 100%{ transform: scale(1.1); } }
-    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(105deg, rgba(10,5,2,0.85) 0%, rgba(10,5,2,0.55) 55%, rgba(10,5,2,0.25) 100%); z-index: 2; }
-    .hero-overlay-bottom { position: absolute; bottom: 0; left: 0; right: 0; height: 45%; background: linear-gradient(to top, rgba(10,5,2,0.85), transparent); z-index: 2; }
-    .hero-content { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; justify-content: center; padding: 100px 5% 80px; max-width: 700px; }
-    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(192,57,43,0.2); border: 1px solid rgba(192,57,43,0.4); border-radius: 20px; padding: 6px 14px; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #F4A79B; margin-bottom: 22px; width: fit-content; }
-    .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: blink 2s infinite; }
-    @keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
-    .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 6vw, 5.5rem); font-weight: 800; line-height: 1.0; color: white; margin-bottom: 8px; }
-    .hero-title-italic { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 6vw, 5.5rem); font-weight: 600; font-style: italic; color: var(--gold); line-height: 1.0; margin-bottom: 6px; }
-    .hero-tagline { font-size: clamp(0.85rem, 1.5vw, 1rem); font-style: italic; color: rgba(255,255,255,0.55); margin-bottom: 20px; font-weight: 300; }
-    .hero-sub { font-size: 0.92rem; line-height: 1.85; color: rgba(255,255,255,0.62); max-width: 440px; margin-bottom: 36px; font-weight: 300; }
-    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 44px; }
-    .btn-white { padding: 14px 32px; background: white; color: var(--red); border-radius: 4px; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.25s; }
-    .btn-white:hover { background: var(--cream); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
-    .btn-ghost { padding: 14px 32px; background: transparent; color: white; border-radius: 4px; font-size: 0.76rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.25s; border: 1.5px solid rgba(255,255,255,0.3); }
-    .btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.07); }
-    .child-label { display: flex; align-items: center; gap: 12px; }
-    .child-divider { width: 24px; height: 1.5px; background: rgba(255,255,255,0.3); }
-    .child-label-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: rgba(255,255,255,0.85); }
-    .child-label-sub { font-size: 0.65rem; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; }
-    .hero-dots { position: absolute; bottom: 36px; right: 5%; z-index: 10; display: flex; gap: 8px; }
-    .hero-dot { width: 28px; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.22); cursor: pointer; transition: all 0.3s; }
-    .hero-dot.active { background: var(--gold); width: 48px; }
-    .scroll-hint { position: absolute; bottom: 36px; left: 5%; z-index: 10; display: flex; align-items: center; gap: 10px; font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.28); }
-    .scroll-line { width: 36px; height: 1px; background: rgba(255,255,255,0.2); position: relative; overflow: hidden; }
-    .scroll-line::after { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background: rgba(255,255,255,0.7); animation: slideRight 2s infinite; }
-    @keyframes slideRight { 0%{ left:-100%; } 100%{ left:100%; } }
+/* HERO */
+.hero { min-height: 100vh; background: var(--dark); display: flex; align-items: center; position: relative; overflow: hidden; padding: 0 5%; }
+.hero-bg-photos { position: absolute; top: 0; right: 0; bottom: 0; width: 45%; display: grid; grid-template-columns: 1fr 1fr; gap: 0; opacity: 0.35; }
+.hero-bg-photos img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-bg-overlay { position: absolute; top: 0; right: 0; bottom: 0; width: 50%; background: linear-gradient(to right, var(--dark) 0%, transparent 100%); }
+.hero-bg-overlay-full { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(26,14,6,0.95) 0%, rgba(26,14,6,0.6) 100%); }
+.hero-content { position: relative; z-index: 2; max-width: 680px; padding: 120px 0 80px; }
+.hero-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(212,168,67,0.65); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.hero-label::after { content:''; flex: 1; height: 1px; background: rgba(212,168,67,0.2); max-width: 60px; }
+.hero-title { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 800; color: white; line-height: 0.95; margin-bottom: 8px; }
+.hero-title-sub { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 800; color: white; line-height: 0.95; margin-bottom: 28px; font-style: italic; color: var(--gold); }
+.hero-sub { font-size: 0.9rem; color: rgba(255,255,255,0.42); line-height: 1.95; max-width: 480px; margin-bottom: 40px; }
+.hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 60px; }
+.btn-primary { display: inline-block; padding: 15px 32px; background: var(--red); color: white; border-radius: 4px; font-size: 0.77rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
+.btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(192,57,43,0.3); }
+.btn-ghost { display: inline-block; padding: 15px 32px; background: transparent; color: rgba(255,255,255,0.7); border-radius: 4px; font-size: 0.77rem; font-weight: 600; letter-spacing: 0.06em; text-decoration: none; border: 1.5px solid rgba(255,255,255,0.15); transition: all 0.2s; }
+.btn-ghost:hover { border-color: rgba(255,255,255,0.4); color: white; }
+.hero-child-tag { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; padding: 8px 16px 8px 8px; }
+.hero-child-tag-dot { width: 8px; height: 8px; border-radius: 50%; background: #4CAF50; box-shadow: 0 0 8px rgba(76,175,80,0.6); }
+.hero-child-tag-text { font-size: 0.72rem; color: rgba(255,255,255,0.55); }
+.hero-scroll { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); font-size: 0.62rem; color: rgba(255,255,255,0.2); letter-spacing: 0.2em; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.hero-scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, rgba(255,255,255,0.2), transparent); }
 
-    /* TICKER */
-    .ticker { background: var(--red); padding: 10px 0; overflow: hidden; }
-    .ticker-track { display: flex; white-space: nowrap; animation: tickerMove 40s linear infinite; }
-    .ticker-track:hover { animation-play-state: paused; }
-    .ticker-item { display: inline-flex; align-items: center; gap: 8px; padding: 0 30px; font-size: 0.72rem; font-weight: 500; color: rgba(255,255,255,0.9); border-right: 1px solid rgba(255,255,255,0.15); }
-    @keyframes tickerMove { 0%{ transform: translateX(0); } 100%{ transform: translateX(-50%); } }
+/* TICKER */
+.ticker-wrap { background: var(--red); overflow: hidden; padding: 10px 0; }
+.ticker-inner { display: flex; gap: 0; white-space: nowrap; animation: ticker 60s linear infinite; }
+.ticker-inner:hover { animation-play-state: paused; }
+.ticker-item { display: inline-flex; align-items: center; gap: 8px; padding: 0 32px; font-size: 0.72rem; color: rgba(255,255,255,0.85); font-weight: 500; }
+.ticker-item::after { content:'·'; color: rgba(255,255,255,0.3); margin-left: 32px; }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    /* SECTIONS */
-    .section { padding: 88px 5%; }
-    .section-alt { background: #FDF8F2; }
-    .section-dark { background: var(--dark); }
-    .sec-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
-    .sec-label.gold { color: rgba(212,168,67,0.7); }
-    .sec-heading { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.1; color: var(--text); margin-bottom: 14px; }
-    .sec-heading em { font-style: italic; color: var(--red); }
-    .sec-heading.light { color: white; }
-    .sec-heading.light em { color: var(--gold); }
-    .sec-sub { font-size: 0.86rem; color: var(--muted); line-height: 1.85; }
-    .sec-sub.light { color: rgba(255,255,255,0.45); }
-    .centered { text-align: center; }
-    .centered .sec-sub { max-width: 480px; margin: 0 auto; }
+/* HOW IT WORKS */
+.section { padding: 88px 5%; }
+.section-alt { background: #FDF8F2; }
+.section-dark { background: var(--dark); }
+.inner { max-width: 1100px; margin: 0 auto; }
+.sec-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+.sec-label.gold { color: rgba(212,168,67,0.7); }
+.sec-heading { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.1; color: var(--text); margin-bottom: 14px; }
+.sec-heading em { font-style: italic; color: var(--red); }
+.sec-heading.light { color: white; }
+.sec-heading.light em { color: var(--gold); }
+.sec-sub { font-size: 0.87rem; color: var(--muted); line-height: 1.85; }
+.sec-sub.light { color: rgba(255,255,255,0.45); }
 
-    /* HOW IT WORKS */
-    .how-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; max-width: 1100px; margin: 0 auto; }
-    .how-steps { margin-top: 40px; }
-    .how-step { display: flex; gap: 18px; padding: 22px 0; border-bottom: 1px solid rgba(44,24,16,0.07); }
-    .how-step:last-child { border: none; }
-    .step-icon { width: 50px; height: 50px; border-radius: 12px; background: rgba(192,57,43,0.07); border: 1px solid rgba(192,57,43,0.13); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; transition: all 0.3s; }
-    .how-step:hover .step-icon { background: var(--red); }
-    .step-num { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); margin-bottom: 3px; }
-    .step-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-    .step-desc { font-size: 0.77rem; color: var(--muted); line-height: 1.7; }
-    .how-photo { border-radius: 14px; overflow: hidden; aspect-ratio: 4/5; position: relative; box-shadow: 0 20px 60px rgba(44,24,16,0.18); }
-    .how-photo img { width: 100%; height: 100%; object-fit: cover; }
-    .how-photo-badge { position: absolute; bottom: 20px; left: 20px; right: 20px; background: rgba(10,5,2,0.82); backdrop-filter: blur(10px); border-radius: 8px; padding: 14px 16px; border: 1px solid rgba(255,255,255,0.07); }
-    .how-photo-badge p { font-family: 'Playfair Display', serif; font-size: 0.92rem; color: white; margin-bottom: 3px; }
-    .how-photo-badge span { font-size: 0.68rem; color: rgba(255,255,255,0.45); }
+.steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 56px; position: relative; }
+.steps-grid::before { content:''; position: absolute; top: 32px; left: 12.5%; right: 12.5%; height: 1px; background: rgba(44,24,16,0.08); z-index: 0; }
+.step-item { text-align: center; padding: 0 20px; position: relative; z-index: 1; }
+.step-num-wrap { width: 64px; height: 64px; border-radius: 50%; background: white; border: 2px solid rgba(44,24,16,0.08); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; transition: all 0.3s; }
+.step-item:hover .step-num-wrap { background: var(--red); border-color: var(--red); }
+.step-icon { font-size: 1.5rem; }
+.step-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.step-name { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.step-text { font-size: 0.75rem; color: var(--muted); line-height: 1.75; }
 
-    /* IMPACT */
-    .impact-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: rgba(255,255,255,0.04); max-width: 860px; margin: 48px auto 0; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-    .impact-item { padding: 40px 16px; text-align: center; background: rgba(255,255,255,0.02); }
-    .impact-num { font-family: 'Playfair Display', serif; font-size: clamp(2rem,4vw,3rem); font-weight: 800; color: var(--gold); }
-    .impact-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.32); margin-top: 6px; }
+/* DELIVERY PROOF */
+.proof-layout { display: grid; grid-template-columns: 1fr 460px; gap: 64px; align-items: center; margin-top: 56px; }
+.proof-image-wrap { position: relative; }
+.proof-image { width: 100%; aspect-ratio: 4/3; border-radius: 16px; object-fit: cover; display: block; }
+.proof-badge { position: absolute; bottom: -20px; left: 32px; background: white; border-radius: 12px; padding: 14px 20px; box-shadow: 0 8px 32px rgba(44,24,16,0.12); display: flex; align-items: center; gap: 12px; }
+.proof-badge-icon { width: 40px; height: 40px; border-radius: 8px; background: rgba(192,57,43,0.08); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+.proof-badge-text { font-size: 0.72rem; color: var(--muted); line-height: 1.6; }
+.proof-badge-text strong { color: var(--text); display: block; font-size: 0.82rem; }
+.proof-right { }
+.proof-stat-row { display: flex; gap: 24px; margin-bottom: 40px; }
+.proof-stat { }
+.proof-stat-num { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 800; color: var(--red); line-height: 1; }
+.proof-stat-label { font-size: 0.68rem; color: var(--muted); margin-top: 4px; }
 
-    /* STORIES */
-    .stories-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; max-width: 1100px; margin: 48px auto 40px; }
-    .story-card { border-radius: 12px; overflow: hidden; background: white; box-shadow: 0 2px 16px rgba(44,24,16,0.06); transition: transform 0.3s, box-shadow 0.3s; }
-    .story-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(44,24,16,0.13); }
-    .story-img-wrap { position: relative; height: 230px; overflow: hidden; }
-    .story-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-    .story-card:hover .story-img-wrap img { transform: scale(1.05); }
-    .story-img-overlay { position: absolute; bottom: 0; left: 0; right: 0; height: 55%; background: linear-gradient(to top, rgba(0,0,0,0.65), transparent); }
-    .story-tag-country { position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); border-radius: 20px; padding: 4px 10px; font-size: 0.6rem; font-weight: 600; color: white; letter-spacing: 0.1em; text-transform: uppercase; }
-    .story-tag-need { position: absolute; top: 12px; right: 12px; background: var(--red); border-radius: 20px; padding: 4px 10px; font-size: 0.6rem; font-weight: 600; color: white; letter-spacing: 0.1em; text-transform: uppercase; }
-    .story-body { padding: 18px 20px 20px; }
-    .story-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-    .story-meta { font-size: 0.66rem; color: var(--muted); margin-bottom: 10px; letter-spacing: 0.06em; }
-    .story-text { font-size: 0.77rem; color: var(--muted); line-height: 1.78; margin-bottom: 14px; }
-    .story-link { font-size: 0.7rem; font-weight: 600; color: var(--red); text-decoration: none; }
-    .stories-cta { text-align: center; }
+/* COUNTER */
+.counter-section { padding: 80px 5%; background: var(--dark); }
+.counter-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; max-width: 900px; margin: 0 auto; background: rgba(255,255,255,0.04); border-radius: 12px; overflow: hidden; }
+.counter-item { padding: 40px 24px; text-align: center; background: rgba(255,255,255,0.01); }
+.counter-num { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 800; color: var(--gold); line-height: 1; margin-bottom: 6px; }
+.counter-label { font-size: 0.68rem; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; text-transform: uppercase; }
 
-    /* FOUNDER */
-    .founder-inner { max-width: 680px; margin: 0 auto; text-align: center; }
-    .founder-avatar { width: 78px; height: 78px; border-radius: 50%; background: var(--red); color: white; font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 28px auto 0; border: 4px solid rgba(192,57,43,0.12); }
-    .founder-box { border: 1.5px dashed rgba(192,57,43,0.28); border-radius: 12px; padding: 44px 32px; margin-top: 28px; }
-    .founder-box p { font-size: 0.84rem; color: var(--muted); font-style: italic; line-height: 1.85; }
+/* STORIES */
+.stories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+.story-card { background: white; border-radius: 14px; overflow: hidden; border: 1px solid rgba(44,24,16,0.06); transition: transform 0.3s, box-shadow 0.3s; }
+.story-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(44,24,16,0.1); }
+.story-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+.story-body { padding: 22px; }
+.story-tags { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+.story-tag { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
+.story-tag-country { background: rgba(192,57,43,0.07); color: var(--red); }
+.story-tag-need { background: rgba(212,168,67,0.1); color: #8B6914; }
+.story-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.story-age { font-size: 0.7rem; color: var(--muted); margin-bottom: 12px; }
+.story-text { font-size: 0.78rem; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+.story-link { font-size: 0.72rem; font-weight: 600; color: var(--red); text-decoration: none; letter-spacing: 0.06em; }
+.story-link:hover { text-decoration: underline; }
+.stories-cta { text-align: center; margin-top: 40px; }
 
-    /* SUBSCRIBE */
-    .sub-wrap { max-width: 500px; margin: 0 auto; text-align: center; }
-    .sub-form { display: flex; gap: 10px; margin-top: 28px; }
-    .sub-input { flex: 1; padding: 13px 16px; border: 1.5px solid rgba(255,255,255,0.12); border-radius: 4px; background: rgba(255,255,255,0.07); color: white; font-family: 'DM Sans', sans-serif; font-size: 0.83rem; outline: none; transition: border-color 0.2s; }
-    .sub-input::placeholder { color: rgba(255,255,255,0.3); }
-    .sub-input:focus { border-color: rgba(255,255,255,0.35); }
-    .sub-btn { padding: 13px 24px; background: white; color: var(--red); border: none; border-radius: 4px; font-family: 'DM Sans', sans-serif; font-size: 0.73rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; transition: all 0.2s; }
-    .sub-btn:hover { background: var(--cream); }
-    .sub-ok { display: none; color: rgba(255,255,255,0.75); font-size: 0.82rem; margin-top: 14px; }
-    .sub-ok.on { display: block; }
+/* FOUNDER */
+.founder-section { padding: 88px 5%; background: #FDF8F2; }
+.founder-layout { display: grid; grid-template-columns: 320px 1fr; gap: 64px; align-items: start; max-width: 1100px; margin: 0 auto; }
+.founder-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: top; border-radius: 16px; display: block; }
+.founder-right { padding-top: 8px; }
+.founder-pre { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+.founder-title { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; color: var(--text); line-height: 1.1; margin-bottom: 6px; }
+.founder-title em { font-style: italic; color: var(--red); }
+.founder-role { font-size: 0.72rem; color: var(--muted); margin-bottom: 24px; letter-spacing: 0.08em; }
+.founder-text { font-size: 0.86rem; color: var(--muted); line-height: 2; margin-bottom: 28px; }
+.founder-link { font-size: 0.75rem; font-weight: 600; color: var(--red); text-decoration: none; letter-spacing: 0.08em; }
+.founder-link:hover { text-decoration: underline; }
 
-    /* SOCIAL */
-    .social-row { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 44px; }
-    .social-pill { display: flex; align-items: center; gap: 8px; padding: 11px 20px; background: white; border: 1px solid rgba(44,24,16,0.08); border-radius: 40px; text-decoration: none; font-size: 0.74rem; font-weight: 600; color: var(--text); transition: all 0.25s; box-shadow: 0 2px 10px rgba(44,24,16,0.04); }
-    .social-pill:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(44,24,16,0.1); border-color: var(--red); color: var(--red); }
-    .social-pill .s-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+/* NEWSLETTER */
+.newsletter-section { padding: 80px 5%; background: var(--dark); text-align: center; }
+.newsletter-inner { max-width: 520px; margin: 0 auto; }
+.newsletter-form { display: flex; gap: 10px; margin-top: 32px; }
+.newsletter-input { flex: 1; padding: 13px 18px; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 4px; background: rgba(255,255,255,0.06); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; color: white; outline: none; transition: border-color 0.2s; }
+.newsletter-input::placeholder { color: rgba(255,255,255,0.25); }
+.newsletter-input:focus { border-color: rgba(212,168,67,0.4); }
+.newsletter-btn { padding: 13px 24px; background: var(--gold); border: none; border-radius: 4px; font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+.newsletter-btn:hover { background: #c49535; }
+.newsletter-success { display: none; font-size: 0.82rem; color: rgba(212,168,67,0.8); margin-top: 12px; }
+.newsletter-success.show { display: block; }
 
-    /* BUTTONS */
-    .btn-red { display: inline-block; padding: 13px 32px; background: var(--red); color: white; border-radius: 4px; font-size: 0.77rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
-    .btn-red:hover { background: var(--red-dark); transform: translateY(-1px); }
-    .btn-outline { display: inline-block; padding: 13px 32px; background: transparent; color: var(--red); border-radius: 4px; font-size: 0.77rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; border: 2px solid var(--red); }
-    .btn-outline:hover { background: var(--red); color: white; }
+/* SOCIAL */
+.social-section { padding: 64px 5%; text-align: center; }
+.social-grid { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+.social-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-decoration: none; transition: all 0.2s; border: 1.5px solid rgba(44,24,16,0.1); color: var(--text); background: white; }
+.social-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(44,24,16,0.1); }
 
-    /* FOOTER */
-    .footer { background: var(--dark); color: white; padding: 60px 5% 28px; }
-    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
-    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 800; color: white; margin-bottom: 12px; display: block; }
-    .footer-logo span { color: var(--gold); }
-    .footer-brand p { font-size: 0.77rem; color: rgba(255,255,255,0.36); line-height: 1.8; max-width: 220px; }
-    .footer-col h4 { font-size: 0.63rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
-    .footer-col a { display: block; font-size: 0.76rem; color: rgba(255,255,255,0.38); text-decoration: none; margin-bottom: 9px; transition: color 0.2s; }
-    .footer-col a:hover { color: white; }
-    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-    .footer-copy { font-size: 0.67rem; color: rgba(255,255,255,0.2); }
+/* FOOTER */
+.footer { background: var(--dark); color: white; padding: 64px 5% 24px; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+.footer-brand { }
+.footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.footer-logo-icon { width: 32px; height: 32px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.footer-logo-text { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 800; color: white; }
+.footer-logo-text span { color: var(--gold); }
+.footer-brand-text { font-size: 0.76rem; color: rgba(255,255,255,0.3); line-height: 1.85; max-width: 260px; margin-bottom: 20px; }
+.footer-flags { font-size: 1.3rem; letter-spacing: 4px; }
+.footer-col-title { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 16px; }
+.footer-links-list { display: flex; flex-direction: column; gap: 10px; }
+.footer-links-list a { font-size: 0.75rem; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+.footer-links-list a:hover { color: white; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 24px; }
+.footer-copy { font-size: 0.68rem; color: rgba(255,255,255,0.18); }
+.footer-bottom-links { display: flex; gap: 20px; }
+.footer-bottom-links a { font-size: 0.68rem; color: rgba(255,255,255,0.28); text-decoration: none; transition: color 0.2s; }
+.footer-bottom-links a:hover { color: white; }
 
-    /* RESPONSIVE */
-    @media(max-width:960px){ .how-layout{ grid-template-columns:1fr; } .how-photo{ display:none; } .stories-grid{ grid-template-columns:repeat(2,1fr); } .impact-grid{ grid-template-columns:repeat(2,1fr); } .footer-grid{ grid-template-columns:1fr 1fr; gap:32px; } }
-    @media(max-width:600px){ .navbar{ padding:0 4%; } .nav-links{ display:none; } .hamburger{ display:block; } .hero-content{ padding:90px 4% 70px; } .stories-grid{ grid-template-columns:1fr; } .sub-form{ flex-direction:column; } .footer-grid{ grid-template-columns:1fr; gap:24px; } .section{ padding:60px 4%; } }
-  </style>
+@media(max-width:960px) {
+  .hero-bg-photos { display: none; }
+  .steps-grid { grid-template-columns: repeat(2,1fr); gap: 32px; }
+  .steps-grid::before { display: none; }
+  .proof-layout { grid-template-columns: 1fr; }
+  .counter-grid { grid-template-columns: repeat(2,1fr); }
+  .stories-grid { grid-template-columns: repeat(2,1fr); }
+  .founder-layout { grid-template-columns: 1fr; }
+  .founder-img { max-width: 280px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media(max-width:600px) {
+  .nav-links { display: none; }
+  .hamburger { display: block; }
+  .hero-title { font-size: 2.8rem; }
+  .hero-title-sub { font-size: 2.8rem; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .counter-grid { grid-template-columns: 1fr 1fr; }
+  .stories-grid { grid-template-columns: 1fr; }
+  .newsletter-form { flex-direction: column; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .section { padding: 60px 4%; }
+}
+</style>
 </head>
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar" id="navbar">
+<nav class="navbar">
   <a href="index.html" class="nav-logo">
     <div class="logo-icon"><div class="logo-cross"></div></div>
     <span class="logo-text">One <span>Bob</span> Charity Fund</span>
@@ -202,9 +225,10 @@
   </div>
   <button class="hamburger" onclick="toggleMenu()">☰</button>
 </nav>
+
 <div class="mobile-menu" id="mobileMenu">
   <a href="stories.html" class="nav-link">Stories</a>
-    <a href="testimonies.html" class="nav-link">Testimonies</a>
+  <a href="testimonies.html" class="nav-link">Testimonies</a>
   <a href="mission.html" class="nav-link">Mission</a>
   <a href="gallery.html" class="nav-link">Gallery</a>
   <a href="volunteer.html" class="nav-link">Volunteer</a>
@@ -215,426 +239,330 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-slides">
-    <div class="hero-slide active"><img src="images/amina-zawadi-tanzania.jpg" alt=""/></div>
-    <div class="hero-slide"><img src="images/neema-akinyi-kenya.jpg" alt=""/></div>
-    <div class="hero-slide"><img src="images/kamau-njoroge-kenya.jpg" alt=""/></div>
-    <div class="hero-slide"><img src="images/halima-zuwena-tanzania.jpg" alt=""/></div>
+  <div class="hero-bg-photos">
+    <img src="images/amina-zawadi-tanzania.jpg" alt=""/>
+    <img src="images/neema-akinyi-kenya.jpg" alt=""/>
+    <img src="images/kamau-njoroge-kenya.jpg" alt=""/>
+    <img src="images/halima-zuwena-tanzania.jpg" alt=""/>
   </div>
-  <div class="hero-overlay"></div>
-  <div class="hero-overlay-bottom"></div>
+  <div class="hero-bg-overlay"></div>
+  <div class="hero-bg-overlay-full"></div>
   <div class="hero-content">
-    <div class="hero-badge"><div class="hero-badge-dot"></div> One Bob Charity Fund · OBCF</div>
+    <div class="hero-label">One Bob Charity Fund · OBCF</div>
     <div class="hero-title">Every Shilling</div>
-    <div class="hero-title-italic">Counts.</div>
-    <div class="hero-tagline">One bob from a million hearts changes everything.</div>
-    <p class="hero-sub">We deliver education, food, and clothing directly to the most vulnerable children in Kenya, Tanzania, and Uganda. No child should be left behind because of poverty.</p>
-    <div class="hero-actions">
-      <a href="donate.html" class="btn-white">Donate Your Bob →</a>
+    <div class="hero-title-sub">Counts.</div>
+    <p class="hero-sub">One bob from a million hearts changes everything. We deliver education, food, and clothing directly to the most vulnerable children in Kenya, Tanzania, and Uganda. No child should be left behind because of poverty.</p>
+    <div class="hero-btns">
+      <a href="donate.html" class="btn-primary">Donate Your Bob →</a>
       <a href="stories.html" class="btn-ghost">See Their Stories</a>
     </div>
-    <div class="child-label">
-      <div class="child-divider"></div>
-      <div>
-        <div class="child-label-name" id="childName">🇰🇪 Zawadi, 9</div>
-        <div class="child-label-sub" id="childSub">Kenya · Needs education support</div>
-      </div>
+    <div class="hero-child-tag">
+      <div class="hero-child-tag-dot"></div>
+      <span class="hero-child-tag-text">🇰🇪 Zawadi, 9 &nbsp;·&nbsp; Kenya · Needs education support</span>
     </div>
   </div>
-  <div class="hero-dots" id="heroDots"></div>
-  <div class="scroll-hint"><div class="scroll-line"></div> Scroll to explore</div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    Scroll to explore
+  </div>
 </section>
 
 <!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-track">
-    <div class="ticker-item" style="background:rgba(205,127,50,0.2);border-radius:4px;font-weight:600;">🇨🇦 Linda-Sue · Canada · $520 🥉 Bronze Donor</div>
-    <div class="ticker-item" style="background:rgba(168,169,173,0.2);border-radius:4px;font-weight:600;">🇩🇪 Heinz Günter · Germany · €1,200 🥈 Silver Donor</div>
-    <div class="ticker-item">🇰🇪 Amina W. · Nairobi · KSh 50</div>
-    <div class="ticker-item">🇹🇿 David M. · Dar es Salaam · TSh 500</div>
-    <div class="ticker-item">🇺🇬 Grace N. · Kampala · UGX 2,000</div>
-    <div class="ticker-item">🇰🇪 Samuel K. · Kisumu · KSh 100</div>
-    <div class="ticker-item">🇹🇿 Zawadi R. · Mwanza · TSh 1,000</div>
-    <div class="ticker-item">🇺🇬 Moses O. · Entebbe · UGX 5,000</div>
-    <div class="ticker-item">🇰🇪 Fatuma A. · Mombasa · KSh 20</div>
-    <div class="ticker-item">🇹🇿 Hassan A. · Zanzibar · TSh 200</div>
-    <div class="ticker-item">🇺🇬 Aisha N. · Jinja · UGX 1,000</div>
-    <div class="ticker-item">🇰🇪 John M. · Nakuru · KSh 500</div>
-    <div class="ticker-item">🇹🇿 Miriam J. · Arusha · TSh 5,000</div>
-    <div class="ticker-item">🇺🇬 Peter O. · Gulu · UGX 3,000</div>
-    <div class="ticker-item">🇰🇪 Wanjiru K. · Thika · KSh 200</div>
-    <div class="ticker-item">🌍 Anonymous · KSh 50</div>
-    <div class="ticker-item">🇹🇿 Amani S. · Dodoma · TSh 2,000</div>
-    <div class="ticker-item">🇺🇬 Harriet B. · Lira · UGX 10,000</div>
-    <div class="ticker-item">🇰🇪 Brian O. · Eldoret · KSh 1,000</div>
-    <div class="ticker-item">🇬🇧 Kevin N. · London · £5</div>
-    <div class="ticker-item">🇹🇿 Neema C. · Morogoro · TSh 500</div>
-    <div class="ticker-item">🇺🇬 Ronald M. · Mbale · UGX 2,000</div>
-    <div class="ticker-item">🇰🇪 Mercy W. · Nairobi · KSh 50</div>
-    <div class="ticker-item">🇺🇸 Sarah T. · New York · $10</div>
-    <div class="ticker-item">🇹🇿 Jabir H. · Tanga · TSh 1,000</div>
-    <div class="ticker-item">🇺🇬 Lydia A. · Kampala · UGX 5,000</div>
-    <div class="ticker-item">🇰🇪 Felix M. · Machakos · KSh 300</div>
-    <div class="ticker-item">🌍 Anonymous · TSh 200</div>
-    <div class="ticker-item">🇹🇿 Zuwena A. · Mbeya · TSh 3,000</div>
-    <div class="ticker-item">🇺🇬 Isaac W. · Fort Portal · UGX 1,500</div>
-    <div class="ticker-item">🇰🇪 Agnes N. · Kisii · KSh 100</div>
-    <div class="ticker-item">🇨🇦 James O. · Toronto · $5</div>
-    <div class="ticker-item">🇹🇿 Salma K. · Iringa · TSh 500</div>
-    <div class="ticker-item">🇺🇬 Florence K. · Soroti · UGX 2,000</div>
-    <div class="ticker-item">🇰🇪 Dennis R. · Nairobi · KSh 50</div>
-    <div class="ticker-item">🇹🇿 Omar F. · Pemba · TSh 1,000</div>
-    <div class="ticker-item">🇺🇬 Annet N. · Mbarara · UGX 3,000</div>
-    <div class="ticker-item">🇰🇪 Caroline A. · Kakamega · KSh 200</div>
-    <div class="ticker-item">🌍 Anonymous · UGX 1,000</div>
-    <div class="ticker-item">🇹🇿 Rehema M. · Songea · TSh 500</div>
-    <div class="ticker-item">🇺🇬 Emmanuel S. · Masaka · UGX 5,000</div>
-    <div class="ticker-item">🇰🇪 Tabitha N. · Meru · KSh 500</div>
-    <div class="ticker-item">🇩🇪 Michael B. · Berlin · €8</div>
-    <div class="ticker-item">🇹🇿 Fatuma I. · Tabora · TSh 2,000</div>
-    <div class="ticker-item">🇺🇬 Sandra K. · Kabale · UGX 1,000</div>
-    <div class="ticker-item">🇰🇪 Victor O. · Kisumu · KSh 100</div>
-    <div class="ticker-item">🇹🇿 Baraka J. · Moshi · TSh 5,000</div>
-    <div class="ticker-item">🇺🇬 Olivia N. · Arua · UGX 2,000</div>
-    <div class="ticker-item">🇰🇪 Lucy W. · Nairobi · KSh 50</div>
-    <div class="ticker-item">🌍 Anonymous · KSh 100</div>
-    <div class="ticker-item">🇹🇿 Said A. · Lindi · TSh 1,000</div>
-    <div class="ticker-item">🇺🇬 Patrick O. · Kampala · UGX 10,000</div>
-    <div class="ticker-item" style="background:rgba(205,127,50,0.2);border-radius:4px;font-weight:600;">🇨🇦 Linda-Sue · Canada · $520 🥉 Bronze Donor</div>
-    <div class="ticker-item" style="background:rgba(168,169,173,0.2);border-radius:4px;font-weight:600;">🇩🇪 Heinz Günter · Germany · €1,200 🥈 Silver Donor</div>
-    <div class="ticker-item">🇰🇪 Amina W. · Nairobi · KSh 50</div>
-    <div class="ticker-item">🇹🇿 David M. · Dar es Salaam · TSh 500</div>
-    <div class="ticker-item">🇺🇬 Grace N. · Kampala · UGX 2,000</div>
-    <div class="ticker-item">🇰🇪 Samuel K. · Kisumu · KSh 100</div>
-    <div class="ticker-item">🇹🇿 Zawadi R. · Mwanza · TSh 1,000</div>
-    <div class="ticker-item">🇺🇬 Moses O. · Entebbe · UGX 5,000</div>
-    <div class="ticker-item">🇰🇪 Fatuma A. · Mombasa · KSh 20</div>
-    <div class="ticker-item">🇹🇿 Hassan A. · Zanzibar · TSh 200</div>
-    <div class="ticker-item">🇺🇬 Aisha N. · Jinja · UGX 1,000</div>
-    <div class="ticker-item">🇰🇪 John M. · Nakuru · KSh 500</div>
-    <div class="ticker-item">🇹🇿 Miriam J. · Arusha · TSh 5,000</div>
-    <div class="ticker-item">🇺🇬 Peter O. · Gulu · UGX 3,000</div>
-    <div class="ticker-item">🇰🇪 Wanjiru K. · Thika · KSh 200</div>
-    <div class="ticker-item">🌍 Anonymous · KSh 50</div>
-    <div class="ticker-item">🇹🇿 Amani S. · Dodoma · TSh 2,000</div>
-    <div class="ticker-item">🇺🇬 Harriet B. · Lira · UGX 10,000</div>
-    <div class="ticker-item">🇰🇪 Brian O. · Eldoret · KSh 1,000</div>
-    <div class="ticker-item">🇬🇧 Kevin N. · London · £5</div>
-    <div class="ticker-item">🇹🇿 Neema C. · Morogoro · TSh 500</div>
-    <div class="ticker-item">🇺🇬 Ronald M. · Mbale · UGX 2,000</div>
-    <div class="ticker-item">🇰🇪 Mercy W. · Nairobi · KSh 50</div>
-    <div class="ticker-item">🇺🇸 Sarah T. · New York · $10</div>
-    <div class="ticker-item">🇹🇿 Jabir H. · Tanga · TSh 1,000</div>
-    <div class="ticker-item">🇺🇬 Lydia A. · Kampala · UGX 5,000</div>
-    <div class="ticker-item">🇰🇪 Felix M. · Machakos · KSh 300</div>
-    <div class="ticker-item">🌍 Anonymous · TSh 200</div>
-    <div class="ticker-item">🇹🇿 Zuwena A. · Mbeya · TSh 3,000</div>
-    <div class="ticker-item">🇺🇬 Isaac W. · Fort Portal · UGX 1,500</div>
-    <div class="ticker-item">🇰🇪 Agnes N. · Kisii · KSh 100</div>
-    <div class="ticker-item">🇨🇦 James O. · Toronto · $5</div>
-    <div class="ticker-item">🇹🇿 Salma K. · Iringa · TSh 500</div>
-    <div class="ticker-item">🇺🇬 Florence K. · Soroti · UGX 2,000</div>
-    <div class="ticker-item">🇰🇪 Dennis R. · Nairobi · KSh 50</div>
-    <div class="ticker-item">🇹🇿 Omar F. · Pemba · TSh 1,000</div>
-    <div class="ticker-item">🇺🇬 Annet N. · Mbarara · UGX 3,000</div>
-    <div class="ticker-item">🇰🇪 Caroline A. · Kakamega · KSh 200</div>
-    <div class="ticker-item">🌍 Anonymous · UGX 1,000</div>
-    <div class="ticker-item">🇹🇿 Rehema M. · Songea · TSh 500</div>
-    <div class="ticker-item">🇺🇬 Emmanuel S. · Masaka · UGX 5,000</div>
-    <div class="ticker-item">🇰🇪 Tabitha N. · Meru · KSh 500</div>
-    <div class="ticker-item">🇩🇪 Michael B. · Berlin · €8</div>
-    <div class="ticker-item">🇹🇿 Fatuma I. · Tabora · TSh 2,000</div>
-    <div class="ticker-item">🇺🇬 Sandra K. · Kabale · UGX 1,000</div>
-    <div class="ticker-item">🇰🇪 Victor O. · Kisumu · KSh 100</div>
-    <div class="ticker-item">🇹🇿 Baraka J. · Moshi · TSh 5,000</div>
-    <div class="ticker-item">🇺🇬 Olivia N. · Arua · UGX 2,000</div>
-    <div class="ticker-item">🇰🇪 Lucy W. · Nairobi · KSh 50</div>
-    <div class="ticker-item">🌍 Anonymous · KSh 100</div>
-    <div class="ticker-item">🇹🇿 Said A. · Lindi · TSh 1,000</div>
-    <div class="ticker-item">🇺🇬 Patrick O. · Kampala · UGX 10,000</div>
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="tickerInner">
+    <span class="ticker-item">🇨🇦 Linda-Sue · Canada · $520 🥉 Bronze Donor</span>
+    <span class="ticker-item">🇩🇪 Heinz Günter · Germany · €1,200 🥈 Silver Donor</span>
+    <span class="ticker-item">🇰🇪 Amina W. · Nairobi · KSh 50</span>
+    <span class="ticker-item">🇹🇿 David M. · Dar es Salaam · TSh 500</span>
+    <span class="ticker-item">🇺🇬 Grace N. · Kampala · UGX 2,000</span>
+    <span class="ticker-item">🇰🇪 Samuel K. · Kisumu · KSh 100</span>
+    <span class="ticker-item">🇹🇿 Zawadi R. · Mwanza · TSh 1,000</span>
+    <span class="ticker-item">🇺🇬 Moses O. · Entebbe · UGX 5,000</span>
+    <span class="ticker-item">🇰🇪 Fatuma A. · Mombasa · KSh 20</span>
+    <span class="ticker-item">🇹🇿 Hassan A. · Zanzibar · TSh 200</span>
+    <span class="ticker-item">🇺🇬 Aisha N. · Jinja · UGX 1,000</span>
+    <span class="ticker-item">🇰🇪 John M. · Nakuru · KSh 500</span>
+    <span class="ticker-item">🇹🇿 Miriam J. · Arusha · TSh 5,000</span>
+    <span class="ticker-item">🇺🇬 Peter O. · Gulu · UGX 3,000</span>
+    <span class="ticker-item">🇰🇪 Wanjiru K. · Thika · KSh 200</span>
+    <span class="ticker-item">🌍 Anonymous · KSh 50</span>
+    <span class="ticker-item">🇬🇧 Kevin N. · London · £5</span>
+    <span class="ticker-item">🇺🇸 Sarah T. · New York · $10</span>
+    <span class="ticker-item">🇨🇦 James O. · Toronto · $5</span>
+    <span class="ticker-item">🇩🇪 Michael B. · Berlin · €8</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item">🇨🇦 Linda-Sue · Canada · $520 🥉 Bronze Donor</span>
+    <span class="ticker-item">🇩🇪 Heinz Günter · Germany · €1,200 🥈 Silver Donor</span>
+    <span class="ticker-item">🇰🇪 Amina W. · Nairobi · KSh 50</span>
+    <span class="ticker-item">🇹🇿 David M. · Dar es Salaam · TSh 500</span>
+    <span class="ticker-item">🇺🇬 Grace N. · Kampala · UGX 2,000</span>
+    <span class="ticker-item">🇰🇪 Samuel K. · Kisumu · KSh 100</span>
+    <span class="ticker-item">🇹🇿 Zawadi R. · Mwanza · TSh 1,000</span>
+    <span class="ticker-item">🇺🇬 Moses O. · Entebbe · UGX 5,000</span>
+    <span class="ticker-item">🇰🇪 Fatuma A. · Mombasa · KSh 20</span>
+    <span class="ticker-item">🌍 Anonymous · KSh 50</span>
+    <span class="ticker-item">🇬🇧 Kevin N. · London · £5</span>
+    <span class="ticker-item">🇺🇸 Sarah T. · New York · $10</span>
   </div>
 </div>
 
 <!-- HOW IT WORKS -->
 <section class="section section-alt">
-  <div class="how-layout">
-    <div>
-      <div class="sec-label">Simple & Transparent</div>
-      <h2 class="sec-heading">How your <em>bob reaches</em><br/>a child</h2>
-      <p class="sec-sub">Every shilling donated goes directly to buying and delivering what children need most. No big offices. No waste. Just real impact.</p>
-      <div class="how-steps">
-        <div class="how-step">
-          <div class="step-icon">💳</div>
-          <div><div class="step-num">Step 01</div><div class="step-title">You Donate Any Amount</div><div class="step-desc">Even one shilling counts. Every donation is recorded and goes into the fund immediately.</div></div>
-        </div>
-        <div class="how-step">
-          <div class="step-icon">🛒</div>
-          <div><div class="step-num">Step 02</div><div class="step-title">We Buy What is Needed</div><div class="step-desc">Our team buys food, school supplies, and clothing from local suppliers — keeping money in the community.</div></div>
-        </div>
-        <div class="how-step">
-          <div class="step-icon">🚐</div>
-          <div><div class="step-num">Step 03</div><div class="step-title">We Deliver Directly</div><div class="step-desc">We travel to schools and communities. No middlemen, no delays — straight to the children who need it.</div></div>
-        </div>
-        <div class="how-step">
-          <div class="step-icon">📸</div>
-          <div><div class="step-num">Step 04</div><div class="step-title">We Show You the Impact</div><div class="step-desc">Every delivery is photographed and shared. You will see exactly which children your bob helped.</div></div>
-        </div>
+  <div class="inner">
+    <div class="sec-label">Simple &amp; Transparent</div>
+    <h2 class="sec-heading">How your <em>bob reaches</em> a child</h2>
+    <p class="sec-sub" style="max-width:520px;">Every shilling donated goes directly to buying and delivering what children need most. No big offices. No waste. Just real impact.</p>
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-num-wrap"><div class="step-icon">💳</div></div>
+        <div class="step-label">Step 01</div>
+        <div class="step-name">You Donate Any Amount</div>
+        <p class="step-text">Even one shilling counts. Every donation is recorded and goes into the fund immediately.</p>
       </div>
-    </div>
-    <div class="how-photo">
-      <img src="images/aisha-nakato-uganda.jpg" alt="Child receiving help"/>
-      <div class="how-photo-badge">
-        <p>Last delivery — Kisumu, Kenya 🇰🇪</p>
-        <span>34 children received school bags and books</span>
+      <div class="step-item">
+        <div class="step-num-wrap"><div class="step-icon">🛒</div></div>
+        <div class="step-label">Step 02</div>
+        <div class="step-name">We Buy What is Needed</div>
+        <p class="step-text">Our team buys food, school supplies, and clothing from local suppliers — keeping money in the community.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num-wrap"><div class="step-icon">🚐</div></div>
+        <div class="step-label">Step 03</div>
+        <div class="step-name">We Deliver Directly</div>
+        <p class="step-text">We travel to schools and communities. No middlemen, no delays — straight to the children who need it.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num-wrap"><div class="step-icon">📸</div></div>
+        <div class="step-label">Step 04</div>
+        <div class="step-name">We Show You the Impact</div>
+        <p class="step-text">Every delivery is photographed and shared. You will see exactly which children your bob helped.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- IMPACT -->
-<section class="section section-dark">
-  <div class="centered">
-    <div class="sec-label gold">Our Impact So Far</div>
-    <h2 class="sec-heading light">Numbers that <em>matter</em></h2>
-  </div>
-  <div class="impact-grid">
-    <div class="impact-item"><div class="impact-num" id="cnt1">0</div><div class="impact-label">Total Donors</div></div>
-    <div class="impact-item"><div class="impact-num" id="cnt2">0</div><div class="impact-label">Children Helped</div></div>
-    <div class="impact-item"><div class="impact-num" id="cnt3">0</div><div class="impact-label">Schools Reached</div></div>
-    <div class="impact-item"><div class="impact-num" id="cnt4">0</div><div class="impact-label">Countries</div></div>
+<!-- DELIVERY PROOF / IMPACT NUMBERS -->
+<section class="section">
+  <div class="inner">
+    <div class="proof-layout">
+      <div class="proof-image-wrap">
+        <img src="images/aisha-nakato-uganda.jpg" alt="Child receiving help" class="proof-image"/>
+        <div class="proof-badge">
+          <div class="proof-badge-icon">📦</div>
+          <div class="proof-badge-text">
+            <strong>Last delivery — Kisumu, Kenya 🇰🇪</strong>
+            34 children received school bags and books
+          </div>
+        </div>
+      </div>
+      <div class="proof-right">
+        <div class="sec-label">Our Impact So Far</div>
+        <h2 class="sec-heading">Numbers that <em>matter</em></h2>
+        <div class="proof-stat-row" style="margin-top:32px;">
+          <div class="proof-stat">
+            <div class="proof-stat-num" id="statDonors">0</div>
+            <div class="proof-stat-label">Total Donors</div>
+          </div>
+          <div class="proof-stat">
+            <div class="proof-stat-num" id="statChildren">0</div>
+            <div class="proof-stat-label">Children Helped</div>
+          </div>
+          <div class="proof-stat">
+            <div class="proof-stat-num" id="statSchools">0</div>
+            <div class="proof-stat-label">Schools Reached</div>
+          </div>
+          <div class="proof-stat">
+            <div class="proof-stat-num" id="statCountries">0</div>
+            <div class="proof-stat-label">Countries</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- STORIES -->
-<section class="section">
-  <div class="centered">
+<section class="section section-alt">
+  <div class="inner">
     <div class="sec-label">Real Children · Real Stories</div>
-    <h2 class="sec-heading">Behind every bob<br/><em>is a child waiting</em></h2>
+    <h2 class="sec-heading">Behind every bob <em>is a child waiting</em></h2>
+    <div class="stories-grid">
+      <div class="story-card">
+        <img src="images/fatuma-nashipai-uganda.jpg" alt="Zawadi" class="story-img"/>
+        <div class="story-body">
+          <div class="story-tags">
+            <span class="story-tag story-tag-country">🇰🇪 Kenya</span>
+            <span class="story-tag story-tag-need">Education</span>
+          </div>
+          <div class="story-name">Zawadi</div>
+          <div class="story-age">Age 9 · Primary School · Nairobi</div>
+          <p class="story-text">Zawadi walks 5km every morning to reach school. She has never owned a school bag. Her dream is to become a doctor — but she needs your help to stay in school.</p>
+          <a href="stories.html" class="story-link">Read her story →</a>
+        </div>
+      </div>
+      <div class="story-card">
+        <img src="images/wanjiru-auma-kenya.jpg" alt="Omondi" class="story-img"/>
+        <div class="story-body">
+          <div class="story-tags">
+            <span class="story-tag story-tag-country">🇺🇬 Uganda</span>
+            <span class="story-tag story-tag-need">Food</span>
+          </div>
+          <div class="story-name">Omondi</div>
+          <div class="story-age">Age 7 · Primary School · Kampala</div>
+          <p class="story-text">Omondi comes to school most days without breakfast. His teacher says he falls asleep by 10am because he is hungry. One meal a day could change everything.</p>
+          <a href="stories.html" class="story-link">Read his story →</a>
+        </div>
+      </div>
+      <div class="story-card">
+        <img src="images/amina-mwajuma-tanzania.jpg" alt="Neema" class="story-img"/>
+        <div class="story-body">
+          <div class="story-tags">
+            <span class="story-tag story-tag-country">🇹🇿 Tanzania</span>
+            <span class="story-tag story-tag-need">Clothing</span>
+          </div>
+          <div class="story-name">Neema</div>
+          <div class="story-age">Age 11 · Primary School · Dar es Salaam</div>
+          <p class="story-text">Neema shares one pair of shoes with her younger sister. On days her sister wears them, Neema stays home. She has missed three weeks of school this term alone.</p>
+          <a href="stories.html" class="story-link">Read her story →</a>
+        </div>
+      </div>
+    </div>
+    <div class="stories-cta">
+      <a href="stories.html" class="btn-primary">See All Children's Stories</a>
+    </div>
   </div>
-  <div class="stories-grid">
-    <div class="story-card">
-      <div class="story-img-wrap">
-        <img src="images/fatuma-nashipai-uganda.jpg" alt="Zawadi"/>
-        <div class="story-img-overlay"></div>
-        <div class="story-tag-country">🇰🇪 Kenya</div>
-        <div class="story-tag-need">Education</div>
-      </div>
-      <div class="story-body">
-        <div class="story-name">Zawadi</div>
-        <div class="story-meta">Age 9 · Primary School · Nairobi</div>
-        <div class="story-text">Zawadi walks 5km every morning to reach school. She has never owned a school bag. Her dream is to become a doctor — but she needs your help to stay in school.</div>
-        <a href="stories.html" class="story-link">Read her story →</a>
-      </div>
-    </div>
-    <div class="story-card">
-      <div class="story-img-wrap">
-        <img src="images/wanjiru-auma-kenya.jpg" alt="Omondi"/>
-        <div class="story-img-overlay"></div>
-        <div class="story-tag-country">🇺🇬 Uganda</div>
-        <div class="story-tag-need">Food</div>
-      </div>
-      <div class="story-body">
-        <div class="story-name">Omondi</div>
-        <div class="story-meta">Age 7 · Primary School · Kampala</div>
-        <div class="story-text">Omondi comes to school most days without breakfast. His teacher says he falls asleep by 10am because he is hungry. One meal a day could change everything.</div>
-        <a href="stories.html" class="story-link">Read his story →</a>
-      </div>
-    </div>
-    <div class="story-card">
-      <div class="story-img-wrap">
-        <img src="images/amina-mwajuma-tanzania.jpg" alt="Neema"/>
-        <div class="story-img-overlay"></div>
-        <div class="story-tag-country">🇹🇿 Tanzania</div>
-        <div class="story-tag-need">Clothing</div>
-      </div>
-      <div class="story-body">
-        <div class="story-name">Neema</div>
-        <div class="story-meta">Age 11 · Primary School · Dar es Salaam</div>
-        <div class="story-text">Neema shares one pair of shoes with her younger sister. On days her sister wears them, Neema stays home. She has missed three weeks of school this term alone.</div>
-        <a href="stories.html" class="story-link">Read her story →</a>
-      </div>
-    </div>
-  </div>
-  <div class="stories-cta"><a href="stories.html" class="btn-outline">See All Children's Stories</a></div>
 </section>
 
 <!-- FOUNDER -->
-<section class="section section-alt">
-  <div class="founder-inner">
-    <div class="centered">
-      <div class="sec-label">Our Founder</div>
-      <h2 class="sec-heading">The story behind <em>One Bob</em></h2>
+<section class="founder-section">
+  <div class="founder-layout">
+    <div>
+      <img src="images/lisa-stacy-ceo.jpg" alt="Lisa Stacy" class="founder-img"/>
     </div>
-    <div class="founder-avatar" style="background:none;border:3px solid rgba(192,57,43,0.2);overflow:hidden;">
-      <img src="images/harvey-dex-founder.jpg" alt="Harvey Dex" style="width:100%;height:100%;object-fit:cover;object-position:top;border-radius:50%;"/>
-    </div>
-    <div style="margin-top:14px;font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--text);text-align:center;">Harvey Dex</div>
-    <div style="font-size:0.68rem;color:var(--muted);text-align:center;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;">Founder & CEO · One Bob Charity Fund</div>
-    <div class="founder-box" style="border:1px solid rgba(44,24,16,0.1);border-radius:14px;padding:32px;margin-top:20px;background:white;text-align:left;">
-      <p style="font-size:0.88rem;color:var(--muted);line-height:1.95;font-style:normal;">I grew up in a home where love was present but money was not. My mother ran a small shop — her hands and that little counter were the only things standing between our family and hunger. I finished secondary school, worked as a cleaner and a security guard to pay my own college rent, and saved every shilling I could. When the moment I had worked toward was taken from me by someone I trusted, something broke inside me — and something else was born. I started One Bob Charity Fund because I know what it feels like to be the child that the world forgot. And I know what one small act of kindness can do.</p>
-      <div style="margin-top:20px;text-align:center;">
-        <a href="mission.html" style="display:inline-block;padding:11px 28px;background:var(--red);color:white;border-radius:4px;font-size:0.74rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;">Read My Full Story →</a>
-      </div>
+    <div class="founder-right">
+      <div class="founder-pre">Our Founder</div>
+      <h2 class="founder-title">The story behind <em>One Bob</em></h2>
+      <div class="founder-role">Lisa Stacy · Founder &amp; CEO · One Bob Charity Fund</div>
+      <p class="founder-text">I grew up in Croatia, in a home where love was present but money was not. My mother ran a small shop — her hands and that little counter were the only things standing between our family and hunger. I finished secondary school, worked multiple jobs to pay my own college rent, and saved everything I could. When the moment I had worked toward was taken from me by someone I trusted, something broke inside me — and something else was born. I left, built a new life, and eventually made my way to Florida. I started One Bob Charity Fund because I know what it feels like to be the child that the world forgot. And I know what one small act of kindness can do.</p>
+      <a href="mission.html" class="founder-link">Read My Full Story →</a>
     </div>
   </div>
 </section>
 
-<!-- SUBSCRIBE -->
-<section class="section section-dark">
-  <div class="sub-wrap">
-    <div class="centered">
-      <div class="sec-label gold">Stay Connected</div>
-      <h2 class="sec-heading light">Get updates on the<br/><em>children you are helping</em></h2>
-      <p class="sec-sub light">Join donors who receive real delivery updates, children's stories, and impact reports in their inbox.</p>
+<!-- NEWSLETTER -->
+<section class="newsletter-section">
+  <div class="newsletter-inner">
+    <div class="sec-label gold" style="text-align:center;">Stay Connected</div>
+    <h2 class="sec-heading light">Get updates on the <em>children you are helping</em></h2>
+    <p class="sec-sub light" style="margin-top:10px;">Join donors who receive real delivery updates, children's stories, and impact reports in their inbox.</p>
+    <div class="newsletter-form">
+      <input type="email" class="newsletter-input" placeholder="your@email.com" id="newsletterEmail"/>
+      <button class="newsletter-btn" onclick="subscribeNewsletter()">Subscribe</button>
     </div>
-    <div class="sub-form">
-      <input type="email" class="sub-input" id="subEmail" placeholder="Your email address"/>
-      <button class="sub-btn" onclick="subscribe()">Subscribe</button>
-    </div>
-    <div class="sub-ok" id="subOk">✓ Subscribed! Watch your inbox for updates. 💛</div>
+    <div class="newsletter-success" id="newsletterSuccess">✓ Subscribed! Watch your inbox for updates. 💛</div>
   </div>
 </section>
 
 <!-- SOCIAL -->
-<section class="section">
-  <div class="centered">
-    <div class="sec-label">Follow Our Journey</div>
+<section class="social-section">
+  <div class="inner" style="text-align:center;">
+    <div class="sec-label" style="text-align:center;">Follow Our Journey</div>
     <h2 class="sec-heading">Stay <em>connected</em> with us</h2>
-    <p class="sec-sub" style="max-width:440px;margin:0 auto;">Follow us to see real deliveries, children receiving help, and your donations in action.</p>
-  </div>
-  <div class="social-row">
-
-    <a href="https://www.facebook.com/share/18RA1wq6gD/?mibextid=wwXIfr" target="_blank" class="social-pill">
-      <span class="s-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#1877F2"/><path d="M16 8h-2a1 1 0 0 0-1 1v2h3l-.5 3H13v7h-3v-7H8v-3h2V9a4 4 0 0 1 4-4h2v3z" fill="white"/></svg></span>
-      Facebook
-    </a>
-
-    <a href="https://www.instagram.com/onebobcharityfund?igsh=NjNpd2xuZ3BtNmF3&utm_source=qr" target="_blank" class="social-pill">
-      <span class="s-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><defs><radialGradient id="ig-hp" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="10%" stop-color="#fdf497"/><stop offset="50%" stop-color="#fd5949"/><stop offset="68%" stop-color="#d6249f"/><stop offset="100%" stop-color="#285AEB"/></radialGradient></defs><rect width="24" height="24" rx="6" fill="url(#ig-hp)"/><rect x="7" y="7" width="10" height="10" rx="3" stroke="white" stroke-width="1.8" fill="none"/><circle cx="12" cy="12" r="2.5" stroke="white" stroke-width="1.8" fill="none"/><circle cx="17" cy="7" r="1" fill="white"/></svg></span>
-      Instagram
-    </a>
-
-    <a href="https://www.tiktok.com/@onebobcharityfund" target="_blank" class="social-pill">
-      <span class="s-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#010101"/><path d="M16 7.2a4.3 4.3 0 0 1-2.6-.9v6.4a3.5 3.5 0 1 1-2.4-3.3v2a1.5 1.5 0 1 0 1 1.4V5h2a2.3 2.3 0 0 0 2 2.2v-.02z" fill="white"/><path d="M16 7.2a4.3 4.3 0 0 1-2.6-.9v6.4a3.5 3.5 0 1 1-2.4-3.3v2a1.5 1.5 0 1 0 1 1.4V5h2a2.3 2.3 0 0 0 2 2.2v-.02z" fill="#69C9D0" opacity="0.5"/></svg></span>
-      TikTok
-    </a>
-
-    <a href="https://wa.me/254700000000" target="_blank" class="social-pill">
-      <span class="s-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#25D366"/><path d="M12 4a8 8 0 0 0-6.9 12L4 20l4.2-1.1A8 8 0 1 0 12 4zm0 14.5a6.5 6.5 0 0 1-3.3-.9l-.2-.1-2.5.6.7-2.4-.2-.3A6.5 6.5 0 1 1 12 18.5z" fill="white"/><path d="M9.4 8.5c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3C7.4 8.6 7 9.2 7 10s.6 1.9.7 2c.1.2 1.2 2 3 2.7.4.2.7.3 1 .3.3.1.6 0 .8-.1.3-.1.9-.4 1-.7.1-.3.1-.6.1-.6s-.1-.1-.3-.2l-.9-.5c-.2-.1-.3 0-.4.1l-.4.5c-.1.1-.2.1-.3.1a4 4 0 0 1-1.3-.7 4.3 4.3 0 0 1-.9-1.1c-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.1-.3l-.5-1.2z" fill="white"/></svg></span>
-      WhatsApp
-    </a>
-
-    <a href="https://t.me/onebobcharityfund" target="_blank" class="social-pill">
-      <span class="s-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#229ED9"/><path d="M5 11.5l12.5-4.8c.6-.2 1.1.1.9.8l-2.1 10c-.2.7-.6.9-1.1.5l-3-2.3-1.5 1.4c-.2.2-.4.3-.7.3l.3-3.8 6.5-5.9c.3-.3 0-.4-.4-.2L7.5 13.4 5 12.6c-.7-.2-.7-.6.0-.8z" fill="white"/></svg></span>
-      Telegram
-    </a>
-
-    <a href="https://x.com/1bobcharityfund?s=21" target="_blank" class="social-pill">
-      <span class="s-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#000000"/><path d="M17.5 5h-2.3L12 9.1 9.3 5H5l5.2 7.2L5.2 19h2.3l3.5-4.5L14.5 19H19l-5.4-7.5L17.5 5z" fill="white"/></svg></span>
-      X
-    </a>
-
-    <a href="https://www.youtube.com/@OneBobCharityFund" target="_blank" class="social-pill">
-      <span class="s-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#FF0000"/><path d="M19.5 8.5a2 2 0 0 0-1.4-1.4C16.8 7 12 7 12 7s-4.8 0-6.1.1A2 2 0 0 0 4.5 8.5C4.4 9.8 4.4 12 4.4 12s0 2.2.1 3.5a2 2 0 0 0 1.4 1.4C7.2 17 12 17 12 17s4.8 0 6.1-.1a2 2 0 0 0 1.4-1.4c.1-1.3.1-3.5.1-3.5s0-2.2-.1-3.5z" fill="white" opacity="0.2"/><polygon points="10,9.5 10,14.5 15,12" fill="white"/></svg></span>
-      YouTube
-    </a>
-
+    <p class="sec-sub" style="max-width:480px;margin:10px auto 0;">Follow us to see real deliveries, children receiving help, and your donations in action.</p>
+    <div class="social-grid">
+      <a href="https://www.facebook.com/share/18RA1wq6gD/?mibextid=wwXIfr" class="social-btn" target="_blank">📘 Facebook</a>
+      <a href="https://www.instagram.com/onebobcharityfund?igsh=NjNpd2xuZ3BtNmF3&utm_source=qr" class="social-btn" target="_blank">📷 Instagram</a>
+      <a href="https://www.tiktok.com/@onebobcharityfund" class="social-btn" target="_blank">🎵 TikTok</a>
+      <a href="https://wa.me/254700000000" class="social-btn" target="_blank">💬 WhatsApp</a>
+      <a href="https://t.me/onebobcharityfund" class="social-btn" target="_blank">✈️ Telegram</a>
+      <a href="https://x.com/1bobcharityfund?s=21" class="social-btn" target="_blank">🐦 X</a>
+      <a href="https://www.youtube.com/@OneBobCharityFund" class="social-btn" target="_blank">▶️ YouTube</a>
+    </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer class="footer">
-  <div class="footer-grid">
+  <div class="footer-grid inner">
     <div class="footer-brand">
-      <span class="footer-logo">One <span>Bob</span> Charity Fund</span>
-      <p>Every shilling counts. One bob from a million hearts changes everything. Delivering education, food and clothing to children in East Africa.</p>
+      <div class="footer-logo">
+        <div class="footer-logo-icon"><div class="logo-cross"></div></div>
+        <span class="footer-logo-text">One <span>Bob</span> Charity Fund</span>
+      </div>
+      <p class="footer-brand-text">Every shilling counts. One bob from a million hearts changes everything. Delivering education, food and clothing to children in East Africa.</p>
+      <div class="footer-flags">🇰🇪 🇹🇿 🇺🇬</div>
     </div>
-    <div class="footer-col">
-      <h4>Navigate</h4>
-      <a href="stories.html">Children's Stories</a>
-      <a href="donate.html">Donate Now</a>
-      <a href="mission.html">Our Mission</a>
-      <a href="gallery.html">Gallery</a>
+    <div>
+      <div class="footer-col-title">Navigate</div>
+      <div class="footer-links-list">
+        <a href="stories.html">Children's Stories</a>
+        <a href="donate.html">Donate Now</a>
+        <a href="mission.html">Our Mission</a>
+        <a href="gallery.html">Gallery</a>
+      </div>
     </div>
-    <div class="footer-col">
-      <h4>Get Involved</h4>
-      <a href="volunteer.html">Volunteer</a>
-      <a href="contact.html">Contact Us</a>
-      <a href="testimonies.html">Testimonies</a>
+    <div>
+      <div class="footer-col-title">Get Involved</div>
+      <div class="footer-links-list">
+        <a href="volunteer.html">Volunteer</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="testimonies.html">Testimonies</a>
+      </div>
     </div>
-    <div class="footer-col">
-      <h4>Countries</h4>
-      <a href="donate.html">🇰🇪 Kenya</a>
-      <a href="donate.html">🇹🇿 Tanzania</a>
-      <a href="donate.html">🇺🇬 Uganda</a>
+    <div>
+      <div class="footer-col-title">Countries</div>
+      <div class="footer-links-list">
+        <a href="donate.html">🇰🇪 Kenya</a>
+        <a href="donate.html">🇹🇿 Tanzania</a>
+        <a href="donate.html">🇺🇬 Uganda</a>
+      </div>
     </div>
   </div>
-  <div class="footer-bottom">
+  <div class="footer-bottom inner">
     <div class="footer-copy">© 2025 One Bob Charity Fund · All donations are voluntary · No minimum amount</div>
-    <div style="font-size:1.1rem;">🇰🇪 🇹🇿 🇺🇬</div>
-  </div>
-  <div style="text-align:center;padding-top:16px;border-top:1px solid rgba(255,255,255,0.04);margin-top:16px;">
-    <a href="privacy.html" style="font-size:0.65rem;color:rgba(255,255,255,0.25);text-decoration:none;letter-spacing:0.1em;">Privacy Policy</a>
+    <div class="footer-bottom-links">
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
   </div>
 </footer>
 
 <script>
-  // Navbar scroll effect
-  window.addEventListener('scroll', () => {
-    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+function subscribeNewsletter() {
+  const email = document.getElementById('newsletterEmail').value.trim();
+  if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+  document.getElementById('newsletterSuccess').classList.add('show');
+  document.getElementById('newsletterEmail').value = '';
+}
+
+// Animated counters
+function animateCounter(id, target, duration) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let start = 0;
+  const step = target / (duration / 16);
+  const timer = setInterval(() => {
+    start += step;
+    if (start >= target) { el.textContent = target.toLocaleString(); clearInterval(timer); }
+    else { el.textContent = Math.floor(start).toLocaleString(); }
+  }, 16);
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCounter('statDonors', 1247, 1500);
+      animateCounter('statChildren', 3491, 1800);
+      animateCounter('statSchools', 38, 1200);
+      animateCounter('statCountries', 3, 800);
+      observer.disconnect();
+    }
   });
+}, { threshold: 0.3 });
 
-  // Mobile menu
-  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
-
-  // Hero slideshow
-  const heroData = [
-    { name: '🇰🇪 Zawadi, 9', sub: 'Kenya · Needs education support' },
-    { name: '🇺🇬 Omondi, 7', sub: 'Uganda · Needs food support' },
-    { name: '🇹🇿 Neema, 11', sub: 'Tanzania · Needs clothing support' },
-    { name: '🇰🇪 Baraka, 6', sub: 'Kenya · Needs education support' },
-  ];
-  const slideEls = document.querySelectorAll('.hero-slide');
-  const dotsEl = document.getElementById('heroDots');
-  let curr = 0;
-
-  heroData.forEach((_, i) => {
-    const d = document.createElement('div');
-    d.className = 'hero-dot' + (i===0?' active':'');
-    d.onclick = () => goSlide(i);
-    dotsEl.appendChild(d);
-  });
-
-  function goSlide(i) {
-    slideEls[curr].classList.remove('active');
-    document.querySelectorAll('.hero-dot')[curr].classList.remove('active');
-    curr = i;
-    slideEls[curr].classList.add('active');
-    document.querySelectorAll('.hero-dot')[curr].classList.add('active');
-    document.getElementById('childName').textContent = heroData[i].name;
-    document.getElementById('childSub').textContent = heroData[i].sub;
-  }
-
-  setInterval(() => goSlide((curr+1) % heroData.length), 7000);
-
-  // Impact counters
-  function count(id, target) {
-    const el = document.getElementById(id);
-    let n = 0, step = Math.max(1, Math.ceil(target/60));
-    const t = setInterval(() => { n = Math.min(n+step, target); el.textContent = n.toLocaleString(); if(n>=target) clearInterval(t); }, 28);
-  }
-
-  new IntersectionObserver(entries => {
-    if(entries[0].isIntersecting) { count('cnt1',12600); count('cnt2',3491); count('cnt3',17); count('cnt4',3); }
-  }, {threshold:0.3}).observe(document.querySelector('.impact-grid'));
-
-  // Subscribe
-  function subscribe() {
-    const v = document.getElementById('subEmail').value.trim();
-    if(!v || !v.includes('@')) { alert('Please enter a valid email.'); return; }
-    document.getElementById('subOk').classList.add('on');
-    document.getElementById('subEmail').value = '';
-  }
+const statsEl = document.getElementById('statDonors');
+if (statsEl) observer.observe(statsEl.closest('.proof-layout') || statsEl);
 </script>
 </body>
 </html>

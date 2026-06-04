@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OBCF Admin Panel</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23C0392B'/><rect x='14' y='6' width='4' height='20' rx='2' fill='white'/><rect x='6' y='14' width='20' height='4' rx='2' fill='white'/></svg>"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #C0392B; --red-dark: #922B21; --gold: #D4A843;
+      --bg: #0F0A07; --surface: #1A1108; --surface2: #221609;
+      --border: rgba(212,168,67,0.12); --text: #F5EDE0;
+      --muted: rgba(245,237,224,0.45); --success: #27AE60; --danger: #E74C3C;
+    }
+    html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); }
+
+    /* LOGIN */
+    #loginScreen {
+      position: fixed; inset: 0; z-index: 999;
+      display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(ellipse at 30% 40%, rgba(192,57,43,0.18) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 80%, rgba(212,168,67,0.08) 0%, transparent 55%),
+                  var(--bg);
+    }
+    .login-box {
+      width: 380px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 16px;
+      padding: 44px 36px; text-align: center;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    }
+    .login-logo {
+      width: 52px; height: 52px; background: var(--red); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;
+      position: relative;
+    }
+    .login-logo::before, .login-logo::after {
+      content: ''; position: absolute; background: white; border-radius: 2px;
+    }
+    .login-logo::before { width: 22px; height: 3.5px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .login-logo::after { width: 3.5px; height: 22px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .login-box h1 { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 800; margin-bottom: 4px; }
+    .login-box h1 span { color: var(--gold); }
+    .login-box p { font-size: 0.75rem; color: var(--muted); margin-bottom: 32px; }
+    .field { margin-bottom: 14px; text-align: left; }
+    .field label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 6px; }
+    .field input {
+      width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.08); border-radius: 8px;
+      color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .field input:focus { border-color: rgba(192,57,43,0.5); }
+    .login-btn {
+      width: 100%; padding: 13px; background: var(--red); color: white; border: none;
+      border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+      font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; margin-top: 8px; transition: all 0.2s;
+    }
+    .login-btn:hover { background: var(--red-dark); }
+    .login-err { font-size: 0.75rem; color: var(--danger); margin-top: 10px; display: none; }
+    .login-err.on { display: block; }
+
+    /* LAYOUT */
+    #adminApp { display: none; height: 100vh; flex-direction: column; }
+    #adminApp.on { display: flex; }
+
+    /* TOPBAR */
+    .topbar {
+      height: 60px; background: var(--surface); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px; flex-shrink: 0;
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; }
+    .topbar-logo { width: 30px; height: 30px; background: var(--red); border-radius: 50%; position: relative; flex-shrink: 0; }
+    .topbar-logo::before, .topbar-logo::after { content:''; position:absolute; background:white; border-radius:2px; }
+    .topbar-logo::before { width:12px; height:2.5px; top:50%; left:50%; transform:translate(-50%,-50%); }
+    .topbar-logo::after { width:2.5px; height:12px; top:50%; left:50%; transform:translate(-50%,-50%); }
+    .topbar-title { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 800; }
+    .topbar-title span { color: var(--gold); }
+    .topbar-right { display: flex; align-items: center; gap: 14px; }
+    .topbar-badge { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); background: rgba(212,168,67,0.1); border: 1px solid rgba(212,168,67,0.2); border-radius: 20px; padding: 4px 10px; }
+    .logout-btn { padding: 7px 16px; background: transparent; color: var(--muted); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .logout-btn:hover { color: white; border-color: rgba(255,255,255,0.2); }
+
+    /* BODY */
+    .admin-body { display: flex; flex: 1; overflow: hidden; }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 220px; background: var(--surface); border-right: 1px solid var(--border);
+      padding: 24px 0; flex-shrink: 0; overflow-y: auto;
+    }
+    .sidebar-section { margin-bottom: 28px; }
+    .sidebar-label { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(212,168,67,0.45); padding: 0 20px; margin-bottom: 8px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 20px;
+      font-size: 0.78rem; font-weight: 500; color: var(--muted); cursor: pointer;
+      transition: all 0.18s; border-left: 2.5px solid transparent;
+    }
+    .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .nav-item.active { color: var(--text); background: rgba(192,57,43,0.1); border-left-color: var(--red); }
+    .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+
+    /* MAIN */
+    .main { flex: 1; overflow-y: auto; padding: 28px; }
+    .page { display: none; }
+    .page.on { display: block; }
+
+    /* PAGE HEADER */
+    .page-head { margin-bottom: 28px; }
+    .page-head h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 800; }
+    .page-head h2 em { color: var(--gold); font-style: italic; }
+    .page-head p { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+    /* CARDS */
+    .stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 28px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .stat-card .s-label { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .stat-card .s-val { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 800; color: var(--gold); }
+
+    /* CONFIG */
+    .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+    .config-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+    .config-card h3 { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+
+    /* FORM CONTROLS */
+    .form-row { margin-bottom: 14px; }
+    .form-row label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 5px; }
+    .form-row input, .form-row select, .form-row textarea {
+      width: 100%; padding: 10px 12px; background: rgba(255,255,255,0.04);
+      border: 1.5px solid rgba(255,255,255,0.07); border-radius: 8px;
+      color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: rgba(192,57,43,0.45); }
+    .form-row select option { background: #1A1108; }
+    .form-row textarea { resize: vertical; min-height: 80px; }
+    .btn-save { padding: 10px 22px; background: var(--red); color: white; border: none; border-radius: 8px; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+    .btn-save:hover { background: var(--red-dark); }
+    .btn-add { padding: 9px 18px; background: rgba(39,174,96,0.15); color: #4ade80; border: 1px solid rgba(39,174,96,0.25); border-radius: 8px; font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-add:hover { background: rgba(39,174,96,0.25); }
+    .btn-del { padding: 6px 12px; background: rgba(231,76,60,0.12); color: #f87171; border: 1px solid rgba(231,76,60,0.2); border-radius: 6px; font-size: 0.68rem; cursor: pointer; transition: all 0.2s; }
+    .btn-del:hover { background: rgba(231,76,60,0.22); }
+
+    /* TABLE */
+    .tbl-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .tbl-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    .tbl-toolbar h3 { font-size: 0.8rem; font-weight: 600; }
+    .search-input {
+      padding: 8px 14px; background: rgba(255,255,255,0.04);
+      border: 1.5px solid rgba(255,255,255,0.07); border-radius: 8px;
+      color: var(--text); font-size: 0.78rem; font-family: 'DM Sans', sans-serif;
+      outline: none; width: 220px;
+    }
+    .search-input:focus { border-color: rgba(192,57,43,0.4); }
+    table { width: 100%; border-collapse: collapse; }
+    th { padding: 11px 16px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); text-align: left; border-bottom: 1px solid var(--border); }
+    td { padding: 12px 16px; font-size: 0.78rem; color: rgba(245,237,224,0.75); border-bottom: 1px solid rgba(255,255,255,0.03); }
+    tr:last-child td { border: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    .badge { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 0.62rem; font-weight: 600; }
+    .badge-green { background: rgba(39,174,96,0.15); color: #4ade80; }
+    .badge-red { background: rgba(231,76,60,0.15); color: #f87171; }
+    .badge-gold { background: rgba(212,168,67,0.15); color: var(--gold); }
+    .empty-state { text-align: center; padding: 40px; color: var(--muted); font-size: 0.8rem; }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 28px; right: 28px; z-index: 9999;
+      padding: 13px 20px; border-radius: 10px; font-size: 0.8rem; font-weight: 500;
+      background: var(--surface); border: 1px solid var(--border);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5); opacity: 0;
+      transform: translateY(10px); transition: all 0.3s; pointer-events: none;
+    }
+    .toast.on { opacity: 1; transform: translateY(0); }
+    .toast.success { border-color: rgba(39,174,96,0.3); color: #4ade80; }
+    .toast.error { border-color: rgba(231,76,60,0.3); color: #f87171; }
+
+    /* SUPABASE CONFIG */
+    .sb-config { background: rgba(212,168,67,0.05); border: 1px dashed rgba(212,168,67,0.25); border-radius: 12px; padding: 20px; margin-bottom: 28px; }
+    .sb-config h3 { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .sb-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; }
+    .sb-status { font-size: 0.72rem; color: var(--muted); margin-top: 8px; }
+    .sb-status.connected { color: #4ade80; }
+
+    /* MODAL */
+    .modal-ov { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 800; display: none; align-items: center; justify-content: center; }
+    .modal-ov.on { display: flex; }
+    .modal-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 32px; width: 440px; max-width: 95vw; }
+    .modal-box h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 800; margin-bottom: 20px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+    .btn-cancel { padding: 10px 20px; background: transparent; color: var(--muted); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.74rem; cursor: pointer; }
+    .btn-cancel:hover { color: var(--text); }
+
+    @media(max-width:900px){
+      .stat-row { grid-template-columns: repeat(2,1fr); }
+      .config-grid { grid-template-columns: 1fr; }
+      .sidebar { width: 180px; }
+    }
+    @media(max-width:640px){
+      .sidebar { display: none; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo"></div>
+    <h1>One <span>Bob</span> Admin</h1>
+    <p>Charity Fund · Backend Panel</p>
+    <div class="field"><label>Username</label><input type="text" id="loginUser" placeholder="admin"/></div>
+    <div class="field"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="login-btn" onclick="doLogin()">Sign In →</button>
+    <div class="login-err" id="loginErr">Invalid credentials. Try again.</div>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="adminApp">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo"></div>
+      <div class="topbar-title">One <span>Bob</span> <span style="color:var(--muted);font-weight:400;font-size:0.8rem;">· Admin</span></div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-badge">● Live</div>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="admin-body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Overview</div>
+        <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="nav-icon">📊</span> Dashboard</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Content</div>
+        <div class="nav-item" onclick="showPage('donors',this)"><span class="nav-icon">💳</span> Donors Ticker</div>
+        <div class="nav-item" onclick="showPage('impact',this)"><span class="nav-icon">📈</span> Impact Numbers</div>
+        <div class="nav-item" onclick="showPage('stories',this)"><span class="nav-icon">📖</span> Stories</div>
+        <div class="nav-item" onclick="showPage('gallery',this)"><span class="nav-icon">🖼️</span> Gallery</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">People</div>
+        <div class="nav-item" onclick="showPage('subscribers',this)"><span class="nav-icon">📧</span> Subscribers</div>
+        <div class="nav-item" onclick="showPage('volunteers',this)"><span class="nav-icon">🤝</span> Volunteers</div>
+        <div class="nav-item" onclick="showPage('contacts',this)"><span class="nav-icon">📬</span> Contact Messages</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">System</div>
+        <div class="nav-item" onclick="showPage('settings',this)"><span class="nav-icon">⚙️</span> Settings</div>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+      <!-- SUPABASE CONFIG BAR (shown on every page) -->
+      <div class="sb-config" id="sbConfigBar">
+        <h3>⚡ Supabase Connection</h3>
+        <div class="sb-row">
+          <div class="form-row" style="margin:0"><label>Project URL</label><input type="text" id="sbUrl" placeholder="https://xxxx.supabase.co"/></div>
+          <div class="form-row" style="margin:0"><label>Anon Key</label><input type="text" id="sbKey" placeholder="eyJhbGciOiJIUzI1NiIs..."/></div>
+          <button class="btn-save" onclick="connectSupabase()">Connect</button>
+        </div>
+        <div class="sb-status" id="sbStatus">Not connected — enter your Supabase URL and anon key above.</div>
+      </div>
+
+      <!-- DASHBOARD -->
+      <div class="page on" id="page-dashboard">
+        <div class="page-head"><h2>Dashboard <em>Overview</em></h2><p>Live snapshot of One Bob Charity Fund activity.</p></div>
+        <div class="stat-row">
+          <div class="stat-card"><div class="s-label">Total Donors (Ticker)</div><div class="s-val" id="ds-donors">—</div></div>
+          <div class="stat-card"><div class="s-label">Subscribers</div><div class="s-val" id="ds-subs">—</div></div>
+          <div class="stat-card"><div class="s-label">Volunteers</div><div class="s-val" id="ds-vols">—</div></div>
+          <div class="stat-card"><div class="s-label">Messages</div><div class="s-val" id="ds-msgs">—</div></div>
+        </div>
+        <div class="tbl-wrap" style="padding:24px;">
+          <p style="font-size:0.82rem;color:var(--muted);line-height:1.85;">
+            Welcome to the <strong style="color:var(--text);">One Bob Charity Fund Admin Panel</strong>. Use the sidebar to manage donors, impact numbers, stories, gallery, subscribers, volunteers, and contact messages.<br/><br/>
+            Connect your Supabase project above to enable live data. All tables must exist in your Supabase database — see the <strong style="color:var(--gold);">Settings</strong> tab for the required SQL schema.
+          </p>
+        </div>
+      </div>
+
+      <!-- DONORS TICKER -->
+      <div class="page" id="page-donors">
+        <div class="page-head"><h2>Donors <em>Ticker</em></h2><p>Manage entries shown in the scrolling ticker on the homepage.</p></div>
+        <div class="tbl-wrap" style="margin-bottom:20px;">
+          <div class="tbl-toolbar">
+            <h3>Add Donor Entry</h3>
+          </div>
+          <div style="padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:end;">
+            <div class="form-row" style="margin:0"><label>Name</label><input type="text" id="d-name" placeholder="e.g. Amina W."/></div>
+            <div class="form-row" style="margin:0"><label>Location</label><input type="text" id="d-loc" placeholder="e.g. 🇰🇪 Nairobi"/></div>
+            <div class="form-row" style="margin:0"><label>Amount</label><input type="text" id="d-amt" placeholder="e.g. KSh 50"/></div>
+            <button class="btn-add" onclick="addDonor()">+ Add</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-toolbar">
+            <h3>All Ticker Entries</h3>
+            <input type="text" class="search-input" placeholder="🔍 Search donors..." oninput="filterTable('donors-tbody',this.value,[0,1,2])"/>
+          </div>
+          <table>
+            <thead><tr><th>Name</th><th>Location</th><th>Amount</th><th>Featured</th><th>Action</th></tr></thead>
+            <tbody id="donors-tbody"><tr><td colspan="5" class="empty-state">Connect Supabase to load donors.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- IMPACT NUMBERS -->
+      <div class="page" id="page-impact">
+        <div class="page-head"><h2>Impact <em>Numbers</em></h2><p>Update the 4 counters shown on the homepage.</p></div>
+        <div class="config-grid">
+          <div class="config-card">
+            <h3>🌍 Impact Counters</h3>
+            <div class="form-row"><label>Total Donors</label><input type="number" id="imp-donors" placeholder="12600"/></div>
+            <div class="form-row"><label>Children Helped</label><input type="number" id="imp-children" placeholder="3491"/></div>
+            <div class="form-row"><label>Schools Reached</label><input type="number" id="imp-schools" placeholder="17"/></div>
+            <div class="form-row"><label>Countries</label><input type="number" id="imp-countries" placeholder="3"/></div>
+            <button class="btn-save" onclick="saveImpact()">Save Impact Numbers</button>
+          </div>
+          <div class="config-card">
+            <h3>📋 Preview</h3>
+            <p style="font-size:0.78rem;color:var(--muted);line-height:1.8;">These numbers appear in the dark "Numbers that matter" section on the homepage. They animate up from 0 when scrolled into view.<br/><br/>After saving, refresh the main website to see the updated values.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- STORIES -->
+      <div class="page" id="page-stories">
+        <div class="page-head"><h2>Children's <em>Stories</em></h2><p>Manage the stories shown on the homepage and stories page.</p></div>
+        <div class="tbl-wrap" style="margin-bottom:20px;">
+          <div class="tbl-toolbar"><h3>Add Story</h3></div>
+          <div style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-row" style="margin:0"><label>Child Name</label><input type="text" id="st-name" placeholder="Zawadi"/></div>
+            <div class="form-row" style="margin:0"><label>Age & Location</label><input type="text" id="st-meta" placeholder="Age 9 · Nairobi, Kenya"/></div>
+            <div class="form-row" style="margin:0"><label>Country Flag & Name</label><input type="text" id="st-country" placeholder="🇰🇪 Kenya"/></div>
+            <div class="form-row" style="margin:0"><label>Need Type</label><select id="st-need"><option>Education</option><option>Food</option><option>Clothing</option><option>Healthcare</option></select></div>
+            <div class="form-row" style="grid-column:span 2;margin:0"><label>Story Text</label><textarea id="st-text" placeholder="Write the child's story..."></textarea></div>
+            <div class="form-row" style="margin:0"><label>Image Filename</label><input type="text" id="st-img" placeholder="e.g. zawadi-nairobi.jpg"/></div>
+            <div style="display:flex;align-items:flex-end;"><button class="btn-add" onclick="addStory()">+ Add Story</button></div>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-toolbar"><h3>All Stories</h3><input type="text" class="search-input" placeholder="🔍 Search..." oninput="filterTable('stories-tbody',this.value,[0,1])"/></div>
+          <table>
+            <thead><tr><th>Name</th><th>Location</th><th>Need</th><th>Country</th><th>Action</th></tr></thead>
+            <tbody id="stories-tbody"><tr><td colspan="5" class="empty-state">Connect Supabase to load stories.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- GALLERY -->
+      <div class="page" id="page-gallery">
+        <div class="page-head"><h2>Photo <em>Gallery</em></h2><p>Manage gallery images shown on gallery.html.</p></div>
+        <div class="tbl-wrap" style="margin-bottom:20px;">
+          <div class="tbl-toolbar"><h3>Add Photo</h3></div>
+          <div style="padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:end;">
+            <div class="form-row" style="margin:0"><label>Image Filename</label><input type="text" id="g-img" placeholder="delivery-kisumu.jpg"/></div>
+            <div class="form-row" style="margin:0"><label>Caption</label><input type="text" id="g-cap" placeholder="Delivery in Kisumu, Kenya"/></div>
+            <div class="form-row" style="margin:0"><label>Category</label><select id="g-cat"><option>Delivery</option><option>Education</option><option>Food</option><option>Clothing</option><option>Team</option></select></div>
+            <button class="btn-add" onclick="addGallery()">+ Add</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-toolbar"><h3>All Photos</h3></div>
+          <table>
+            <thead><tr><th>Filename</th><th>Caption</th><th>Category</th><th>Action</th></tr></thead>
+            <tbody id="gallery-tbody"><tr><td colspan="4" class="empty-state">Connect Supabase to load gallery.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SUBSCRIBERS -->
+      <div class="page" id="page-subscribers">
+        <div class="page-head"><h2>Email <em>Subscribers</em></h2><p>People who subscribed from the homepage.</p></div>
+        <div class="tbl-wrap">
+          <div class="tbl-toolbar">
+            <h3>All Subscribers</h3>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <input type="text" class="search-input" placeholder="🔍 Search email..." oninput="filterTable('subs-tbody',this.value,[0])"/>
+              <button class="btn-save" onclick="exportCSV('subs-tbody',['Email','Date'])">Export CSV</button>
+            </div>
+          </div>
+          <table>
+            <thead><tr><th>Email</th><th>Subscribed On</th><th>Action</th></tr></thead>
+            <tbody id="subs-tbody"><tr><td colspan="3" class="empty-state">Connect Supabase to load subscribers.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VOLUNTEERS -->
+      <div class="page" id="page-volunteers">
+        <div class="page-head"><h2><em>Volunteers</em></h2><p>People who signed up to volunteer.</p></div>
+        <div class="tbl-wrap">
+          <div class="tbl-toolbar">
+            <h3>All Volunteers</h3>
+            <input type="text" class="search-input" placeholder="🔍 Search..." oninput="filterTable('vols-tbody',this.value,[0,1])"/>
+          </div>
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Location</th><th>Skills</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="vols-tbody"><tr><td colspan="6" class="empty-state">Connect Supabase to load volunteers.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CONTACTS -->
+      <div class="page" id="page-contacts">
+        <div class="page-head"><h2>Contact <em>Messages</em></h2><p>Messages sent via contact.html.</p></div>
+        <div class="tbl-wrap">
+          <div class="tbl-toolbar">
+            <h3>All Messages</h3>
+            <input type="text" class="search-input" placeholder="🔍 Search..." oninput="filterTable('msgs-tbody',this.value,[0,1])"/>
+          </div>
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="msgs-tbody"><tr><td colspan="6" class="empty-state">Connect Supabase to load messages.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="page" id="page-settings">
+        <div class="page-head"><h2>System <em>Settings</em></h2><p>Admin credentials, password change, and database schema.</p></div>
+        <div class="config-grid">
+          <div class="config-card">
+            <h3>🔑 Change Admin Password</h3>
+            <div class="form-row"><label>Current Password</label><input type="password" id="pw-old"/></div>
+            <div class="form-row"><label>New Password</label><input type="password" id="pw-new"/></div>
+            <div class="form-row"><label>Confirm New Password</label><input type="password" id="pw-confirm"/></div>
+            <button class="btn-save" onclick="changePassword()">Update Password</button>
+          </div>
+          <div class="config-card">
+            <h3>🗄️ Required Supabase Tables</h3>
+            <p style="font-size:0.74rem;color:var(--muted);line-height:1.85;margin-bottom:12px;">Run this SQL in your Supabase SQL editor to create the required tables:</p>
+            <textarea readonly style="width:100%;height:260px;font-size:0.65rem;font-family:monospace;background:rgba(0,0,0,0.3);border:1px solid var(--border);color:rgba(255,255,255,0.6);border-radius:8px;padding:12px;resize:none;">-- Donors ticker
+CREATE TABLE donors (
+  id BIGSERIAL PRIMARY KEY,
+  name TEXT, location TEXT,
+  amount TEXT, featured BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Impact numbers
+CREATE TABLE impact (
+  id INT DEFAULT 1 PRIMARY KEY,
+  total_donors INT DEFAULT 12600,
+  children_helped INT DEFAULT 3491,
+  schools_reached INT DEFAULT 17,
+  countries INT DEFAULT 3
+);
+INSERT INTO impact VALUES (1,12600,3491,17,3)
+ON CONFLICT DO NOTHING;
+
+-- Stories
+CREATE TABLE stories (
+  id BIGSERIAL PRIMARY KEY,
+  name TEXT, meta TEXT, country TEXT,
+  need TEXT, story_text TEXT, image TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Gallery
+CREATE TABLE gallery (
+  id BIGSERIAL PRIMARY KEY,
+  image TEXT, caption TEXT, category TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Subscribers
+CREATE TABLE subscribers (
+  id BIGSERIAL PRIMARY KEY,
+  email TEXT UNIQUE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Volunteers
+CREATE TABLE volunteers (
+  id BIGSERIAL PRIMARY KEY,
+  name TEXT, email TEXT, location TEXT,
+  skills TEXT, created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Contact messages
+CREATE TABLE contact_messages (
+  id BIGSERIAL PRIMARY KEY,
+  name TEXT, email TEXT, subject TEXT,
+  message TEXT, created_at TIMESTAMPTZ DEFAULT NOW()
+);</textarea>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /main -->
+  </div><!-- /admin-body -->
+</div><!-- /adminApp -->
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- DELETE MODAL -->
+<div class="modal-ov" id="delModal">
+  <div class="modal-box">
+    <h3>Confirm Delete</h3>
+    <p style="font-size:0.82rem;color:var(--muted);" id="delMsg">Are you sure you want to delete this entry?</p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" style="background:var(--danger);" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── CREDENTIALS (change password stored in localStorage) ───
+const DEFAULT_USER = 'admin';
+const DEFAULT_PASS = 'obcf2025';
+
+function getPass() { return localStorage.getItem('obcf_pass') || DEFAULT_PASS; }
+
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  if(u === DEFAULT_USER && p === getPass()) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminApp').classList.add('on');
+    loadDashboardStats();
+    // Restore supabase if saved
+    const su = localStorage.getItem('obcf_sb_url');
+    const sk = localStorage.getItem('obcf_sb_key');
+    if(su && sk) {
+      document.getElementById('sbUrl').value = su;
+      document.getElementById('sbKey').value = sk;
+      connectSupabase(true);
+    }
+  } else {
+    document.getElementById('loginErr').classList.add('on');
+  }
+}
+
+function doLogout() {
+  document.getElementById('adminApp').classList.remove('on');
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginErr').classList.remove('on');
+}
+
+function changePassword() {
+  const old = document.getElementById('pw-old').value;
+  const nw = document.getElementById('pw-new').value;
+  const cf = document.getElementById('pw-confirm').value;
+  if(old !== getPass()) { showToast('Current password is wrong.','error'); return; }
+  if(nw.length < 6) { showToast('New password must be at least 6 characters.','error'); return; }
+  if(nw !== cf) { showToast('Passwords do not match.','error'); return; }
+  localStorage.setItem('obcf_pass', nw);
+  showToast('✓ Password updated.','success');
+  document.getElementById('pw-old').value='';
+  document.getElementById('pw-new').value='';
+  document.getElementById('pw-confirm').value='';
+}
+
+// ─── SUPABASE ───
+let sb = null;
+
+function connectSupabase(silent=false) {
+  const url = document.getElementById('sbUrl').value.trim();
+  const key = document.getElementById('sbKey').value.trim();
+  if(!url || !key) { showToast('Enter both URL and key.','error'); return; }
+  try {
+    sb = supabase.createClient(url, key);
+    localStorage.setItem('obcf_sb_url', url);
+    localStorage.setItem('obcf_sb_key', key);
+    document.getElementById('sbStatus').textContent = '✓ Connected to Supabase — ' + url;
+    document.getElementById('sbStatus').className = 'sb-status connected';
+    if(!silent) showToast('✓ Supabase connected!','success');
+    loadDashboardStats();
+    loadPage(document.querySelector('.page.on').id.replace('page-',''));
+  } catch(e) {
+    showToast('Connection failed: ' + e.message,'error');
+  }
+}
+
+// ─── NAV ───
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('on');
+  el.classList.add('active');
+  loadPage(name);
+}
+
+function loadPage(name) {
+  if(!sb) return;
+  if(name==='donors') loadDonors();
+  if(name==='impact') loadImpact();
+  if(name==='stories') loadStories();
+  if(name==='gallery') loadGallery();
+  if(name==='subscribers') loadSubscribers();
+  if(name==='volunteers') loadVolunteers();
+  if(name==='contacts') loadContacts();
+  if(name==='dashboard') loadDashboardStats();
+}
+
+// ─── DASHBOARD STATS ───
+async function loadDashboardStats() {
+  if(!sb) return;
+  const tables = [
+    {table:'donors', el:'ds-donors'},
+    {table:'subscribers', el:'ds-subs'},
+    {table:'volunteers', el:'ds-vols'},
+    {table:'contact_messages', el:'ds-msgs'}
+  ];
+  for(const t of tables) {
+    const {count} = await sb.from(t.table).select('*', {count:'exact',head:true});
+    const el = document.getElementById(t.el);
+    if(el) el.textContent = count ?? '—';
+  }
+}
+
+// ─── DONORS ───
+async function loadDonors() {
+  const {data, error} = await sb.from('donors').select('*').order('created_at',{ascending:false});
+  const tbody = document.getElementById('donors-tbody');
+  if(error || !data?.length) { tbody.innerHTML = `<tr><td colspan="5" class="empty-state">${error?'Error: '+error.message:'No donors yet.'}</td></tr>`; return; }
+  tbody.innerHTML = data.map(d => `
+    <tr>
+      <td>${d.name||''}</td>
+      <td>${d.location||''}</td>
+      <td>${d.amount||''}</td>
+      <td><span class="badge ${d.featured?'badge-gold':'badge-green'}">${d.featured?'⭐ Featured':'Standard'}</span></td>
+      <td><button class="btn-del" onclick="delRow('donors',${d.id})">Delete</button></td>
+    </tr>`).join('');
+}
+
+async function addDonor() {
+  if(!sb) { showToast('Connect Supabase first.','error'); return; }
+  const name = document.getElementById('d-name').value.trim();
+  const loc = document.getElementById('d-loc').value.trim();
+  const amt = document.getElementById('d-amt').value.trim();
+  if(!name||!loc||!amt) { showToast('Fill all fields.','error'); return; }
+  const {error} = await sb.from('donors').insert({name,location:loc,amount:amt});
+  if(error) { showToast('Error: '+error.message,'error'); return; }
+  showToast('✓ Donor added.','success');
+  document.getElementById('d-name').value='';
+  document.getElementById('d-loc').value='';
+  document.getElementById('d-amt').value='';
+  loadDonors();
+}
+
+// ─── IMPACT ───
+async function loadImpact() {
+  const {data} = await sb.from('impact').select('*').eq('id',1).single();
+  if(!data) return;
+  document.getElementById('imp-donors').value = data.total_donors||'';
+  document.getElementById('imp-children').value = data.children_helped||'';
+  document.getElementById('imp-schools').value = data.schools_reached||'';
+  document.getElementById('imp-countries').value = data.countries||'';
+}
+
+async function saveImpact() {
+  if(!sb) { showToast('Connect Supabase first.','error'); return; }
+  const {error} = await sb.from('impact').upsert({
+    id:1,
+    total_donors: parseInt(document.getElementById('imp-donors').value)||0,
+    children_helped: parseInt(document.getElementById('imp-children').value)||0,
+    schools_reached: parseInt(document.getElementById('imp-schools').value)||0,
+    countries: parseInt(document.getElementById('imp-countries').value)||0
+  });
+  if(error) { showToast('Error: '+error.message,'error'); return; }
+  showToast('✓ Impact numbers saved.','success');
+}
+
+// ─── STORIES ───
+async function loadStories() {
+  const {data, error} = await sb.from('stories').select('*').order('created_at',{ascending:false});
+  const tbody = document.getElementById('stories-tbody');
+  if(error || !data?.length) { tbody.innerHTML = `<tr><td colspan="5" class="empty-state">${error?'Error: '+error.message:'No stories yet.'}</td></tr>`; return; }
+  tbody.innerHTML = data.map(d => `
+    <tr>
+      <td><strong>${d.name||''}</strong></td>
+      <td>${d.meta||''}</td>
+      <td><span class="badge badge-red">${d.need||''}</span></td>
+      <td>${d.country||''}</td>
+      <td><button class="btn-del" onclick="delRow('stories',${d.id})">Delete</button></td>
+    </tr>`).join('');
+}
+
+async function addStory() {
+  if(!sb) { showToast('Connect Supabase first.','error'); return; }
+  const obj = {
+    name: document.getElementById('st-name').value.trim(),
+    meta: document.getElementById('st-meta').value.trim(),
+    country: document.getElementById('st-country').value.trim(),
+    need: document.getElementById('st-need').value,
+    story_text: document.getElementById('st-text').value.trim(),
+    image: document.getElementById('st-img').value.trim()
+  };
+  if(!obj.name||!obj.story_text) { showToast('Name and story text are required.','error'); return; }
+  const {error} = await sb.from('stories').insert(obj);
+  if(error) { showToast('Error: '+error.message,'error'); return; }
+  showToast('✓ Story added.','success');
+  loadStories();
+}
+
+// ─── GALLERY ───
+async function loadGallery() {
+  const {data, error} = await sb.from('gallery').select('*').order('created_at',{ascending:false});
+  const tbody = document.getElementById('gallery-tbody');
+  if(error || !data?.length) { tbody.innerHTML = `<tr><td colspan="4" class="empty-state">${error?'Error: '+error.message:'No photos yet.'}</td></tr>`; return; }
+  tbody.innerHTML = data.map(d => `
+    <tr>
+      <td>${d.image||''}</td>
+      <td>${d.caption||''}</td>
+      <td><span class="badge badge-gold">${d.category||''}</span></td>
+      <td><button class="btn-del" onclick="delRow('gallery',${d.id})">Delete</button></td>
+    </tr>`).join('');
+}
+
+async function addGallery() {
+  if(!sb) { showToast('Connect Supabase first.','error'); return; }
+  const obj = {
+    image: document.getElementById('g-img').value.trim(),
+    caption: document.getElementById('g-cap').value.trim(),
+    category: document.getElementById('g-cat').value
+  };
+  if(!obj.image) { showToast('Image filename required.','error'); return; }
+  const {error} = await sb.from('gallery').insert(obj);
+  if(error) { showToast('Error: '+error.message,'error'); return; }
+  showToast('✓ Photo added.','success');
+  loadGallery();
+}
+
+// ─── SUBSCRIBERS ───
+async function loadSubscribers() {
+  const {data, error} = await sb.from('subscribers').select('*').order('created_at',{ascending:false});
+  const tbody = document.getElementById('subs-tbody');
+  if(error || !data?.length) { tbody.innerHTML = `<tr><td colspan="3" class="empty-state">${error?'Error: '+error.message:'No subscribers yet.'}</td></tr>`; return; }
+  tbody.innerHTML = data.map(d => `
+    <tr>
+      <td>${d.email||''}</td>
+      <td>${d.created_at?new Date(d.created_at).toLocaleDateString():''}</td>
+      <td><button class="btn-del" onclick="delRow('subscribers',${d.id})">Delete</button></td>
+    </tr>`).join('');
+}
+
+// ─── VOLUNTEERS ───
+async function loadVolunteers() {
+  const {data, error} = await sb.from('volunteers').select('*').order('created_at',{ascending:false});
+  const tbody = document.getElementById('vols-tbody');
+  if(error || !data?.length) { tbody.innerHTML = `<tr><td colspan="6" class="empty-state">${error?'Error: '+error.message:'No volunteers yet.'}</td></tr>`; return; }
+  tbody.innerHTML = data.map(d => `
+    <tr>
+      <td>${d.name||''}</td>
+      <td>${d.email||''}</td>
+      <td>${d.location||''}</td>
+      <td>${d.skills||''}</td>
+      <td>${d.created_at?new Date(d.created_at).toLocaleDateString():''}</td>
+      <td><button class="btn-del" onclick="delRow('volunteers',${d.id})">Delete</button></td>
+    </tr>`).join('');
+}
+
+// ─── CONTACTS ───
+async function loadContacts() {
+  const {data, error} = await sb.from('contact_messages').select('*').order('created_at',{ascending:false});
+  const tbody = document.getElementById('msgs-tbody');
+  if(error || !data?.length) { tbody.innerHTML = `<tr><td colspan="6" class="empty-state">${error?'Error: '+error.message:'No messages yet.'}</td></tr>`; return; }
+  tbody.innerHTML = data.map(d => `
+    <tr>
+      <td>${d.name||''}</td>
+      <td>${d.email||''}</td>
+      <td>${d.subject||''}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${d.message||''}</td>
+      <td>${d.created_at?new Date(d.created_at).toLocaleDateString():''}</td>
+      <td><button class="btn-del" onclick="delRow('contact_messages',${d.id})">Delete</button></td>
+    </tr>`).join('');
+}
+
+// ─── DELETE ───
+let pendingDel = null;
+
+function delRow(table, id) {
+  pendingDel = {table, id};
+  document.getElementById('delMsg').textContent = `Delete this entry from "${table}"? This cannot be undone.`;
+  document.getElementById('delModal').classList.add('on');
+}
+
+async function confirmDelete() {
+  if(!pendingDel) return;
+  const {error} = await sb.from(pendingDel.table).delete().eq('id', pendingDel.id);
+  closeModal();
+  if(error) { showToast('Error: '+error.message,'error'); return; }
+  showToast('✓ Deleted.','success');
+  loadPage(document.querySelector('.page.on').id.replace('page-',''));
+  pendingDel = null;
+}
+
+function closeModal() { document.getElementById('delModal').classList.remove('on'); }
+
+// ─── SEARCH FILTER ───
+function filterTable(tbodyId, query, cols) {
+  const rows = document.getElementById(tbodyId).querySelectorAll('tr');
+  rows.forEach(row => {
+    const tds = row.querySelectorAll('td');
+    const match = cols.some(i => tds[i]?.textContent.toLowerCase().includes(query.toLowerCase()));
+    row.style.display = (!query || match) ? '' : 'none';
+  });
+}
+
+// ─── EXPORT CSV ───
+function exportCSV(tbodyId, headers) {
+  const rows = document.getElementById(tbodyId).querySelectorAll('tr');
+  let csv = headers.join(',') + '\n';
+  rows.forEach(row => {
+    const tds = row.querySelectorAll('td');
+    if(tds.length > 1) {
+      const vals = Array.from(tds).slice(0,-1).map(td => '"'+td.textContent.replace(/"/g,'""')+'"');
+      csv += vals.join(',') + '\n';
+    }
+  });
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'obcf-subscribers.csv';
+  a.click();
+}
+
+// ─── TOAST ───
+let toastTimer;
+function showToast(msg, type='success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast on ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('on'), 3200);
+}
+
+// Enter key on login
+document.getElementById('loginUser').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+</script>
+</body>
+</html>
